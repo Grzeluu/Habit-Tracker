@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.grzeluu.habittracker.component.habit"
+    namespace = "com.grzeluu.habittracker.util"
     compileSdk = 34
 
     defaultConfig {
@@ -17,6 +17,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -30,4 +34,10 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }
