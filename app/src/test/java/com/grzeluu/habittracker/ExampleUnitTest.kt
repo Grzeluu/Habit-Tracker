@@ -1,4 +1,4 @@
-package com.grzeluu
+package com.grzeluu.habittracker
 
 import org.junit.Test
 

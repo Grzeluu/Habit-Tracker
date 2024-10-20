@@ -1,6 +1,5 @@
-package com.grzeluu.ui.theme
+package com.grzeluu.habittracker.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

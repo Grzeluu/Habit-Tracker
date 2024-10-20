@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Habit Tracker"
 include(":app")
- 
+include(":component")
+include(":component:habit")

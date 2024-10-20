@@ -1,4 +1,4 @@
-package com.grzeluu.ui.theme
+package com.grzeluu.habittracker.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

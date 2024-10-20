@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.grzeluu"
+    namespace = "com.grzeluu.habittracker"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.grzeluu"
+        applicationId = "com.grzeluu.habittracker"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
