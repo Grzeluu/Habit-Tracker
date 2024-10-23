@@ -1,4 +1,4 @@
-package com.grzeluu.habittracker.ui.theme
+package com.grzeluu.habittracker.common.ui
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFFA1001D)
