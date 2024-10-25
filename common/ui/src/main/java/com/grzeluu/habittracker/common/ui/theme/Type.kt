@@ -1,4 +1,4 @@
-package com.grzeluu.habittracker.common.ui
+package com.grzeluu.habittracker.common.ui.theme
 
 import androidx.compose.material3.Typography
 

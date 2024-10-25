@@ -1,7 +1,9 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.kotlin.android.get().pluginId)
+    id(libs.plugins.android.hilt.get().pluginId)
+    id(libs.plugins.google.ksp.get().pluginId)
+    id(libs.plugins.kotlin.compose.get().pluginId)
 }
 
 android {
@@ -12,7 +14,7 @@ android {
         minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+       
     }
 
     buildTypes {
@@ -20,16 +22,21 @@ android {
             isMinifyEnabled = false
         }
     }
+    buildFeatures {
+        compose = true
+    }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
 dependencies {
+    implementation(project(":common:base"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel)
@@ -42,7 +49,7 @@ dependencies {
 
     implementation(libs.android.hilt)
     implementation(libs.android.hilt.navigation)
-    kapt(libs.android.hilt.compiler)
+    ksp(libs.android.hilt.compiler)
 
     testImplementation(libs.junit)
 

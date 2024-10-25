@@ -4,5 +4,15 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.android.library) apply false
-    alias(libs.plugins.kotlin.kapt) apply false
+    id(libs.plugins.android.hilt.get().pluginId) version libs.plugins.android.hilt.get().version.requiredVersion apply false
+    id(libs.plugins.google.ksp.get().pluginId)  version libs.plugins.google.ksp.get().version.requiredVersion apply false
+}
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+    }
+    dependencies {
+        classpath(libs.hilt.android.gradle.plugin)
+    }
 }

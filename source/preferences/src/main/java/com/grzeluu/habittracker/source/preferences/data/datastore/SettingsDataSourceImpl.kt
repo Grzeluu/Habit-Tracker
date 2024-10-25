@@ -12,9 +12,9 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
-class SettingsDataStoreImpl @Inject constructor(
+class SettingsDataSourceImpl @Inject constructor(
     @SettingsStore private val settingsDataStore: DataStore<Preferences>
-) : SettingsDataStore {
+) : SettingsDataSource {
 
     companion object {
         private const val SETTINGS_KEY = ("SETTINGS")

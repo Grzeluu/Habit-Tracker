@@ -1,6 +1,6 @@
 package com.grzeluu.habittracker.feature.onboarding.ui.state
 
-data class OnboardingUiState(
+data class OnboardingStateData(
     val isDarkModeSelected: Boolean,
     val isNotificationsEnabled: Boolean
 )

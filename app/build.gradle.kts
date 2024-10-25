@@ -1,8 +1,9 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.kapt)
+    id(libs.plugins.android.application.get().pluginId)
+    id(libs.plugins.kotlin.android.get().pluginId)
+    id(libs.plugins.kotlin.compose.get().pluginId)
+    id(libs.plugins.google.ksp.get().pluginId)
+    id(libs.plugins.android.hilt.get().pluginId)
 }
 
 android {
@@ -28,15 +29,15 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+    hilt {
+        enableAggregatingTask = true
     }
-    kapt {
-        correctErrorTypes = true
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -44,9 +45,21 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:onboarding"))
-    implementation(project(":component:settings"))
     implementation(project(":common:ui"))
+    implementation(project(":common:base"))
+    implementation(project(":common:util"))
+
+    implementation(project(":component:settings"))
+    implementation(project(":component:habit"))
+
+    implementation(project(":feature:addhabit"))
+    implementation(project(":feature:habits"))
+    implementation(project(":feature:notifications"))
+    implementation(project(":feature:onboarding"))
+    implementation(project(":feature:settings"))
+
+    implementation(project(":source:database"))
+    implementation(project(":source:preferences"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -58,7 +71,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.android.hilt)
     implementation(libs.android.hilt.navigation)
-    kapt(libs.android.hilt.compiler)
+    ksp(libs.android.hilt.compiler)
 
     testImplementation(libs.junit)
 
