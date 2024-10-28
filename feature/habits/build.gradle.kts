@@ -1,8 +1,8 @@
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
-    id(libs.plugins.android.hilt.get().pluginId)
     id(libs.plugins.google.ksp.get().pluginId)
+    id(libs.plugins.android.hilt.get().pluginId)
     id(libs.plugins.kotlin.compose.get().pluginId)
 }
 
@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.android.hilt)
     implementation(libs.android.hilt.navigation)
     ksp(libs.android.hilt.compiler)
+    implementation(libs.kotlinx.metadata)
 
     testImplementation(libs.junit)
 

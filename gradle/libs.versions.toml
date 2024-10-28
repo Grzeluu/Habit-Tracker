@@ -12,13 +12,14 @@ composeBom = "2024.04.01"
 appcompat = "1.6.1"
 material = "1.10.0"
 runtimeAndroid = "1.7.4"
-hilt = "2.49"
+hilt = "2.52"
 hiltPlugin = "2.52"
 androidHilt = "1.2.0"
 datastorePreferences = "1.1.1"
 kotlinSerialization = "1.7.3"
 kotlinCoroutines = "1.9.0"
 ksp = "2.0.21-1.0.26"
+kotlinxMetadata = "0.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,6 +47,7 @@ android-hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-com
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
 kotlinx-serialization = {group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerialization"}
 kotlinx-coroutines-core = {group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinCoroutines"}
+kotlinx-metadata = {group = "org.jetbrains.kotlinx", name = "kotlinx-metadata-jvm", version.ref = "kotlinxMetadata"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

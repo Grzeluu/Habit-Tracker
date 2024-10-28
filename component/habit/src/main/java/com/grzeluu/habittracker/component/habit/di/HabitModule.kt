@@ -1,6 +1,5 @@
 package com.grzeluu.habittracker.component.habit.di
 
-
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent

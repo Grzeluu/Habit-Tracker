@@ -11,7 +11,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun OnboardingScreen() {
 
-    val viewModel: OnboardingViewModel = hiltViewModel()
+//    val viewModel: OnboardingViewModel = hiltViewModel()
 
     Surface(
         modifier = Modifier
