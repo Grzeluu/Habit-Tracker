@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding_welcome_title">Welcome to Habit Tracker!</string>
+    <string name="onboarding_welcome_message"> An app to help you track your habits, organize plans, and achieve them.</string>
+    <string name="lets_begin">Let\'s begin!</string>
+    <string name="cont">Continue</string>
+    <string name="chooseDarkMode">Choose between Light and Dark mode to personalize your app experience.</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="notifications">Notifications</string>
+    <string name="choose_notifications">Enable habit notifications to keep track of your progress and stay motivated.</string>
+    <string name="add_habit">Add Habit</string>
+    <string name="add_your_first_habit">Add your first habit or go directly to the app.</string>
+    <string name="skip">Skip</string>
+    <string name="add_your_first_habit_massage">Now is a great time to add your first habit to the app and start something new!</string>
+    <string name="go_to_previous_step">Go to previous step</string>
+</resources>

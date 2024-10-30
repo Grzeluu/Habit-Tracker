@@ -36,6 +36,7 @@ android {
 
 dependencies {
     implementation(project(":common:base"))
+    implementation(project(":common:ui"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
