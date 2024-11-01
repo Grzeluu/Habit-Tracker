@@ -4,8 +4,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -17,13 +19,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.grzeluu.habittracker.base.ui.BaseScreenContainer
-import com.grzeluu.habittracker.base.ui.state.UiState.Loading.data
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.feature.onboarding.ui.animations.OnboardingAnimations
 import com.grzeluu.habittracker.feature.onboarding.ui.components.PagerIndicator
@@ -44,9 +46,7 @@ fun OnboardingScreen() {
     val uiState by viewModel.uiState.collectAsState()
 
     BaseScreenContainer(
-        modifier = Modifier
-            .systemBarsPadding()
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         uiState = uiState,
     ) { data ->
         Box {
@@ -56,13 +56,11 @@ fun OnboardingScreen() {
                 when (page) {
                     0 -> WelcomePage(goToNextPage = { goToNextPage(coroutineScope, pagerState) })
 
-                    1 -> ThemePage(
-                        isDarkModeEnabled = data.isDarkModeEnabled,
+                    1 -> ThemePage(isDarkModeEnabled = data.isDarkModeEnabled,
                         changeIsDarkModeSelected = {},
                         goToNextPage = { goToNextPage(coroutineScope, pagerState) })
 
-                    2 -> NotificationsPage(
-                        isNotificationsEnabled = data.isNotificationsEnabled,
+                    2 -> NotificationsPage(isNotificationsEnabled = data.isNotificationsEnabled,
                         changeIsNotificationsEnabled = {/* TODO */ },
                         goToNextPage = { goToNextPage(coroutineScope, pagerState) })
 
@@ -77,18 +75,25 @@ fun OnboardingScreen() {
                 enter = OnboardingAnimations.enterPagerBackArrow,
                 exit = OnboardingAnimations.exitPagerBackArrow,
             ) {
-                IconButton(
-                    modifier = Modifier.padding(8.dp),
+                IconButton(modifier = Modifier
+                    .padding(start = 8.dp)
+                    .systemBarsPadding(),
                     colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.onSurface),
-                    onClick = { goToPreviousPage(coroutineScope, pagerState) }
-                ) {
+                    onClick = { goToPreviousPage(coroutineScope, pagerState) }) {
                     Icon(
                         painterResource(R.drawable.ic_back),
                         contentDescription = stringResource(R.string.go_to_previous_step)
                     )
                 }
             }
-            PagerIndicator(pagerState)
+            PagerIndicator(
+                modifier = Modifier
+                    .systemBarsPadding()
+                    .wrapContentHeight()
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 12.dp), pagerState = pagerState
+            )
         }
     }
 }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -21,13 +22,12 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun BoxScope.PagerIndicator(pagerState: PagerState) {
+fun BoxScope.PagerIndicator(
+    modifier: Modifier = Modifier,
+    pagerState: PagerState
+) {
     Row(
-        Modifier
-            .wrapContentHeight()
-            .fillMaxWidth()
-            .align(Alignment.BottomCenter)
-            .padding(bottom = 16.dp),
+        modifier = modifier,
         horizontalArrangement = Arrangement.Center,
     ) {
         repeat(pagerState.pageCount) { iteration ->
