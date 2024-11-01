@@ -7,7 +7,7 @@
     <string name="chooseDarkMode">Choose between Light and Dark mode to personalize your app experience.</string>
     <string name="dark_mode">Dark mode</string>
     <string name="notifications">Notifications</string>
-    <string name="choose_notifications">Enable habit notifications to keep track of your progress and stay motivated.</string>
+    <string name="choose_notifications">Enable notifications to keep track of your progress and stay motivated.</string>
     <string name="add_habit">Add Habit</string>
     <string name="add_your_first_habit">Add your first habit or go directly to the app.</string>
     <string name="skip">Skip</string>

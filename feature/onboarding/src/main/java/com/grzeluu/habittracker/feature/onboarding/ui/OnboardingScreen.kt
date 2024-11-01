@@ -20,6 +20,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -27,6 +29,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.grzeluu.habittracker.base.domain.Result
+import com.grzeluu.habittracker.base.ui.state.UiState
+import com.grzeluu.habittracker.base.ui.state.UiState.Loading.data
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.feature.onboarding.ui.animations.OnboardingAnimations
 import com.grzeluu.habittracker.feature.onboarding.ui.components.PagerIndicator
@@ -34,6 +39,7 @@ import com.grzeluu.habittracker.feature.onboarding.ui.pages.AddHabitPage
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.NotificationsPage
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.ThemePage
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.WelcomePage
+import com.grzeluu.habittracker.feature.onboarding.ui.state.OnboardingStateData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -44,46 +50,50 @@ fun OnboardingScreen() {
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 4 })
 
-    Box(
-        modifier = Modifier.systemBarsPadding()
-    ) {
-        HorizontalPager(
-            state = pagerState, modifier = Modifier.fillMaxSize()
-        ) { page ->
-            when (page) {
-                0 -> WelcomePage(goToNextPage = { goToNextPage(coroutineScope, pagerState) })
+    val uiState by viewModel.uiState.collectAsState()
 
-                1 -> ThemePage(isDarkModeEnabled = true,
-                    changeIsDarkModeSelected = {},
-                    goToNextPage = { goToNextPage(coroutineScope, pagerState) })
-
-                2 -> NotificationsPage(isNotificationsEnabled = true,
-                    changeIsNotificationsEnabled = {/* TODO */ },
-                    goToNextPage = { goToNextPage(coroutineScope, pagerState) })
-
-                3 -> AddHabitPage(
-                    goToAddHabit = { /* TODO */ },
-                    goToApp = { /* TODO */ },
-                )
-            }
-        }
-        AnimatedVisibility(
-            visible = pagerState.currentPage != 0,
-            enter = OnboardingAnimations.enterPagerBackArrow,
-            exit = OnboardingAnimations.exitPagerBackArrow,
+    uiState.data?.let {
+        Box(
+            modifier = Modifier.systemBarsPadding()
         ) {
-            IconButton(
-                modifier = Modifier.padding(8.dp),
-                colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.onSurface),
-                onClick = { goToPreviousPage(coroutineScope, pagerState) }
-            ) {
-                Icon(
-                    painterResource(R.drawable.ic_back),
-                    contentDescription = stringResource(R.string.go_to_previous_step)
-                )
+            HorizontalPager(
+                state = pagerState, modifier = Modifier.fillMaxSize()
+            ) { page ->
+                when (page) {
+                    0 -> WelcomePage(goToNextPage = { goToNextPage(coroutineScope, pagerState) })
+
+                    1 -> ThemePage(isDarkModeEnabled = true,
+                        changeIsDarkModeSelected = {},
+                        goToNextPage = { goToNextPage(coroutineScope, pagerState) })
+
+                    2 -> NotificationsPage(isNotificationsEnabled = true,
+                        changeIsNotificationsEnabled = {/* TODO */ },
+                        goToNextPage = { goToNextPage(coroutineScope, pagerState) })
+
+                    3 -> AddHabitPage(
+                        goToAddHabit = { /* TODO */ },
+                        goToApp = { /* TODO */ },
+                    )
+                }
             }
+            AnimatedVisibility(
+                visible = pagerState.currentPage != 0,
+                enter = OnboardingAnimations.enterPagerBackArrow,
+                exit = OnboardingAnimations.exitPagerBackArrow,
+            ) {
+                IconButton(
+                    modifier = Modifier.padding(8.dp),
+                    colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.onSurface),
+                    onClick = { goToPreviousPage(coroutineScope, pagerState) }
+                ) {
+                    Icon(
+                        painterResource(R.drawable.ic_back),
+                        contentDescription = stringResource(R.string.go_to_previous_step)
+                    )
+                }
+            }
+            PagerIndicator(pagerState)
         }
-        PagerIndicator(pagerState)
     }
 }
 

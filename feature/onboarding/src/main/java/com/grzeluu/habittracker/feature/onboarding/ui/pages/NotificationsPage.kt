@@ -44,8 +44,7 @@ fun NotificationsPage(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                modifier = Modifier
-                    .padding(12.dp, 0.dp),
+                modifier = Modifier.padding(12.dp, 0.dp),
                 text = stringResource(comR.string.notifications),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
