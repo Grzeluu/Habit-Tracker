@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.domain.error.Error
-import com.grzeluu.habittracker.base.domain.Result
-import com.grzeluu.habittracker.base.domain.RootError
+import com.grzeluu.habittracker.base.domain.result.Result
 import com.grzeluu.habittracker.base.domain.error.BaseError
+import com.grzeluu.habittracker.base.domain.result.RootError
 import com.grzeluu.habittracker.base.ui.state.LoadingState
 import com.grzeluu.habittracker.base.ui.state.UiState
 import kotlinx.coroutines.CoroutineScope
@@ -32,7 +32,7 @@ abstract class BaseViewModel<DATA> : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     private val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val errorChannel = Channel<Error>()
+    protected val errorChannel = Channel<Error>()
     private val error: Flow<Error?> = errorChannel.receiveAsFlow()
 
     protected abstract val uiDataState: StateFlow<DATA?>
@@ -47,9 +47,6 @@ abstract class BaseViewModel<DATA> : ViewModel() {
                 isLoading || uiDataState == null -> UiState.Loading
                 else -> UiState.Success(uiDataState)
             }
-        }.catch { e ->
-            Log.e("BaseViewModel", "Error while loading data", e)
-            UiState.Failure(BaseError.GENERIC_ERROR)
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),

@@ -13,4 +13,6 @@
     <string name="skip">Skip</string>
     <string name="add_your_first_habit_massage">Now is a great time to add your first habit to the app and start something new!</string>
     <string name="go_to_previous_step">Go to previous step</string>
+    <string name="loading">Loading...</string>
+    <string name="something_has_gone_wrong">Oh no! Something has go wrong!</string>
 </resources>

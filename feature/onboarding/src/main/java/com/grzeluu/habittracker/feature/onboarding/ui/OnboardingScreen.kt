@@ -1,12 +1,6 @@
 package com.grzeluu.habittracker.feature.onboarding.ui
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideIn
-import androidx.compose.animation.slideOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,11 +20,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.grzeluu.habittracker.base.domain.Result
-import com.grzeluu.habittracker.base.ui.state.UiState
+import com.grzeluu.habittracker.base.ui.BaseScreenContainer
 import com.grzeluu.habittracker.base.ui.state.UiState.Loading.data
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.feature.onboarding.ui.animations.OnboardingAnimations
@@ -39,7 +31,6 @@ import com.grzeluu.habittracker.feature.onboarding.ui.pages.AddHabitPage
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.NotificationsPage
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.ThemePage
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.WelcomePage
-import com.grzeluu.habittracker.feature.onboarding.ui.state.OnboardingStateData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -52,21 +43,26 @@ fun OnboardingScreen() {
 
     val uiState by viewModel.uiState.collectAsState()
 
-    uiState.data?.let {
-        Box(
-            modifier = Modifier.systemBarsPadding()
-        ) {
+    BaseScreenContainer(
+        modifier = Modifier
+            .systemBarsPadding()
+            .fillMaxSize(),
+        uiState = uiState,
+    ) { data ->
+        Box {
             HorizontalPager(
                 state = pagerState, modifier = Modifier.fillMaxSize()
             ) { page ->
                 when (page) {
                     0 -> WelcomePage(goToNextPage = { goToNextPage(coroutineScope, pagerState) })
 
-                    1 -> ThemePage(isDarkModeEnabled = true,
+                    1 -> ThemePage(
+                        isDarkModeEnabled = data.isDarkModeEnabled,
                         changeIsDarkModeSelected = {},
                         goToNextPage = { goToNextPage(coroutineScope, pagerState) })
 
-                    2 -> NotificationsPage(isNotificationsEnabled = true,
+                    2 -> NotificationsPage(
+                        isNotificationsEnabled = data.isNotificationsEnabled,
                         changeIsNotificationsEnabled = {/* TODO */ },
                         goToNextPage = { goToNextPage(coroutineScope, pagerState) })
 

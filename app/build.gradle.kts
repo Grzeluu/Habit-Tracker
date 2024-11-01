@@ -45,8 +45,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":base"))
+
     implementation(project(":common:ui"))
-    implementation(project(":common:base"))
     implementation(project(":common:util"))
 
     implementation(project(":component:settings"))

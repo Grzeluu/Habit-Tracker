@@ -1,4 +1,4 @@
-package com.grzeluu.habittracker.base.domain
+package com.grzeluu.habittracker.base.domain.result
 
 import com.grzeluu.habittracker.base.domain.error.Error
 

@@ -1,4 +1,4 @@
-package com.grzeluu.habittracker.base.ui
+package com.grzeluu.habittracker.common.ui.text
 
 import android.content.Context
 import androidx.annotation.StringRes
