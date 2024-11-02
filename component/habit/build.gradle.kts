@@ -1,6 +1,9 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.kotlin.android.get().pluginId)
+    id(libs.plugins.kotlin.compose.get().pluginId)
+    id(libs.plugins.android.hilt.get().pluginId)
+    id(libs.plugins.google.ksp.get().pluginId)
 }
 
 android {
@@ -9,9 +12,7 @@ android {
 
     defaultConfig {
         minSdk = 26
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -20,14 +21,26 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
 dependencies {
-
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(libs.android.hilt)
+    implementation(libs.android.hilt.navigation)
+    ksp(libs.android.hilt.compiler)
+    implementation(libs.kotlinx.metadata)
+    implementation(libs.timber)
 }

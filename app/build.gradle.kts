@@ -1,7 +1,9 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    id(libs.plugins.android.application.get().pluginId)
+    id(libs.plugins.kotlin.android.get().pluginId)
+    id(libs.plugins.kotlin.compose.get().pluginId)
+    id(libs.plugins.google.ksp.get().pluginId)
+    id(libs.plugins.android.hilt.get().pluginId)
 }
 
 android {
@@ -27,19 +29,39 @@ android {
             )
         }
     }
+    hilt {
+        enableAggregatingTask = true
+    }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 }
 
 dependencies {
+    implementation(project(":base"))
+
+    implementation(project(":common:ui"))
+    implementation(project(":common:util"))
+
+    implementation(project(":component:settings"))
+    implementation(project(":component:habit"))
+
+    implementation(project(":feature:addhabit"))
+    implementation(project(":feature:habits"))
+    implementation(project(":feature:notifications"))
+    implementation(project(":feature:onboarding"))
+    implementation(project(":feature:settings"))
+
+    implementation(project(":source:database"))
+    implementation(project(":source:preferences"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -49,11 +71,20 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.android.hilt)
+    implementation(libs.android.hilt.navigation)
+    ksp(libs.android.hilt.compiler)
+    implementation(libs.kotlinx.metadata)
+    implementation(libs.timber)
+
+
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
