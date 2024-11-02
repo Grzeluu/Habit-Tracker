@@ -33,7 +33,7 @@ fun BoxScope.PagerIndicator(
         repeat(pagerState.pageCount) { iteration ->
             val color =
                 if (pagerState.currentPage == iteration) MaterialTheme.colorScheme.onPrimaryContainer
-                else MaterialTheme.colorScheme.outline
+                else MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
             Box(
                 modifier = Modifier
                     .padding(2.dp)
