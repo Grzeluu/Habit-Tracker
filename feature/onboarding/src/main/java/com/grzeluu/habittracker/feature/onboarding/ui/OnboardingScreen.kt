@@ -15,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -57,16 +58,16 @@ fun OnboardingScreen() {
                     0 -> WelcomePage(goToNextPage = { goToNextPage(coroutineScope, pagerState) })
 
                     1 -> ThemePage(isDarkModeEnabled = data.isDarkModeEnabled,
-                        changeIsDarkModeSelected = {},
+                        changeIsDarkModeSelected = { viewModel.changeDarkModeSettings(it) },
                         goToNextPage = { goToNextPage(coroutineScope, pagerState) })
 
                     2 -> NotificationsPage(isNotificationsEnabled = data.isNotificationsEnabled,
-                        changeIsNotificationsEnabled = {/* TODO */ },
+                        changeIsNotificationsEnabled = { viewModel.changeNotificationSettings(it) },
                         goToNextPage = { goToNextPage(coroutineScope, pagerState) })
 
                     3 -> AddHabitPage(
-                        goToAddHabit = { /* TODO */ },
-                        goToApp = { /* TODO */ },
+                        goToAddHabit = { viewModel.saveSettingsAndAddHabit() },
+                        goToApp = { viewModel.saveSettingsAndGoToMainPage() },
                     )
                 }
             }
@@ -99,15 +100,11 @@ fun OnboardingScreen() {
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-private fun goToPreviousPage(
-    coroutineScope: CoroutineScope, pagerState: PagerState
-) {
+private fun goToPreviousPage(coroutineScope: CoroutineScope, pagerState: PagerState) {
     coroutineScope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-private fun goToNextPage(
-    coroutineScope: CoroutineScope, pagerState: PagerState
-) {
+private fun goToNextPage(coroutineScope: CoroutineScope, pagerState: PagerState) {
     coroutineScope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
 }

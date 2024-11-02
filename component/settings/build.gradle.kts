@@ -31,8 +31,13 @@ android {
 }
 
 dependencies {
+    implementation(project(":base"))
+    implementation(project(":common:util"))
+    implementation(project(":source:preferences"))
+
     implementation(libs.kotlinx.serialization)
     implementation(libs.android.hilt)
     implementation(libs.android.hilt.navigation)
     ksp(libs.android.hilt.compiler)
+    implementation(libs.timber)
 }

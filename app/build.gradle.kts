@@ -40,6 +40,7 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 }
@@ -74,6 +75,8 @@ dependencies {
     implementation(libs.android.hilt.navigation)
     ksp(libs.android.hilt.compiler)
     implementation(libs.kotlinx.metadata)
+    implementation(libs.timber)
+
 
     testImplementation(libs.junit)
 

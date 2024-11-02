@@ -37,6 +37,7 @@ android {
 dependencies {
     implementation(project(":base"))
     implementation(project(":common:ui"))
+    implementation(project(":component:settings"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -52,6 +53,7 @@ dependencies {
     implementation(libs.android.hilt.navigation)
     ksp(libs.android.hilt.compiler)
     implementation(libs.kotlinx.metadata)
+    implementation(libs.timber)
 
     testImplementation(libs.junit)
 

@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class SettingsDataSourceImpl @Inject constructor(
     @SettingsStore private val settingsDataStore: DataStore<Preferences>
 ) : SettingsDataSource {

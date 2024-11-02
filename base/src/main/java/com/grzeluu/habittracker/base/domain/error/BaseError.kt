@@ -1,5 +1,7 @@
 package com.grzeluu.habittracker.base.domain.error
 
 enum class BaseError: Error {
-    GENERIC_ERROR,
+    UNKNOWN_ERROR,
+    SAVE_ERROR,
+    READ_ERROR
 }

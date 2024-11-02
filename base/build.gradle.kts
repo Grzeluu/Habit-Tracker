@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.timber)
 
     implementation(libs.android.hilt)
     implementation(libs.android.hilt.navigation)

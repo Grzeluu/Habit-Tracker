@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.android.hilt.navigation)
     ksp(libs.android.hilt.compiler)
     implementation(libs.kotlinx.metadata)
+    implementation(libs.timber)
 
     testImplementation(libs.junit)
 
