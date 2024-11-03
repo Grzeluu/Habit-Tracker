@@ -1,4 +1,4 @@
-package com.grzeluu.habittracker.activity.ui.navigation
+package com.grzeluu.habittracker.activity.ui.navigation.app
 
 import kotlinx.serialization.Serializable
 

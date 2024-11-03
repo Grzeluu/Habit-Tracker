@@ -37,6 +37,7 @@ android {
 dependencies {
     implementation(project(":base"))
     implementation(project(":common:ui"))
+    implementation(project(":common:util"))
     implementation(project(":component:settings"))
 
     implementation(libs.androidx.core.ktx)
@@ -48,6 +49,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.compose.foundation)
 
     implementation(libs.android.hilt)
     implementation(libs.android.hilt.navigation)

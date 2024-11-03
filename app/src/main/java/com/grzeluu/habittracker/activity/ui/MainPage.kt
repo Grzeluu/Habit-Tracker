@@ -11,10 +11,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.grzeluu.habittracker.activity.ui.components.BottomNavigationBar
 import com.grzeluu.habittracker.activity.ui.navigation.main.BottomNavItem
-import com.grzeluu.habittracker.activity.ui.navigation.main.NavigationHost
+import com.grzeluu.habittracker.activity.ui.navigation.main.MainPageNavigationHost
 
 @Composable
-fun MainPage(modifier: Modifier = Modifier) {
+fun MainPage(modifier: Modifier = Modifier, onNavigateToAddHabit: () -> Unit) {
 
     val mainPageNavController = rememberNavController()
     val navBackStackEntry by mainPageNavController.currentBackStackEntryAsState()
@@ -44,7 +44,7 @@ fun MainPage(modifier: Modifier = Modifier) {
             )
         }
     ) { innerPadding ->
-        NavigationHost(
+        MainPageNavigationHost(
             modifier = Modifier.padding(innerPadding),
             navController = mainPageNavController
         )

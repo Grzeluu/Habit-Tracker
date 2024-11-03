@@ -1,10 +1,16 @@
 package com.grzeluu.habittracker.feature.addhabit.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 
 @Composable
-fun AddHabitScreen(modifier: Modifier = Modifier) {
+fun AddHabitScreen(
+    onNavigateToMainPage: () -> Unit,
+) {
+    BackHandler {
+        onNavigateToMainPage()
+    }
+
     Text("Add Habit")
 }

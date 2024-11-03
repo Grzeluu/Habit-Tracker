@@ -6,7 +6,6 @@ import com.grzeluu.habittracker.base.domain.usecase.FlowUseCase
 import com.grzeluu.habittracker.component.settings.domain.model.Settings
 import com.grzeluu.habittracker.component.settings.domain.repository.SettingsRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import timber.log.Timber

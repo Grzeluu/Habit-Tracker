@@ -12,7 +12,7 @@ import com.grzeluu.habittracker.feature.settings.ui.SettingsScreen
 
 
 @Composable
-fun NavigationHost(navController: NavHostController, modifier: Modifier) {
+fun MainPageNavigationHost(navController: NavHostController, modifier: Modifier) {
     NavHost(
         modifier = modifier,
         navController = navController,

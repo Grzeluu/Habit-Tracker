@@ -50,7 +50,7 @@ abstract class BaseViewModel<DATA> : ViewModel() {
     }
 
 
-    protected suspend fun <D, E : RootError> Result<D, E>.handleResult(action: (D) -> Unit = {}) {
+    protected suspend fun <D, E : RootError> Result<D, E>.handleResult(action: suspend (D) -> Unit = {}) {
         when (this) {
             is Result.Error -> {
                 errorChannel.send(this.error)

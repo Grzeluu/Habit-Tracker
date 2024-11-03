@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SettingsCacheModel(
-    val isDarkMode: Boolean,
+    val isDarkMode: Boolean?,
     val isNotificationsEnabled: Boolean
 )
