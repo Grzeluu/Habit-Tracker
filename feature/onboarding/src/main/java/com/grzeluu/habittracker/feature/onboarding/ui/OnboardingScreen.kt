@@ -39,7 +39,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnboardingScreen() {
+fun OnboardingScreen(
+    onNavigateToMainPage: () -> Unit,
+    onNavigateToAddHabit: () -> Unit
+) {
     val viewModel: OnboardingViewModel = hiltViewModel()
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 4 })

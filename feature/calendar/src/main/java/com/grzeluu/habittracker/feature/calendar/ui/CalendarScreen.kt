@@ -1,10 +1,10 @@
-package com.grzeluu.habittracker.feature.settings.ui
+package com.grzeluu.habittracker.feature.calendar.ui
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun HabitsScreen(modifier: Modifier = Modifier) {
-    Text("Habits")
+fun CalendarScreen(modifier: Modifier = Modifier) {
+    Text("Calendar")
 }

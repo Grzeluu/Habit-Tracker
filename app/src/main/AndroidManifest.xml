@@ -14,7 +14,7 @@
         android:theme="@style/Theme.HabitTracker"
         tools:targetApi="31">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.HabitTracker">

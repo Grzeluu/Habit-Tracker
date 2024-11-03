@@ -1,7 +1,7 @@
-package com.grzeluu.habittracker.activity
+package com.grzeluu.habittracker.activity.ui
 
 import androidx.lifecycle.viewModelScope
-import com.grzeluu.habittracker.activity.state.MainActivityStateData
+import com.grzeluu.habittracker.activity.ui.state.MainActivityStateData
 import com.grzeluu.habittracker.base.ui.BaseViewModel
 import com.grzeluu.habittracker.component.settings.domain.model.Settings
 import com.grzeluu.habittracker.component.settings.domain.usecase.GetSettingsUseCase

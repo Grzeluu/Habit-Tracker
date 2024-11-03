@@ -1,4 +1,4 @@
-package com.grzeluu.habittracker.activity
+package com.grzeluu.habittracker.activity.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.grzeluu.habittracker.base.ui.BaseScreenContainer
 import com.grzeluu.habittracker.common.ui.theme.HabitTrackerTheme
-import com.grzeluu.habittracker.feature.onboarding.ui.OnboardingScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,10 +30,9 @@ class MainActivity : ComponentActivity() {
                 HabitTrackerTheme(
                     darkTheme = data.settings?.isDarkModeEnabled ?: isSystemInDarkTheme()
                 ) {
-                    OnboardingScreen()
+                    MainPage(modifier = Modifier.fillMaxSize())
                 }
             }
-
         }
     }
 }

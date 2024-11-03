@@ -1,4 +1,4 @@
-package com.grzeluu.habittracker.activity.state
+package com.grzeluu.habittracker.activity.ui.state
 
 import com.grzeluu.habittracker.component.settings.domain.model.Settings
 
