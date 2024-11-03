@@ -4,6 +4,7 @@ plugins {
     id(libs.plugins.kotlin.compose.get().pluginId)
     id(libs.plugins.google.ksp.get().pluginId)
     id(libs.plugins.android.hilt.get().pluginId)
+    id(libs.plugins.kotlin.serialization.get().pluginId)
 }
 
 android {
@@ -56,6 +57,7 @@ dependencies {
 
     implementation(project(":feature:addhabit"))
     implementation(project(":feature:habits"))
+    implementation(project(":feature:calendar"))
     implementation(project(":feature:notifications"))
     implementation(project(":feature:onboarding"))
     implementation(project(":feature:settings"))
@@ -76,7 +78,8 @@ dependencies {
     ksp(libs.android.hilt.compiler)
     implementation(libs.kotlinx.metadata)
     implementation(libs.timber)
-
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization)
 
     testImplementation(libs.junit)
 

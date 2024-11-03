@@ -13,7 +13,7 @@ class SaveSettingsUseCase @Inject constructor(
 ) : UseCase<SaveSettingsUseCase.Request, Unit, BaseError>() {
 
     data class Request(
-        val isDarkModeEnabled: Boolean,
+        val isDarkModeEnabled: Boolean?,
         val isNotificationsEnabled: Boolean
     )
 

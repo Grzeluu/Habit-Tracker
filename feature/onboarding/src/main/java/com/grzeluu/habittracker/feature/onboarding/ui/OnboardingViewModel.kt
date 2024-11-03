@@ -6,15 +6,20 @@ import com.grzeluu.habittracker.component.settings.domain.usecase.GetSettingsUse
 import com.grzeluu.habittracker.component.settings.domain.usecase.SaveSettingsUseCase
 import com.grzeluu.habittracker.feature.onboarding.ui.state.OnboardingStateData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,8 +28,11 @@ class OnboardingViewModel @Inject constructor(
     private val getSettingsUseCase: GetSettingsUseCase
 ) : BaseViewModel<OnboardingStateData>() {
 
-    private var _isDarkModeEnabled = MutableStateFlow(false)
-    private val isDarkModeEnabled: StateFlow<Boolean> = _isDarkModeEnabled
+    private val navigationChannel = Channel<NavigationEvent>()
+    val navigationEventsChannelFlow = navigationChannel.receiveAsFlow()
+
+    private var _isDarkModeEnabled = MutableStateFlow<Boolean?>(null)
+    private val isDarkModeEnabled: StateFlow<Boolean?> = _isDarkModeEnabled
 
     private var _isNotificationsEnabled = MutableStateFlow(false)
     private val isNotificationsEnabled: StateFlow<Boolean> = _isNotificationsEnabled
@@ -65,24 +73,19 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    fun saveSettingsAndAddHabit() {
+    fun saveSettingsAndNavigate(destinationNavigationEvent: NavigationEvent) {
         viewModelScope.launch(Dispatchers.IO) {
             loadingState.incrementTasksInProgress()
             saveSettings(isDarkModeEnabled.value, isNotificationsEnabled.value)
-            loadingState.decrementTasksInProgress()
-        }
-    }
-
-    fun saveSettingsAndGoToMainPage() {
-        viewModelScope.launch(Dispatchers.IO) {
-            loadingState.incrementTasksInProgress()
-            saveSettings(isDarkModeEnabled.value, isNotificationsEnabled.value)
+            withContext(Dispatchers.Main) {
+                navigationChannel.send(destinationNavigationEvent)
+            }
             loadingState.decrementTasksInProgress()
         }
     }
 
     private suspend fun OnboardingViewModel.saveSettings(
-        isDarkModeEnabled: Boolean,
+        isDarkModeEnabled: Boolean?,
         isNotificationsEnabled: Boolean
     ) {
         saveSettingsUseCase(

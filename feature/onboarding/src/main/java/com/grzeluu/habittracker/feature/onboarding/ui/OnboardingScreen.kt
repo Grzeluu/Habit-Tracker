@@ -2,6 +2,7 @@ package com.grzeluu.habittracker.feature.onboarding.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,17 +34,27 @@ import com.grzeluu.habittracker.feature.onboarding.ui.pages.AddHabitPage
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.NotificationsPage
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.ThemePage
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.WelcomePage
+import com.grzeluu.habittracker.util.flow.ObserveAsEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnboardingScreen() {
+fun OnboardingScreen(
+    onNavigateToMainPage: () -> Unit,
+    onNavigateToAddHabit: () -> Unit
+) {
     val viewModel: OnboardingViewModel = hiltViewModel()
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 4 })
 
     val uiState by viewModel.uiState.collectAsState()
+
+    ObserveAsEvent(viewModel.navigationEventsChannelFlow) { event ->
+        when (event) {
+            NavigationEvent.NAVIGATE_TO_MAIN_PAGE -> onNavigateToMainPage()
+            NavigationEvent.NAVIGATE_TO_ADD_HABIT -> onNavigateToAddHabit()
+        }
+    }
 
     BaseScreenContainer(
         modifier = Modifier.fillMaxSize(),
@@ -57,7 +67,7 @@ fun OnboardingScreen() {
                 when (page) {
                     0 -> WelcomePage(goToNextPage = { goToNextPage(coroutineScope, pagerState) })
 
-                    1 -> ThemePage(isDarkModeEnabled = data.isDarkModeEnabled,
+                    1 -> ThemePage(isDarkModeEnabled = data.isDarkModeEnabled ?: isSystemInDarkTheme(),
                         changeIsDarkModeSelected = { viewModel.changeDarkModeSettings(it) },
                         goToNextPage = { goToNextPage(coroutineScope, pagerState) })
 
@@ -66,8 +76,8 @@ fun OnboardingScreen() {
                         goToNextPage = { goToNextPage(coroutineScope, pagerState) })
 
                     3 -> AddHabitPage(
-                        goToAddHabit = { viewModel.saveSettingsAndAddHabit() },
-                        goToApp = { viewModel.saveSettingsAndGoToMainPage() },
+                        goToAddHabit = { viewModel.saveSettingsAndNavigate(NavigationEvent.NAVIGATE_TO_ADD_HABIT) },
+                        goToApp = { viewModel.saveSettingsAndNavigate(NavigationEvent.NAVIGATE_TO_MAIN_PAGE) },
                     )
                 }
             }
@@ -99,12 +109,10 @@ fun OnboardingScreen() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 private fun goToPreviousPage(coroutineScope: CoroutineScope, pagerState: PagerState) {
     coroutineScope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 private fun goToNextPage(coroutineScope: CoroutineScope, pagerState: PagerState) {
     coroutineScope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
 }

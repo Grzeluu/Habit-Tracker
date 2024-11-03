@@ -22,18 +22,23 @@ dependencyResolutionManagement {
 rootProject.name = "Habit Tracker"
 include(":app")
 include(":base")
+
 include(":common")
 include(":common:ui")
 include(":common:util")
+
 include(":component")
 include(":component:habit")
 include(":component:settings")
+
 include(":feature")
 include(":feature:addhabit")
 include(":feature:habits")
 include(":feature:notifications")
 include(":feature:onboarding")
 include(":feature:settings")
+include(":feature:calendar")
+
 include(":source")
 include(":source:database")
 include(":source:preferences")

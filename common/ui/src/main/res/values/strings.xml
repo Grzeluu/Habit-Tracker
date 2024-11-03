@@ -15,4 +15,8 @@
     <string name="go_to_previous_step">Go to previous step</string>
     <string name="loading">Loading…</string>
     <string name="something_has_gone_wrong">Oh no! Something has go wrong!</string>
+    <string name="habits">Habits</string>
+    <string name="calendar">Calendar</string>
+    <string name="notification">Notifications</string>
+    <string name="settings">Settings</string>
 </resources>
