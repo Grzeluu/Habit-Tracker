@@ -14,7 +14,7 @@ android {
         minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-       
+
     }
 
     buildTypes {
@@ -32,6 +32,11 @@ android {
 }
 
 dependencies {
+    implementation(project(":component:habit"))
+    implementation(project(":base"))
+    implementation(project(":common:ui"))
+    implementation(project(":common:util"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel)

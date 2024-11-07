@@ -1,8 +1,12 @@
 package com.grzeluu.habittracker.feature.addhabit.ui
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 
 @Composable
 fun AddHabitScreen(
@@ -12,5 +16,11 @@ fun AddHabitScreen(
         onNavigateToMainPage()
     }
 
-    Text("Add Habit")
+    Scaffold(
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+
+        }
+    }
 }
