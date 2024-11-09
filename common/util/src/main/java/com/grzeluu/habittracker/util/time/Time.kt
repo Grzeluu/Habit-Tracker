@@ -1,4 +1,4 @@
-package com.grzeluu.habittracker.util
+package com.grzeluu.habittracker.util.time
 
 fun Int.toPresentationTime(
 ): String {

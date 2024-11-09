@@ -20,4 +20,11 @@
     <string name="notification">Notifications</string>
     <string name="settings">Settings</string>
     <string name="done">Done</string>
+    <string name="minute">min</string>
+    <string name="hour">h</string>
+    <string name="km">km</string>
+    <string name="kcal">kcal</string>
+    <string name="liters">l</string>
+    <string name="times">times</string>
+    <string name="steps">steps</string>
 </resources>

@@ -1,6 +1,6 @@
-package com.grzeluu.habittracker.base.domain.enums
+package com.grzeluu.habittracker.util.enums
 
-enum class HabitIcon {
+enum class CardIcon {
     GOAL,
     WELLNESS,
     EXERCISE,
@@ -10,6 +10,5 @@ enum class HabitIcon {
     MUSIC,
     BOOK,
     FOOD,
-    DRINK,
-    FORBIDDEN
+    DRINK
 }

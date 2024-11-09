@@ -7,6 +7,8 @@ import androidx.compose.ui.platform.LocalContext
 
 sealed class UiText {
 
+    data object Empty : UiText()
+
     data class DynamicString(val value: String) : UiText()
 
     class StringResource(
@@ -19,6 +21,7 @@ sealed class UiText {
         return when (this) {
             is DynamicString -> value
             is StringResource -> LocalContext.current.getString(id, *args)
+            Empty -> ""
         }
 
     }
@@ -27,6 +30,7 @@ sealed class UiText {
         return when (this) {
             is DynamicString -> value
             is StringResource -> context.getString(id, *args)
+            is Empty -> ""
         }
     }
 
