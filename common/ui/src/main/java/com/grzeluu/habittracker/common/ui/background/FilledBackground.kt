@@ -1,8 +1,7 @@
-package com.grzeluu.habittracker.common.ui.components
+package com.grzeluu.habittracker.common.ui.background
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

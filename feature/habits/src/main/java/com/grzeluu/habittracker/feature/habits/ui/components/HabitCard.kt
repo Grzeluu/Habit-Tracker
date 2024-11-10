@@ -26,14 +26,13 @@ import androidx.compose.ui.unit.dp
 import com.grzeluu.habittracker.util.enums.CardColor
 import com.grzeluu.habittracker.util.enums.CardIcon
 import com.grzeluu.habittracker.common.ui.R
-import com.grzeluu.habittracker.common.ui.components.FilledBackground
+import com.grzeluu.habittracker.common.ui.background.FilledBackground
 import com.grzeluu.habittracker.common.ui.mapper.mapToColor
 import com.grzeluu.habittracker.common.ui.mapper.mapToDrawableRes
 import com.grzeluu.habittracker.common.ui.mapper.mapToUiText
 import com.grzeluu.habittracker.common.ui.theme.HabitTrackerTheme
 import com.grzeluu.habittracker.component.habit.domain.model.Habit
 import com.grzeluu.habittracker.component.habit.domain.model.HabitDesiredEffort
-import com.grzeluu.habittracker.component.habit.domain.model.HabitPeriodicity
 import com.grzeluu.habittracker.util.enums.EffortUnit
 import com.grzeluu.habittracker.util.numbers.formatFloat
 
@@ -144,7 +143,7 @@ fun HabitCardPreviewDone1() {
                     desired = 15f,
                 ),
                 history = emptyList(),
-                periodicity = HabitPeriodicity(defaultDaysInWeek = 4)
+                desirableDays = emptyList()
             ),
             isDone = true,
             onButtonClicked = {}
@@ -169,7 +168,7 @@ fun HabitCardPreviewDone2() {
                     desired = 2.5f,
                 ),
                 history = emptyList(),
-                periodicity = HabitPeriodicity(defaultDaysInWeek = 4)
+                desirableDays = emptyList()
             ),
             isDone = true,
             onButtonClicked = {}
@@ -190,11 +189,11 @@ fun HabitCardPreviewAlmostDone() {
                 description = "20 pages",
                 notificationTime = null,
                 effort = HabitDesiredEffort(
-                    effortUnit = EffortUnit.REPEAT,
+                    effortUnit = EffortUnit.TIMES,
                     desired = 20f,
                 ),
                 history = emptyList(),
-                periodicity = HabitPeriodicity(defaultDaysInWeek = 4)
+                desirableDays = emptyList()
             ),
             isDone = true,
             onButtonClicked = {}
@@ -216,7 +215,7 @@ fun HabitCardUndone() {
                 notificationTime = null,
                 effort = null,
                 history = emptyList(),
-                periodicity = HabitPeriodicity(defaultDaysInWeek = 4)
+                desirableDays = emptyList()
             ),
             isDone = false,
             onButtonClicked = {}

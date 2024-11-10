@@ -8,4 +8,7 @@ enum class CardColor {
     PINK,
     BLUE,
     PURPLE,
+    MAGENTA,
+    TEAL,
+    BROWN
 }

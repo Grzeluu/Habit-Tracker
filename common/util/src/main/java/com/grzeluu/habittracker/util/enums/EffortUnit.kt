@@ -1,11 +1,11 @@
 package com.grzeluu.habittracker.util.enums
 
 enum class EffortUnit {
-    MINUTE,
-    HOUR,
+    TIMES,
+    MINUTES,
+    HOURS,
     KM,
     KCAL,
     LITERS,
-    REPEAT,
     STEPS
 }

@@ -13,4 +13,7 @@ fun CardColor.mapToColor(): Color =
         CardColor.PINK -> CardColors.PINK
         CardColor.BLUE -> CardColors.BLUE
         CardColor.PURPLE -> CardColors.PURPLE
+        CardColor.MAGENTA ->  CardColors.MAGENTA
+        CardColor.TEAL ->  CardColors.TEAL
+        CardColor.BROWN ->  CardColors.BROWN
     }

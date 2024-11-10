@@ -25,6 +25,8 @@ timber = "5.0.1"
 composeFoundation = "1.7.5"
 datetime = "0.6.1"
 uiTooling = "1.7.5"
+foundationLayoutAndroid = "1.7.2"
+foundationLayoutAndroidVersion = "1.6.6"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -58,6 +60,8 @@ kotlinx-metadata = { group = "org.jetbrains.kotlinx", name = "kotlinx-metadata-j
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime"}
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
+androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
+foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroidVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

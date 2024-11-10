@@ -10,4 +10,7 @@ object CardColors {
     val PINK = Color(0xFFE82E68)
     val BLUE = Color(0xFF2196F3)
     val PURPLE = Color(0xFF9003F4)
+    val MAGENTA = Color(0xFFFF00FF)
+    val TEAL = Color(0xFF008080)
+    val BROWN = Color(0xFF795548)
 }

@@ -2,6 +2,7 @@ package com.grzeluu.habittracker.component.habit.domain.model
 
 import com.grzeluu.habittracker.util.enums.CardColor
 import com.grzeluu.habittracker.util.enums.CardIcon
+import com.grzeluu.habittracker.util.enums.Day
 import kotlinx.datetime.LocalDate
 
 data class Habit(
@@ -10,7 +11,7 @@ data class Habit(
     val icon: CardIcon,
     val color: CardColor,
     val description: String?,
-    val periodicity: HabitPeriodicity,
+    val desirableDays: List<Day>?,
     val notificationTime: HabitTime?,
     val effort: HabitDesiredEffort?,
     val history: List<HabitHistoryEntry> = emptyList()
