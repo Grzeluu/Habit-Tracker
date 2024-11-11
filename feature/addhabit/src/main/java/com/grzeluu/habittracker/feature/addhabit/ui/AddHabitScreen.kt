@@ -5,11 +5,13 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -36,11 +38,7 @@ import com.grzeluu.habittracker.feature.addhabit.ui.components.IconSelectionRow
 import com.grzeluu.habittracker.feature.addhabit.ui.components.SetDailyGoalView
 import com.grzeluu.habittracker.feature.addhabit.ui.components.SetNotificationsView
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitEvent
-import com.grzeluu.habittracker.util.enums.CardColor
-import com.grzeluu.habittracker.util.enums.CardIcon
-import com.grzeluu.habittracker.util.enums.Day
 import com.grzeluu.habittracker.util.enums.EffortUnit
-import com.grzeluu.habittracker.util.numbers.formatFloat
 
 @Composable
 fun AddHabitScreen(
@@ -63,11 +61,15 @@ fun AddHabitScreen(
             )
         },
     ) { innerPadding ->
-        BaseScreenContainer(modifier = Modifier.padding(innerPadding), uiState) { uiData ->
+        BaseScreenContainer(
+            modifier = Modifier.padding(innerPadding),
+            uiState
+        ) { uiData ->
             Column(
                 modifier = Modifier
-                    .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
-                    .padding(AppSizes.screenPadding)
+                    .padding(horizontal = AppSizes.screenPadding)
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxWidth()
             ) {
                 CustomTextField(
                     value = uiData.name,
@@ -79,26 +81,26 @@ fun AddHabitScreen(
                 CustomTextField(
                     maxLines = 2,
                     imeAction = ImeAction.Done,
-                    value = uiData.name,
+                    value = uiData.description.orEmpty(),
                     onValueChange = { viewModel.onEvent(AddHabitEvent.OnDescriptionChanged(it)) },
                     label = stringResource(R.string.description)
                 )
                 Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormSections))
                 BasicLabel(text = stringResource(R.string.color))
                 ColorSelectionRow(
-                    selectedColor = CardColor.ORANGE,
+                    selectedColor = uiData.color,
                     onSelectionChanged = { viewModel.onEvent(AddHabitEvent.OnColorChanged(it)) }
                 )
                 Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormElements))
                 BasicLabel(text = stringResource(R.string.icon))
                 IconSelectionRow(
-                    selectedIcon = CardIcon.EXERCISE,
-                    iconsColor = CardColor.ORANGE,
+                    selectedIcon = uiData.icon,
+                    iconsColor = uiData.color,
                     onSelectionChanged = { viewModel.onEvent(AddHabitEvent.OnIconChanged(it)) }
                 )
                 Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormSections))
                 DaySelectionView(
-                    selectedDays = listOf(Day.MONDAY, Day.TUESDAY, Day.SATURDAY),
+                    selectedDays = uiData.selectedDays,
                     onDayCheckedChange = { day, isChecked ->
                         viewModel.onEvent(AddHabitEvent.OnDayChanged(day, isChecked))
                     },
@@ -107,21 +109,17 @@ fun AddHabitScreen(
                 Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormSections))
                 BasicLabel(text = stringResource(R.string.set_your_daily_goal))
                 SetDailyGoalView(
-                    goalTextState = uiData.dailyGoal.formatFloat(),
+                    goalTextState = uiData.dailyEffort.toString(),
                     onTextChanged = { viewModel.onEvent(AddHabitEvent.OnDailyGoalTextChanged(it)) },
-                    selectedEffortUnit = EffortUnit.HOURS,
+                    selectedEffortUnit = uiData.effortUnit,
                     onChangeEffortUnit = { viewModel.onEvent(AddHabitEvent.OnDailyGoalUnitChanged(it)) }
                 )
                 Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormElements))
                 SetNotificationsView(
-                    isNotificationsEnabled = false,
+                    isNotificationsEnabled = uiData.isNotificationsEnabled,
                     onNotificationsEnabledChange = { viewModel.onEvent(AddHabitEvent.OnNotificationsEnabledChanged(it)) }
                 )
-                Spacer(
-                    modifier = Modifier
-                        .weight(1.0f)
-                        .height(AppSizes.spaceBetweenFormSections)
-                )
+                Spacer(modifier = Modifier.defaultMinSize(AppSizes.spaceBetweenFormSections).weight(1f))
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()

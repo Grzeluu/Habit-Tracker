@@ -3,7 +3,7 @@ package com.grzeluu.habittracker.common.ui.color
 import androidx.compose.ui.graphics.Color
 
 object CardColors {
-    val YELLOW = Color(0xFFFFEB3B)
+    val YELLOW = Color(0xFFFAE30F)
     val GREEN = Color(0xFF4CAF50)
     val ORANGE = Color(0xFFFF9800)
     val RED = Color(0xFFF44336)

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.runtime.Composable
@@ -38,15 +39,16 @@ fun DaySelectionView(
     Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormElements))
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Day.entries.forEach { day ->
+        Day.entries.forEachIndexed { index, day ->
             DayToggleButton(
-                modifier = Modifier.clip(RoundedCornerShape(12.dp)),
+                modifier = Modifier.weight(1f).clip(RoundedCornerShape(12.dp)),
                 onCheckedChange = { onDayCheckedChange(day, it) },
                 isChecked = selectedDays.contains(day),
                 day = day
             )
+            if(index != Day.entries.lastIndex) Spacer(modifier = Modifier.width(4.dp))
         }
     }
 }

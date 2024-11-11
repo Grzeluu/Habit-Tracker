@@ -5,13 +5,13 @@ import com.grzeluu.habittracker.util.enums.CardIcon
 import com.grzeluu.habittracker.util.enums.Day
 import com.grzeluu.habittracker.util.enums.EffortUnit
 
-data class AddHabitStateData(
+data class AddHabitDataState(
     val name: String,
-    val description: String,
+    val description: String?,
     val color: CardColor,
     val icon: CardIcon,
     val selectedDays: List<Day>,
-    val dailyGoal: Float,
+    val dailyEffort: Float?,
     val effortUnit: EffortUnit,
     val isNotificationsEnabled: Boolean
 )

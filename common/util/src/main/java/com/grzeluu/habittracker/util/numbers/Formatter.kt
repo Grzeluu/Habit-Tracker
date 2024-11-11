@@ -3,7 +3,8 @@ package com.grzeluu.habittracker.util.numbers
 import android.annotation.SuppressLint
 
 @SuppressLint("DefaultLocale")
-fun Float.formatFloat(): String {
+fun Float?.formatFloat(): String {
+    if (this == null) return ""
     return if (this % 1 == 0f) {
         this.toInt().toString()
     } else {
