@@ -4,10 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.ui.BaseViewModel
 import com.grzeluu.habittracker.component.settings.domain.usecase.GetSettingsUseCase
 import com.grzeluu.habittracker.component.settings.domain.usecase.SaveSettingsUseCase
+import com.grzeluu.habittracker.feature.onboarding.ui.event.NavigationEvent
 import com.grzeluu.habittracker.feature.onboarding.ui.state.OnboardingStateData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

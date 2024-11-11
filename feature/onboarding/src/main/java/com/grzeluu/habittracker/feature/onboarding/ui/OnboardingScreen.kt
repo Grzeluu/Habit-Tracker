@@ -1,7 +1,6 @@
 package com.grzeluu.habittracker.feature.onboarding.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +29,7 @@ import com.grzeluu.habittracker.base.ui.BaseScreenContainer
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.feature.onboarding.ui.animations.OnboardingAnimations
 import com.grzeluu.habittracker.feature.onboarding.ui.components.PagerIndicator
+import com.grzeluu.habittracker.feature.onboarding.ui.event.NavigationEvent
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.AddHabitPage
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.NotificationsPage
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.ThemePage

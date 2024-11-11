@@ -41,23 +41,23 @@ fun HabitCard(
     modifier: Modifier = Modifier,
     habit: Habit,
     isDone: Boolean,
+    currentEffort: Float,
     onButtonClicked: () -> Unit,
 ) {
 
     val filled = habit.effort?.let { effort ->
         //TODO
-        //effort.current / effort.desired
-        1f
+        currentEffort / effort.desired
     } ?: if (isDone) 1f else 0f
 
     val effortString =
         habit.effort?.let { effort ->
             buildString {
                 //TODO
-//                if (effort.current > 0) {
-//                    append(effort.current.formatFloat())
-//                    append(" / ")
-//                }
+                if (currentEffort> 0) {
+                    append(currentEffort.formatFloat())
+                    append(" / ")
+                }
                 append(effort.desired.formatFloat())
                 append(" ")
                 append(effort.effortUnit.mapToUiText().asString())
@@ -136,16 +136,17 @@ fun HabitCardPreviewDone1() {
                 name = "Running",
                 icon = CardIcon.RUN,
                 color = CardColor.RED,
-                description = "15km - moderate pace",
+                description = "5km - moderate pace",
                 notificationTime = null,
                 effort = HabitDesiredEffort(
                     effortUnit = EffortUnit.KM,
-                    desired = 15f,
+                    desired = 5f,
                 ),
                 history = emptyList(),
                 desirableDays = emptyList()
             ),
             isDone = true,
+            currentEffort = 5f,
             onButtonClicked = {}
         )
     }
@@ -153,7 +154,7 @@ fun HabitCardPreviewDone1() {
 
 @Preview
 @Composable
-fun HabitCardPreviewDone2() {
+fun HabitCardPreviewAlmostDone1() {
     HabitTrackerTheme {
         HabitCard(
             modifier = Modifier.wrapContentHeight(),
@@ -170,6 +171,7 @@ fun HabitCardPreviewDone2() {
                 history = emptyList(),
                 desirableDays = emptyList()
             ),
+            currentEffort = 1.5f,
             isDone = true,
             onButtonClicked = {}
         )
@@ -178,7 +180,7 @@ fun HabitCardPreviewDone2() {
 
 @Preview
 @Composable
-fun HabitCardPreviewAlmostDone() {
+fun HabitCardPreviewAlmostDone2() {
     HabitTrackerTheme {
         HabitCard(
             modifier = Modifier.wrapContentHeight(),
@@ -195,6 +197,7 @@ fun HabitCardPreviewAlmostDone() {
                 history = emptyList(),
                 desirableDays = emptyList()
             ),
+            currentEffort = 10f,
             isDone = true,
             onButtonClicked = {}
         )
@@ -203,7 +206,7 @@ fun HabitCardPreviewAlmostDone() {
 
 @Preview
 @Composable
-fun HabitCardUndone() {
+fun HabitCardNotDone() {
     HabitTrackerTheme {
         HabitCard(
             modifier = Modifier.wrapContentHeight(),
@@ -217,6 +220,7 @@ fun HabitCardUndone() {
                 history = emptyList(),
                 desirableDays = emptyList()
             ),
+            currentEffort = 0f,
             isDone = false,
             onButtonClicked = {}
         )
