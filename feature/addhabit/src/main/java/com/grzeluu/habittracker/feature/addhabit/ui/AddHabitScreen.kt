@@ -104,7 +104,7 @@ fun AddHabitScreen(
                 Spacer(modifier = Modifier.height(spaceBetweenFormSections))
                 BasicLabel(text = stringResource(R.string.set_your_daily_goal))
                 SetDailyGoalView(
-                    goalTextState = uiData.dailyEffort.toString(),
+                    goalTextState = uiData.dailyEffort.orEmpty(),
                     onTextChanged = { viewModel.onEvent(AddHabitEvent.OnDailyGoalTextChanged(it)) },
                     selectedEffortUnit = uiData.effortUnit,
                     onChangeEffortUnit = { viewModel.onEvent(AddHabitEvent.OnDailyGoalUnitChanged(it)) }

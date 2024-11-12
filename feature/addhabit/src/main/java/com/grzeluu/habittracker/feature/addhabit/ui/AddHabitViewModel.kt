@@ -1,7 +1,5 @@
 package com.grzeluu.habittracker.feature.addhabit.ui
 
-import androidx.compose.ui.semantics.text
-import androidx.core.text.color
 import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.ui.BaseViewModel
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitEvent
@@ -20,7 +18,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
-import kotlin.text.toFloatOrNull
 
 @HiltViewModel
 class AddHabitViewModel @Inject constructor() : BaseViewModel<AddHabitDataState>() {
@@ -43,8 +40,8 @@ class AddHabitViewModel @Inject constructor() : BaseViewModel<AddHabitDataState>
     private var _selectedDays = MutableStateFlow<List<Day>>(emptyList())
     private val selectedDays: StateFlow<List<Day>> = _selectedDays
 
-    private var _dailyEffort = MutableStateFlow<Float?>(1f)
-    private val dailyEffort: StateFlow<Float?> = _dailyEffort
+    private var _dailyEffort = MutableStateFlow<String>("1")
+    private val dailyEffort: StateFlow<String?> = _dailyEffort
 
     private val _effortUnit = MutableStateFlow(EffortUnit.TIMES)
     private val effortUnit: StateFlow<EffortUnit> = _effortUnit
@@ -90,39 +87,44 @@ class AddHabitViewModel @Inject constructor() : BaseViewModel<AddHabitDataState>
         when (event) {
             AddHabitEvent.OnAllDaysToggled -> {
                 val allDays = Day.entries
-                _selectedDays.value = if (selectedDays.value == allDays) {
+                _selectedDays.value = if (selectedDays.value.containsAll(allDays)) {
                     emptyList()
                 } else {
                     allDays
                 }
             }
+
             is AddHabitEvent.OnColorChanged -> {
                 _color.value = event.value
             }
+
             is AddHabitEvent.OnDailyGoalTextChanged -> {
-                _dailyEffort.value = event.value.toFloatOrNull()
+                _dailyEffort.value = event.value
             }
+
             is AddHabitEvent.OnDailyGoalUnitChanged -> {
                 _effortUnit.value = event.unit
             }
+
             is AddHabitEvent.OnDayChanged -> {
                 val currentDays = selectedDays.value.toMutableList()
-                if (event.isChecked) {
-                    currentDays.add(event.day)
-                } else {
-                    currentDays.remove(event.day)
-                }
+                if (event.isChecked) currentDays.add(event.day)
+                else currentDays.remove(event.day)
                 _selectedDays.value = currentDays
             }
+
             is AddHabitEvent.OnDescriptionChanged -> {
                 _description.value = event.value
             }
+
             is AddHabitEvent.OnIconChanged -> {
                 _icon.value = event.icon
             }
+
             is AddHabitEvent.OnNameChanged -> {
                 _name.value = event.value
             }
+
             is AddHabitEvent.OnNotificationsEnabledChanged -> {
                 _isNotificationsEnabled.value = event.value
             }

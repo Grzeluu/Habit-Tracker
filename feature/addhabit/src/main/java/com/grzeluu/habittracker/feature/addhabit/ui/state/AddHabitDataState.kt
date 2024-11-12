@@ -11,7 +11,7 @@ data class AddHabitDataState(
     val color: CardColor,
     val icon: CardIcon,
     val selectedDays: List<Day>,
-    val dailyEffort: Float?,
+    val dailyEffort: String?,
     val effortUnit: EffortUnit,
     val isNotificationsEnabled: Boolean
 )
