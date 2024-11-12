@@ -25,10 +25,12 @@ fun IconSelectionRow(
     LaunchedEffect(selectedIcon) {
         val index = CardIcon.entries.indexOf(selectedIcon)
         val itemInfo = lazyListState.layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }
-        if (itemInfo != null) {
-            val center = lazyListState.layoutInfo.viewportEndOffset / 2
-            val childCenter = itemInfo.offset + itemInfo.size / 2
-            lazyListState.animateScrollBy((childCenter - center).toFloat())
+        if (index > 0) {
+            itemInfo?.let {
+                val center = lazyListState.layoutInfo.viewportEndOffset / 2
+                val childCenter = itemInfo.offset + itemInfo.size / 2
+                lazyListState.animateScrollBy((childCenter - center).toFloat())
+            } ?: lazyListState.animateScrollToItem(index)
         }
     }
     LazyRow(state = lazyListState) {

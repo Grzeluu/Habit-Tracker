@@ -30,12 +30,12 @@ fun DayToggleButton(
             .clip(RoundedCornerShape(8.dp)),
         shape = RectangleShape,
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = if (isChecked) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
+            containerColor = if (isChecked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Text(
             text = day.mapToUiText().asString(),
-            color = if (isChecked) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
+            color = if (isChecked) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

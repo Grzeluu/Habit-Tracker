@@ -6,6 +6,7 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,6 +30,7 @@ import com.grzeluu.habittracker.base.ui.BaseScreenContainer
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.label.BasicLabel
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
+import com.grzeluu.habittracker.common.ui.padding.AppSizes.spaceBetweenFormSections
 import com.grzeluu.habittracker.common.ui.padding.AppSizes.spaceBetweenIconAndText
 import com.grzeluu.habittracker.common.ui.textfield.CustomTextField
 import com.grzeluu.habittracker.common.ui.topbar.BasicTopAppBar
@@ -62,12 +64,13 @@ fun AddHabitScreen(
         },
     ) { innerPadding ->
         BaseScreenContainer(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier.padding(innerPadding).fillMaxSize(),
             uiState
         ) { uiData ->
             Column(
                 modifier = Modifier
                     .padding(horizontal = AppSizes.screenPadding)
+                    .fillMaxHeight()
                     .verticalScroll(rememberScrollState())
                     .fillMaxWidth()
             ) {
@@ -78,14 +81,6 @@ fun AddHabitScreen(
                     label = stringResource(R.string.name)
                 )
                 Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormElements))
-                CustomTextField(
-                    maxLines = 2,
-                    imeAction = ImeAction.Done,
-                    value = uiData.description.orEmpty(),
-                    onValueChange = { viewModel.onEvent(AddHabitEvent.OnDescriptionChanged(it)) },
-                    label = stringResource(R.string.description)
-                )
-                Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormSections))
                 BasicLabel(text = stringResource(R.string.color))
                 ColorSelectionRow(
                     selectedColor = uiData.color,
@@ -98,7 +93,7 @@ fun AddHabitScreen(
                     iconsColor = uiData.color,
                     onSelectionChanged = { viewModel.onEvent(AddHabitEvent.OnIconChanged(it)) }
                 )
-                Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormSections))
+                Spacer(modifier = Modifier.height(spaceBetweenFormSections))
                 DaySelectionView(
                     selectedDays = uiData.selectedDays,
                     onDayCheckedChange = { day, isChecked ->
@@ -106,7 +101,7 @@ fun AddHabitScreen(
                     },
                     toggleSelectAll = { viewModel.onEvent(AddHabitEvent.OnAllDaysToggled) }
                 )
-                Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormSections))
+                Spacer(modifier = Modifier.height(spaceBetweenFormSections))
                 BasicLabel(text = stringResource(R.string.set_your_daily_goal))
                 SetDailyGoalView(
                     goalTextState = uiData.dailyEffort.toString(),
@@ -115,14 +110,24 @@ fun AddHabitScreen(
                     onChangeEffortUnit = { viewModel.onEvent(AddHabitEvent.OnDailyGoalUnitChanged(it)) }
                 )
                 Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormElements))
+                CustomTextField(
+                    maxLines = 2,
+                    imeAction = ImeAction.Done,
+                    value = uiData.description.orEmpty(),
+                    onValueChange = { viewModel.onEvent(AddHabitEvent.OnDescriptionChanged(it)) },
+                    label = stringResource(R.string.description)
+                )
+                Spacer(modifier = Modifier.height(spaceBetweenFormSections))
                 SetNotificationsView(
                     isNotificationsEnabled = uiData.isNotificationsEnabled,
                     onNotificationsEnabledChange = { viewModel.onEvent(AddHabitEvent.OnNotificationsEnabledChanged(it)) }
                 )
-                Spacer(modifier = Modifier.defaultMinSize(AppSizes.spaceBetweenFormSections).weight(1f))
+                Spacer(modifier = Modifier.height(spaceBetweenFormSections))
+                Spacer(modifier = Modifier.weight(1f))
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(bottom = AppSizes.screenPadding)
                         .align(Alignment.CenterHorizontally),
                     onClick = { /* TODO */ }
                 ) {

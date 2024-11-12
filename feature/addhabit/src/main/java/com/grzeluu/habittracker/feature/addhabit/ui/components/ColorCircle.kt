@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -26,8 +27,8 @@ fun ColorCircle(
     size: Dp = 42.dp,
     onClicked: (CardColor) -> Unit
 ) {
-    val color = cardColor.mapToColor()
-    val colors = listOf(color, color.copy(alpha = 0.5f))
+    val color = remember { cardColor.mapToColor() }
+    val colors = remember { listOf(color, color.copy(alpha = 0.5f)) }
     val borderColor = MaterialTheme.colorScheme.onSurface
 
     Box {

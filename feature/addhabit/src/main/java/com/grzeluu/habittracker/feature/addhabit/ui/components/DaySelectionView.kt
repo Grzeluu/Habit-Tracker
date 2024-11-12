@@ -36,7 +36,6 @@ fun DaySelectionView(
             onCheckedChange = { toggleSelectAll() }
         )
     }
-    Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormElements))
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
