@@ -44,7 +44,7 @@ fun AppNavHost(
                 onNavigateToMainPage = {
                     navController.navigate(NavRoute.MainPage) {
                         launchSingleTop = true
-                        popUpTo(NavRoute.Onboarding) { inclusive = true }
+                        popUpTo(NavRoute.MainPage) { inclusive = true }
                     }
                 }
             )
