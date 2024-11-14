@@ -13,8 +13,9 @@ data class Habit(
     val description: String?,
     val desirableDays: List<Day>?,
     val notificationTime: HabitTime?,
-    val effort: HabitDesiredEffort?,
-    val history: List<HabitHistoryEntry> = emptyList()
+    val effort: HabitDesiredEffort,
+    val history: List<HabitHistoryEntry> = emptyList(),
+    val isArchive: Boolean = false
 ) {
     fun isPerformedOnDate(date: LocalDate): Boolean {
         return history.any { it.date == date }

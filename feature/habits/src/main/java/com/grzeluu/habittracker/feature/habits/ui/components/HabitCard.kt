@@ -45,13 +45,9 @@ fun HabitCard(
     onButtonClicked: () -> Unit,
 ) {
 
-    val filled = habit.effort?.let { effort ->
-        //TODO
-        currentEffort / effort.desired
-    } ?: if (isDone) 1f else 0f
-
+    val filled = currentEffort / habit.effort.desired
     val effortString =
-        habit.effort?.let { effort ->
+        habit.effort.let { effort ->
             buildString {
                 //TODO
                 if (currentEffort> 0) {
@@ -216,7 +212,10 @@ fun HabitCardNotDone() {
                 color = CardColor.PURPLE,
                 description = "Rest for a while",
                 notificationTime = null,
-                effort = null,
+                effort = HabitDesiredEffort(
+                    EffortUnit.TIMES,
+                    1f
+                ),
                 history = emptyList(),
                 desirableDays = emptyList()
             ),

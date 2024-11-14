@@ -6,5 +6,5 @@ data class HabitHistoryEntry (
     val id: Long = 0,
     val date: LocalDate,
     val currentEffort: Float,
-    val notes: String?,
+    val note: String?,
 )
