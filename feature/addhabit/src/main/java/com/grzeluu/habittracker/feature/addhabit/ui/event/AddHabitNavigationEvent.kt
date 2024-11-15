@@ -1,4 +1,5 @@
 package com.grzeluu.habittracker.feature.addhabit.ui.event
 
-class AddHabitNavigationEvent {
+enum class AddHabitNavigationEvent {
+    NAVIGATE_AFTER_SAVE
 }

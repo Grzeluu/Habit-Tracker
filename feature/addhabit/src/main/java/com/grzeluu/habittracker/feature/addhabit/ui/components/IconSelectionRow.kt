@@ -40,7 +40,7 @@ fun IconSelectionRow(
                 label = "AnimatedIconColor"
             )
             IconCircle(
-                modifier = Modifier.padding(end = 12.dp),
+                modifier = Modifier.padding(horizontal = 6.dp),
                 onClicked = onSelectionChanged,
                 size = 42.dp,
                 color = animatedColor.value,

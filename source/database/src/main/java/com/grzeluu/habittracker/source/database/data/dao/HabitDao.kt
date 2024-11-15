@@ -8,25 +8,38 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.grzeluu.habittracker.source.database.data.model.HabitEntity
-import com.grzeluu.habittracker.source.database.data.model.HabitWithHistoryEntity
-import com.grzeluu.habittracker.source.database.data.model.HabitWithOneDayHistoryEntryEntity
+import com.grzeluu.habittracker.source.database.data.model.HabitHistoryEntryEntity
+import com.grzeluu.habittracker.source.database.data.model.HabitWithHistoryDbModel
+import com.grzeluu.habittracker.source.database.data.model.HabitWithOneDayHistoryEntryDbModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 
 @Dao
 interface HabitDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insertHabit(habit: HabitEntity)
+    suspend fun insertHabit(habit: HabitEntity): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertHabitHistoryEntry(habitEntry: HabitHistoryEntryEntity)
+
+    @Transaction
+    suspend fun insertHabitWithHistoryEntries(habitWithHistory: HabitWithHistoryDbModel) {
+        val habitId = insertHabit(habitWithHistory.habit)
+        habitWithHistory.historyEntries.forEach { historyEntry ->
+            insertHabitHistoryEntry(historyEntry.copy(habitId = habitId))
+        }
+    }
 
     @Update
-    fun updateHabit(habit: HabitEntity)
+    suspend fun updateHabit(habit: HabitEntity)
 
     @Delete
-    fun deleteHabit(habit: HabitEntity)
+    suspend fun deleteHabit(habit: HabitEntity)
 
     @Transaction
     @Query("SELECT * FROM habits WHERE id = :habitId")
-    fun getHabitWithHistoryEntriesByHabitId(habitId: Long): HabitWithHistoryEntity?
+    fun getHabitWithHistoryEntriesByHabitId(habitId: Long): Flow<HabitWithHistoryDbModel?>
 
     @Transaction
     @Query(
@@ -37,5 +50,5 @@ interface HabitDao {
         WHERE habits.desirable_days LIKE '%' || :day || '%'  AND ( habit_history_entries.date = :date || habit_history_entries.date IS NULL)
         """
     )
-    fun getHabitsWithDailyEntryByDayAndDate(day: String, date: LocalDate): List<HabitWithOneDayHistoryEntryEntity>
+    fun getHabitsWithDailyEntryByDayAndDate(day: String, date: LocalDate): Flow<List<HabitWithOneDayHistoryEntryDbModel>>
 }

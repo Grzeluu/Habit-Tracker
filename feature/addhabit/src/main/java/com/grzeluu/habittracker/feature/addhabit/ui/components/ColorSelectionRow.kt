@@ -33,7 +33,7 @@ fun ColorSelectionRow(
     LazyRow(state = lazyListState) {
         items(CardColor.entries) { color ->
             ColorCircle(
-                modifier = Modifier.padding(end = 12.dp),
+                modifier = Modifier.padding(horizontal = 6.dp),
                 onClicked = onSelectionChanged,
                 isSelected = color == selectedColor,
                 size = 42.dp,

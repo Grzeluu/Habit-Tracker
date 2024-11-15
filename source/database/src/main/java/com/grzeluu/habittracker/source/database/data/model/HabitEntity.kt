@@ -5,6 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
+import kotlinx.datetime.LocalTime
 
 @Entity(tableName = "habits")
 data class HabitEntity(
@@ -21,20 +22,19 @@ data class HabitEntity(
     val description: String?,
     @ColumnInfo(name = "desirable_days")
     val desirableDays: List<String>?,
-    @ColumnInfo(name = "notification_hour")
-    val notificationHour: String?,
-    @ColumnInfo(name = "notification_minute")
-    val notificationMinute: String?,
-    @ColumnInfo(name = "effort_unit_value")
-    val effortUnitValue: String,
-    @ColumnInfo(name = "desired_effort")
-    val desiredEffort: Float,
+    @ColumnInfo(name = "is_notifications_enabled")
+    val isNotificationEnabled: Boolean,
+    @ColumnInfo(name = "notification_time")
+    val notificationTime: LocalTime?,
+    @ColumnInfo(name = "effort_unit")
+    val effortUnit: String,
+    @ColumnInfo(name = "desired_effort_value")
+    val desiredEffortValue: Float,
     @ColumnInfo(name = "is_archive")
     val isArchive: Boolean,
 )
 
-@Entity
-data class HabitWithHistoryEntity(
+data class HabitWithHistoryDbModel(
     @Embedded val habit: HabitEntity,
     @Relation(
         parentColumn = "id",
@@ -43,7 +43,7 @@ data class HabitWithHistoryEntity(
     val historyEntries: List<HabitHistoryEntryEntity>
 )
 
-data class HabitWithOneDayHistoryEntryEntity(
+data class HabitWithOneDayHistoryEntryDbModel(
     @Embedded val habit: HabitEntity,
     @Embedded val historyEntry: HabitHistoryEntryEntity?
 )

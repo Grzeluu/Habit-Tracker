@@ -1,11 +1,8 @@
 package com.grzeluu.habittracker.feature.addhabit.ui
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,7 +37,8 @@ import com.grzeluu.habittracker.feature.addhabit.ui.components.IconSelectionRow
 import com.grzeluu.habittracker.feature.addhabit.ui.components.SetDailyGoalView
 import com.grzeluu.habittracker.feature.addhabit.ui.components.SetNotificationsView
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitEvent
-import com.grzeluu.habittracker.util.enums.EffortUnit
+import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitNavigationEvent
+import com.grzeluu.habittracker.util.flow.ObserveAsEvent
 
 @Composable
 fun AddHabitScreen(
@@ -49,6 +47,12 @@ fun AddHabitScreen(
 
     val viewModel: AddHabitViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    ObserveAsEvent(viewModel.navigationEventsChannelFlow) { event ->
+        when (event) {
+            AddHabitNavigationEvent.NAVIGATE_AFTER_SAVE -> onNavigateToMainPage()
+        }
+    }
 
     BackHandler {
         onNavigateToMainPage()
@@ -64,7 +68,9 @@ fun AddHabitScreen(
         },
     ) { innerPadding ->
         BaseScreenContainer(
-            modifier = Modifier.padding(innerPadding).fillMaxSize(),
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
             uiState
         ) { uiData ->
             Column(
@@ -129,7 +135,7 @@ fun AddHabitScreen(
                         .fillMaxWidth()
                         .padding(bottom = AppSizes.screenPadding)
                         .align(Alignment.CenterHorizontally),
-                    onClick = { /* TODO */ }
+                    onClick = { viewModel.onEvent(AddHabitEvent.AddHabit) }
                 ) {
                     Icon(painterResource(R.drawable.ic_add), null)
                     Text(

@@ -4,5 +4,5 @@ import com.grzeluu.habittracker.util.enums.EffortUnit
 
 data class HabitDesiredEffort(
     val effortUnit: EffortUnit,
-    val desired: Float,
+    val desiredValue: Float,
 )

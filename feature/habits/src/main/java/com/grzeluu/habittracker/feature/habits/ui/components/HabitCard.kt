@@ -23,49 +23,50 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.grzeluu.habittracker.util.enums.CardColor
-import com.grzeluu.habittracker.util.enums.CardIcon
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.background.FilledBackground
 import com.grzeluu.habittracker.common.ui.mapper.mapToColor
 import com.grzeluu.habittracker.common.ui.mapper.mapToDrawableRes
 import com.grzeluu.habittracker.common.ui.mapper.mapToUiText
 import com.grzeluu.habittracker.common.ui.theme.HabitTrackerTheme
-import com.grzeluu.habittracker.component.habit.domain.model.Habit
+import com.grzeluu.habittracker.component.habit.domain.model.DailyHabitInfo
 import com.grzeluu.habittracker.component.habit.domain.model.HabitDesiredEffort
+import com.grzeluu.habittracker.component.habit.domain.model.HabitHistoryEntry
+import com.grzeluu.habittracker.util.enums.CardColor
+import com.grzeluu.habittracker.util.enums.CardIcon
 import com.grzeluu.habittracker.util.enums.EffortUnit
 import com.grzeluu.habittracker.util.numbers.formatFloat
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun HabitCard(
     modifier: Modifier = Modifier,
-    habit: Habit,
-    isDone: Boolean,
-    currentEffort: Float,
+    habitInfo: DailyHabitInfo,
     onButtonClicked: () -> Unit,
 ) {
-
-    val filled = currentEffort / habit.effort.desired
+    val filled = (habitInfo.dailyHistoryEntry?.currentEffort ?: 0f) / habitInfo.effort.desiredValue
     val effortString =
-        habit.effort.let { effort ->
-            buildString {
-                //TODO
-                if (currentEffort> 0) {
+        buildString {
+            with(habitInfo) {
+                if (currentEffort > 0) {
                     append(currentEffort.formatFloat())
                     append(" / ")
                 }
-                append(effort.desired.formatFloat())
+                append(effort.desiredValue.formatFloat())
                 append(" ")
                 append(effort.effortUnit.mapToUiText().asString())
             }
         }
 
 
+
     Card(modifier = modifier.wrapContentHeight()) {
         Box(modifier.fillMaxWidth()) {
             FilledBackground(
                 modifier = Modifier.fillMaxWidth(),
-                color = habit.color.mapToColor().copy(alpha = 0.4f),
+                color = habitInfo.color.mapToColor().copy(alpha = 0.4f),
                 fill = filled
             )
             Row(
@@ -73,49 +74,50 @@ fun HabitCard(
             ) {
                 Icon(
                     modifier = Modifier.size(28.dp),
-                    painter = painterResource(habit.icon.mapToDrawableRes()),
+                    painter = painterResource(habitInfo.icon.mapToDrawableRes()),
                     contentDescription = null,
-                    tint = habit.color.mapToColor().copy(alpha = 0.9f),
+                    tint = habitInfo.color.mapToColor(),
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Column(modifier.weight(1f)) {
                     Text(
-                        text = habit.name,
+                        text = habitInfo.name,
                         style = MaterialTheme.typography.titleSmall,
                         overflow = TextOverflow.Ellipsis
                     )
                     Spacer(modifier = Modifier.size(4.dp))
                     Text(
-                        text = habit.description ?: "",
+                        text = habitInfo.description ?: "",
                         style = MaterialTheme.typography.labelSmall,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                Row(
-                    modifier = Modifier.padding(start = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    text = effortString,
+                    style = MaterialTheme.typography.labelMedium
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                IconButton(
+                    modifier = Modifier.size(42.dp),
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor =
+                        if (habitInfo.effortProgress > 0f) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                    ),
+                    onClick = onButtonClicked,
                 ) {
-                    effortString?.let {
-                        Text(
-                            text = effortString,
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                    }
-                    IconButton(
-                        modifier = Modifier.size(42.dp),
-                        colors = IconButtonDefaults.iconButtonColors(
-                            contentColor =
-                            if (isDone) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                    Icon(
+                        modifier = Modifier.size(32.dp),
+                        painter = painterResource(
+                            when {
+                                habitInfo.effortProgress >= 1f -> R.drawable.ic_checked_filled
+                                habitInfo.effortProgress > 0f -> R.drawable.ic_add_circle
+                                else -> R.drawable.ic_radio_unchecked
+                            }
                         ),
-                        onClick = onButtonClicked,
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(32.dp),
-                            painter = painterResource(if (isDone) R.drawable.ic_checked_filled else R.drawable.ic_radio_unchecked),
-                            contentDescription = stringResource(R.string.done),
-                        )
-                    }
+                        contentDescription = stringResource(R.string.done),
+                    )
                 }
             }
         }
@@ -128,21 +130,21 @@ fun HabitCardPreviewDone1() {
     HabitTrackerTheme {
         HabitCard(
             modifier = Modifier.wrapContentHeight(),
-            habit = Habit(
-                name = "Running",
-                icon = CardIcon.RUN,
-                color = CardColor.RED,
-                description = "5km - moderate pace",
-                notificationTime = null,
+            habitInfo = DailyHabitInfo(
+                name = "Drink water",
+                icon = CardIcon.DRINK,
+                color = CardColor.BLUE,
+                description = "At least 2.5l daily",
                 effort = HabitDesiredEffort(
-                    effortUnit = EffortUnit.KM,
-                    desired = 5f,
+                    effortUnit = EffortUnit.LITERS,
+                    desiredValue = 2.5f,
                 ),
-                history = emptyList(),
-                desirableDays = emptyList()
+                dailyHistoryEntry = HabitHistoryEntry(
+                    date = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).date,
+                    currentEffort = 3f,
+                    note = null,
+                ),
             ),
-            isDone = true,
-            currentEffort = 5f,
             onButtonClicked = {}
         )
     }
@@ -154,21 +156,21 @@ fun HabitCardPreviewAlmostDone1() {
     HabitTrackerTheme {
         HabitCard(
             modifier = Modifier.wrapContentHeight(),
-            habit = Habit(
-                name = "Drink water",
-                icon = CardIcon.DRINK,
-                color = CardColor.BLUE,
-                description = "2.5l daily",
-                notificationTime = null,
+            habitInfo = DailyHabitInfo(
+                name = "Running",
+                icon = CardIcon.RUN,
+                color = CardColor.RED,
+                description = "5km - moderate pace",
                 effort = HabitDesiredEffort(
-                    effortUnit = EffortUnit.LITERS,
-                    desired = 2.5f,
+                    effortUnit = EffortUnit.KM,
+                    desiredValue = 5f,
                 ),
-                history = emptyList(),
-                desirableDays = emptyList()
+                dailyHistoryEntry = HabitHistoryEntry(
+                    date = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).date,
+                    currentEffort = 4f,
+                    note = null,
+                ),
             ),
-            currentEffort = 1.5f,
-            isDone = true,
             onButtonClicked = {}
         )
     }
@@ -180,21 +182,21 @@ fun HabitCardPreviewAlmostDone2() {
     HabitTrackerTheme {
         HabitCard(
             modifier = Modifier.wrapContentHeight(),
-            habit = Habit(
+            habitInfo = DailyHabitInfo(
                 name = "Reading",
                 icon = CardIcon.BOOK,
                 color = CardColor.GREEN,
-                description = "20 pages",
-                notificationTime = null,
+                description = "30 pages daily",
                 effort = HabitDesiredEffort(
-                    effortUnit = EffortUnit.TIMES,
-                    desired = 20f,
+                    effortUnit = EffortUnit.KM,
+                    desiredValue = 5f,
                 ),
-                history = emptyList(),
-                desirableDays = emptyList()
+                dailyHistoryEntry = HabitHistoryEntry(
+                    date = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).date,
+                    currentEffort = 2.5f,
+                    note = null,
+                ),
             ),
-            currentEffort = 10f,
-            isDone = true,
             onButtonClicked = {}
         )
     }
@@ -206,21 +208,17 @@ fun HabitCardNotDone() {
     HabitTrackerTheme {
         HabitCard(
             modifier = Modifier.wrapContentHeight(),
-            habit = Habit(
+            habitInfo = DailyHabitInfo(
                 name = "Rest",
                 icon = CardIcon.WELLNESS,
                 color = CardColor.PURPLE,
                 description = "Rest for a while",
-                notificationTime = null,
                 effort = HabitDesiredEffort(
-                    EffortUnit.TIMES,
-                    1f
+                    effortUnit = EffortUnit.KM,
+                    desiredValue = 5f,
                 ),
-                history = emptyList(),
-                desirableDays = emptyList()
+                dailyHistoryEntry = null,
             ),
-            currentEffort = 0f,
-            isDone = false,
             onButtonClicked = {}
         )
     }

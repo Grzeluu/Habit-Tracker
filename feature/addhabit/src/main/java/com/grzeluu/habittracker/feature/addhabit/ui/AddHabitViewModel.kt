@@ -2,6 +2,10 @@ package com.grzeluu.habittracker.feature.addhabit.ui
 
 import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.ui.BaseViewModel
+import com.grzeluu.habittracker.component.habit.domain.model.Habit
+import com.grzeluu.habittracker.component.habit.domain.model.HabitDesiredEffort
+import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
+import com.grzeluu.habittracker.component.habit.domain.usecase.AddHabitUseCase
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitEvent
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitNavigationEvent
 import com.grzeluu.habittracker.feature.addhabit.ui.state.AddHabitDataState
@@ -11,16 +15,21 @@ import com.grzeluu.habittracker.util.enums.Day
 import com.grzeluu.habittracker.util.enums.EffortUnit
 import com.grzeluu.habittracker.util.flow.combine
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class AddHabitViewModel @Inject constructor() : BaseViewModel<AddHabitDataState>() {
+class AddHabitViewModel @Inject constructor(
+    private val addHabitUseCase: AddHabitUseCase
+) : BaseViewModel<AddHabitDataState>() {
 
     private val navigationChannel = Channel<AddHabitNavigationEvent>()
     val navigationEventsChannelFlow = navigationChannel.receiveAsFlow()
@@ -128,6 +137,35 @@ class AddHabitViewModel @Inject constructor() : BaseViewModel<AddHabitDataState>
             is AddHabitEvent.OnNotificationsEnabledChanged -> {
                 _isNotificationsEnabled.value = event.value
             }
+
+            AddHabitEvent.AddHabit -> {
+                addHabit()
+            }
+        }
+    }
+
+    private fun addHabit() {
+        viewModelScope.launch(Dispatchers.IO) {
+            loadingState.incrementTasksInProgress()
+            addHabitUseCase.execute(
+                Habit(
+                    name = name.value,
+                    description = description.value,
+                    color = color.value,
+                    icon = icon.value,
+                    desirableDays = selectedDays.value,
+                    effort = HabitDesiredEffort(
+                        desiredValue = dailyEffort.value?.toFloat() ?: 1f,
+                        effortUnit = effortUnit.value
+                    ),
+                    //TODO implement during development of notifications
+                    habitNotification = HabitNotification.Disabled
+                )
+            ).handleResult()
+            withContext(Dispatchers.Main) {
+                navigationChannel.send(AddHabitNavigationEvent.NAVIGATE_AFTER_SAVE)
+            }
+            loadingState.decrementTasksInProgress()
         }
     }
 }

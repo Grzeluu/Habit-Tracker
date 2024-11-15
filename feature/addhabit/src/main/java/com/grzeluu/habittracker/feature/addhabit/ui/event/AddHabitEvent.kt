@@ -15,4 +15,5 @@ sealed class AddHabitEvent {
     data class OnDailyGoalTextChanged(val value: String) : AddHabitEvent()
     data class OnDailyGoalUnitChanged(val unit: EffortUnit) : AddHabitEvent()
     data class OnNotificationsEnabledChanged(val value: Boolean) : AddHabitEvent()
+    data object AddHabit : AddHabitEvent()
 }

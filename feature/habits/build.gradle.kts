@@ -52,6 +52,7 @@ dependencies {
     ksp(libs.android.hilt.compiler)
     implementation(libs.kotlinx.metadata)
     implementation(libs.timber)
+    implementation(libs.kotlinx.datetime)
 
     testImplementation(libs.junit)
 

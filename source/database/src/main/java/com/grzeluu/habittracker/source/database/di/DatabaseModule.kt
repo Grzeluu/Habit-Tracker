@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.grzeluu.habittracker.source.database.HabitTrackerDatabase
 import com.grzeluu.habittracker.source.database.data.dao.HabitDao
-import com.grzeluu.habittracker.source.database.data.dao.HabitEntryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,11 +27,6 @@ object AppModule {
     @Singleton
     fun provideHabitDao(appDatabase: HabitTrackerDatabase) : HabitDao{
         return appDatabase.habitDao()
-    }
-    @Provides
-    @Singleton
-    fun provideHabitEntryDao(appDatabase: HabitTrackerDatabase) : HabitEntryDao{
-        return appDatabase.habitEntryDao()
     }
 
 }

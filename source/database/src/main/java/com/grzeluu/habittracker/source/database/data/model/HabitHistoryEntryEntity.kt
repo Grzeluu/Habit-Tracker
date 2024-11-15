@@ -18,7 +18,7 @@ import kotlinx.datetime.LocalDate
         )
     ]
 )
-class HabitHistoryEntryEntity(
+data class HabitHistoryEntryEntity(
     @ColumnInfo("habit_id")
     val habitId: Long = 0,
     @ColumnInfo("date")

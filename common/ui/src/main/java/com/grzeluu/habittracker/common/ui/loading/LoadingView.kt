@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,7 +21,7 @@ import com.grzeluu.habittracker.common.ui.text.UiText
 @Composable
 fun LoadingView(
     modifier: Modifier = Modifier,
-    loadingText: UiText = UiText.StringResource(R.string.loading),
+    loadingText: UiText = UiText.StringResource(R.string.please_wait),
     loadingViewColors: LoadingViewColors = LoadingViewDefaults.loadingViewColors()
 ) {
     Box(

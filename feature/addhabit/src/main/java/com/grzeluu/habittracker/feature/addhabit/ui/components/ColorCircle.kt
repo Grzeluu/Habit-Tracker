@@ -3,6 +3,7 @@ package com.grzeluu.habittracker.feature.addhabit.ui.components
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -31,8 +32,8 @@ fun ColorCircle(
     val colors = remember { listOf(color, color.copy(alpha = 0.5f)) }
     val borderColor = MaterialTheme.colorScheme.onSurface
 
-    Box {
-        Canvas(modifier = modifier.size(size)) {
+    Box(modifier = modifier.size(size)) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
             drawCircle(
                 brush = Brush.linearGradient(
                     colors = colors,
