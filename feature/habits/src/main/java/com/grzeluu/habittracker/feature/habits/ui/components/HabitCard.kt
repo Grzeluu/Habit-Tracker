@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -62,7 +64,13 @@ fun HabitCard(
 
 
 
-    Card(modifier = modifier.wrapContentHeight()) {
+    Card(
+        modifier = modifier.wrapContentHeight(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        )
+    ) {
         Box(modifier.fillMaxWidth()) {
             FilledBackground(
                 modifier = Modifier.fillMaxWidth(),
@@ -73,7 +81,9 @@ fun HabitCard(
                 modifier = Modifier.padding(8.dp)
             ) {
                 Icon(
-                    modifier = Modifier.size(28.dp),
+                    modifier = Modifier
+                        .padding(top = 4.dp, start = 8.dp)
+                        .size(28.dp),
                     painter = painterResource(habitInfo.icon.mapToDrawableRes()),
                     contentDescription = null,
                     tint = habitInfo.color.mapToColor(),

@@ -13,7 +13,6 @@ fun FilledBackground(modifier: Modifier = Modifier, color: Color, fill: Float) {
 
     Canvas(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.surfaceVariant)
     ) {
         drawCircle(
             color = color,

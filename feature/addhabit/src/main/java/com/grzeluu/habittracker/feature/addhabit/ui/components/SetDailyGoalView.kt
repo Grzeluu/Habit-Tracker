@@ -35,7 +35,7 @@ fun SetDailyGoalView(
             keyboardType = KeyboardType.Number,
             withClearTextOption = false,
             onValueChange = {
-                if (it.isEmpty() || it.toFloatOrNull() != null) onTextChanged(it)
+                if (it.isEmpty() || (it.toFloatOrNull() != null && it.toFloat() >= 0f) ) onTextChanged(it)
             },
             alignment = TextAlign.End
         )

@@ -17,4 +17,7 @@ data class DailyHabitInfo(
 
     val effortProgress: Float
         get() = currentEffort / effort.desiredValue
+
+    val isDone: Boolean
+        get() = effortProgress >= 1f
 }
