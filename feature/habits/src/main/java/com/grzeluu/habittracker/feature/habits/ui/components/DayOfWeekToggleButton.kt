@@ -1,6 +1,8 @@
 package com.grzeluu.habittracker.feature.habits.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -42,8 +44,12 @@ fun DayOfWeekToggleButton(
         modifier = modifier.clip(RoundedCornerShape(12.dp)),
         shape = RectangleShape,
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = if (isChecked) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = if (isChecked) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
+            containerColor = when {
+                isChecked -> MaterialTheme.colorScheme.tertiaryContainer
+                isToday -> MaterialTheme.colorScheme.secondaryContainer
+                else -> MaterialTheme.colorScheme.surfaceVariant
+            },
+            contentColor = if (isChecked) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
         )
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

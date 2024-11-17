@@ -2,6 +2,7 @@ package com.grzeluu.habittracker.component.habit.domain.model
 
 import com.grzeluu.habittracker.util.enums.CardColor
 import com.grzeluu.habittracker.util.enums.CardIcon
+import kotlin.math.min
 
 data class DailyHabitInfo(
     val id: Long = 0,
@@ -16,7 +17,7 @@ data class DailyHabitInfo(
         get() = dailyHistoryEntry?.currentEffort ?: 0f
 
     val effortProgress: Float
-        get() = currentEffort / effort.desiredValue
+        get() = min(currentEffort / effort.desiredValue, 1f)
 
     val isDone: Boolean
         get() = effortProgress >= 1f

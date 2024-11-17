@@ -5,5 +5,5 @@ import kotlinx.datetime.LocalDate
 data class HabitHistoryEntry (
     val date: LocalDate,
     val currentEffort: Float,
-    val note: String?,
+    val note: String? = null,
 )

@@ -46,8 +46,8 @@ interface HabitDao {
         """
         SELECT * 
         FROM habits 
-        LEFT JOIN habit_history_entries ON habits.id = habit_history_entries.habit_id
-        WHERE habits.desirable_days LIKE '%' || :day || '%'  AND ( habit_history_entries.date = :date || habit_history_entries.date IS NULL)
+        LEFT JOIN habit_history_entries ON habits.id = habit_history_entries.habit_id  AND habit_history_entries.date = :date
+        WHERE habits.desirable_days LIKE '%' || :day || '%'
         """
     )
     fun getHabitsWithDailyEntryByDayAndDate(day: String, date: LocalDate): Flow<List<HabitWithOneDayHistoryEntryDbModel>>

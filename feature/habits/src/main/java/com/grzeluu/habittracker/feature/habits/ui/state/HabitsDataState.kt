@@ -8,7 +8,6 @@ data class HabitsDataState(
     val daysOfWeek: List<Pair<Day, LocalDate>>,
     val selectedDay: LocalDate,
     val dailyHabits: List<DailyHabitInfo>,
-    val isHabitsLoading: Boolean,
     val dailyStatistics: DailyStatisticsData,
 )
 

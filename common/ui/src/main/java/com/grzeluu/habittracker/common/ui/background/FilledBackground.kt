@@ -16,8 +16,8 @@ fun FilledBackground(modifier: Modifier = Modifier, color: Color, fill: Float) {
     ) {
         drawCircle(
             color = color,
-            center = Offset(x = size.width * 0.1f, y = size.height * 0.1f),
-            radius = size.maxDimension * fill
+            center = Offset(x = 0f, y = size.height * 0.1f),
+            radius = size.maxDimension * 1.05f  * fill
         )
     }
 }

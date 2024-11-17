@@ -55,10 +55,18 @@
     <string name="get_notifications">Get notifications</string>
     <string name="lets_">Get notifications</string>
     <string name="today_habits">Today habits</string>
+    <string name="day_habits">%s habits</string>
     <string name="great_job_today">Great job today!</string>
     <string name="you_are_on_fire">You\'re on fire!</string>
     <string name="keep_it_up">Keep it up!</string>
     <string name="making_progress">Making progress!</string>
     <string name="of_completed">&#160;of %d completed</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
 
 </resources>

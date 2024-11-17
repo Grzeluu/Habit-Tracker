@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.ui.BaseViewModel
 import com.grzeluu.habittracker.component.habit.domain.model.DailyHabitInfo
 import com.grzeluu.habittracker.component.habit.domain.usecase.GetDailyHabitInfosUseCase
+import com.grzeluu.habittracker.feature.habits.ui.event.HabitsEvent
 import com.grzeluu.habittracker.feature.habits.ui.state.DailyStatisticsData
 import com.grzeluu.habittracker.feature.habits.ui.state.HabitsDataState
 import com.grzeluu.habittracker.util.date.getCurrentDate
@@ -40,9 +41,6 @@ class HabitsViewModel @Inject constructor(
     private val _dailyHabits = MutableStateFlow<List<DailyHabitInfo>>(emptyList())
     private val dailyHabits: StateFlow<List<DailyHabitInfo>> = _dailyHabits.asStateFlow()
 
-    private val _isHabitsLoading = MutableStateFlow(false)
-    private val isHabitsLoading: StateFlow<Boolean> = _isHabitsLoading.asStateFlow()
-
     private val dailyStatisticsData = dailyHabits.mapLatest {
         DailyStatisticsData(
             totalHabits = it.size,
@@ -57,14 +55,12 @@ class HabitsViewModel @Inject constructor(
             selectedDay,
             dailyHabits,
             dailyStatisticsData,
-            isHabitsLoading
-        ) { daysOfWeek, selectedDay, dailyHabits, dailyStatisticsData, isHabitsLoading ->
+        ) { daysOfWeek, selectedDay, dailyHabits, dailyStatisticsData ->
             HabitsDataState(
                 daysOfWeek = daysOfWeek,
                 selectedDay = selectedDay,
                 dailyHabits = dailyHabits,
                 dailyStatistics = dailyStatisticsData,
-                isHabitsLoading = isHabitsLoading
             )
         }.onStart {
             getHabitsData()
@@ -75,16 +71,22 @@ class HabitsViewModel @Inject constructor(
             initialValue = null
         )
 
+    fun onEvent(event: HabitsEvent) {
+        when(event) {
+            is HabitsEvent.OnChangeSelectedDay -> {
+                _selectedDay.value = event.dateTime
+            }
+        }
+    }
+
     private fun getHabitsData() {
         viewModelScope.launch {
             selectedDay.flatMapLatest { date ->
-                _isHabitsLoading.value = true
                 getDailyHabitInfosUseCase.invoke(
                     GetDailyHabitInfosUseCase.Request(dateTime = date)
                 )
             }.collectLatestResult { habitInfos ->
                 _dailyHabits.emit(habitInfos)
-                _isHabitsLoading.value = false
             }
         }
     }
@@ -102,6 +104,4 @@ class HabitsViewModel @Inject constructor(
         _daysOfWeek.value = days.toList()
         loadingState.decrementTasksInProgress()
     }
-
-
 }

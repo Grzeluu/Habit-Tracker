@@ -4,11 +4,13 @@ import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.ui.BaseViewModel
 import com.grzeluu.habittracker.component.habit.domain.model.Habit
 import com.grzeluu.habittracker.component.habit.domain.model.HabitDesiredEffort
+import com.grzeluu.habittracker.component.habit.domain.model.HabitHistoryEntry
 import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
 import com.grzeluu.habittracker.component.habit.domain.usecase.AddHabitUseCase
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitEvent
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitNavigationEvent
 import com.grzeluu.habittracker.feature.addhabit.ui.state.AddHabitDataState
+import com.grzeluu.habittracker.util.date.getCurrentDate
 import com.grzeluu.habittracker.util.enums.CardColor
 import com.grzeluu.habittracker.util.enums.CardIcon
 import com.grzeluu.habittracker.util.enums.Day
@@ -158,7 +160,6 @@ class AddHabitViewModel @Inject constructor(
                         desiredValue = dailyEffort.value?.toFloat() ?: 1f,
                         effortUnit = effortUnit.value
                     ),
-                    //TODO implement during development of notifications
                     habitNotification = HabitNotification.Disabled
                 )
             ).handleResult()

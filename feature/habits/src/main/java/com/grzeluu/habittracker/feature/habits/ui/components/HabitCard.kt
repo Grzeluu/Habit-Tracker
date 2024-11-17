@@ -1,5 +1,6 @@
 package com.grzeluu.habittracker.feature.habits.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -65,16 +66,16 @@ fun HabitCard(
 
 
     Card(
-        modifier = modifier.wrapContentHeight(),
+        modifier = modifier,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
             contentColor = MaterialTheme.colorScheme.onSurface
         )
     ) {
-        Box(modifier.fillMaxWidth()) {
+        Box(Modifier.fillMaxWidth()) {
             FilledBackground(
                 modifier = Modifier.fillMaxWidth(),
-                color = habitInfo.color.mapToColor().copy(alpha = 0.4f),
+                color = habitInfo.color.mapToColor().copy(alpha = 0.25f),
                 fill = filled
             )
             Row(
@@ -89,18 +90,24 @@ fun HabitCard(
                     tint = habitInfo.color.mapToColor(),
                 )
                 Spacer(modifier = Modifier.width(12.dp))
-                Column(modifier.weight(1f)) {
+                Column(
+                    Modifier
+                        .weight(1f)
+                        .align(Alignment.CenterVertically)
+                ) {
                     Text(
                         text = habitInfo.name,
                         style = MaterialTheme.typography.titleSmall,
                         overflow = TextOverflow.Ellipsis
                     )
-                    Spacer(modifier = Modifier.size(4.dp))
-                    Text(
-                        text = habitInfo.description ?: "",
-                        style = MaterialTheme.typography.labelSmall,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    if (!habitInfo.description.isNullOrEmpty()) {
+                        Spacer(modifier = Modifier.size(4.dp))
+                        Text(
+                            text = habitInfo.description ?: "",
+                            style = MaterialTheme.typography.labelSmall,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
@@ -151,7 +158,7 @@ fun HabitCardPreviewDone1() {
                 ),
                 dailyHistoryEntry = HabitHistoryEntry(
                     date = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).date,
-                    currentEffort = 3f,
+                    currentEffort = 2.5f,
                     note = null,
                 ),
             ),
@@ -222,7 +229,7 @@ fun HabitCardNotDone() {
                 name = "Rest",
                 icon = CardIcon.WELLNESS,
                 color = CardColor.PURPLE,
-                description = "Rest for a while",
+                description = null,
                 effort = HabitDesiredEffort(
                     effortUnit = EffortUnit.KM,
                     desiredValue = 5f,
