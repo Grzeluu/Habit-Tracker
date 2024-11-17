@@ -1,7 +1,6 @@
 package com.grzeluu.habittracker.feature.onboarding.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +29,7 @@ import com.grzeluu.habittracker.base.ui.BaseScreenContainer
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.feature.onboarding.ui.animations.OnboardingAnimations
 import com.grzeluu.habittracker.feature.onboarding.ui.components.PagerIndicator
+import com.grzeluu.habittracker.feature.onboarding.ui.event.OnboardingNavigationEvent
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.AddHabitPage
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.NotificationsPage
 import com.grzeluu.habittracker.feature.onboarding.ui.pages.ThemePage
@@ -51,8 +51,8 @@ fun OnboardingScreen(
 
     ObserveAsEvent(viewModel.navigationEventsChannelFlow) { event ->
         when (event) {
-            NavigationEvent.NAVIGATE_TO_MAIN_PAGE -> onNavigateToMainPage()
-            NavigationEvent.NAVIGATE_TO_ADD_HABIT -> onNavigateToAddHabit()
+            OnboardingNavigationEvent.NAVIGATE_TO_MAIN_PAGE -> onNavigateToMainPage()
+            OnboardingNavigationEvent.NAVIGATE_TO_ADD_HABIT -> onNavigateToAddHabit()
         }
     }
 
@@ -76,8 +76,8 @@ fun OnboardingScreen(
                         goToNextPage = { goToNextPage(coroutineScope, pagerState) })
 
                     3 -> AddHabitPage(
-                        goToAddHabit = { viewModel.saveSettingsAndNavigate(NavigationEvent.NAVIGATE_TO_ADD_HABIT) },
-                        goToApp = { viewModel.saveSettingsAndNavigate(NavigationEvent.NAVIGATE_TO_MAIN_PAGE) },
+                        goToAddHabit = { viewModel.saveSettingsAndNavigate(OnboardingNavigationEvent.NAVIGATE_TO_ADD_HABIT) },
+                        goToApp = { viewModel.saveSettingsAndNavigate(OnboardingNavigationEvent.NAVIGATE_TO_MAIN_PAGE) },
                     )
                 }
             }

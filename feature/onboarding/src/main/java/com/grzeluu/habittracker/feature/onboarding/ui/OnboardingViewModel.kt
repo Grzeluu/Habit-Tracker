@@ -4,10 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.ui.BaseViewModel
 import com.grzeluu.habittracker.component.settings.domain.usecase.GetSettingsUseCase
 import com.grzeluu.habittracker.component.settings.domain.usecase.SaveSettingsUseCase
+import com.grzeluu.habittracker.feature.onboarding.ui.event.OnboardingNavigationEvent
 import com.grzeluu.habittracker.feature.onboarding.ui.state.OnboardingStateData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +27,7 @@ class OnboardingViewModel @Inject constructor(
     private val getSettingsUseCase: GetSettingsUseCase
 ) : BaseViewModel<OnboardingStateData>() {
 
-    private val navigationChannel = Channel<NavigationEvent>()
+    private val navigationChannel = Channel<OnboardingNavigationEvent>()
     val navigationEventsChannelFlow = navigationChannel.receiveAsFlow()
 
     private var _isDarkModeEnabled = MutableStateFlow<Boolean?>(null)
@@ -73,7 +72,7 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    fun saveSettingsAndNavigate(destinationNavigationEvent: NavigationEvent) {
+    fun saveSettingsAndNavigate(destinationNavigationEvent: OnboardingNavigationEvent) {
         viewModelScope.launch(Dispatchers.IO) {
             loadingState.incrementTasksInProgress()
             saveSettings(isDarkModeEnabled.value, isNotificationsEnabled.value)

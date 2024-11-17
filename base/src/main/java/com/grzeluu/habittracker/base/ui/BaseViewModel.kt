@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import timber.log.Timber
 
 abstract class BaseViewModel<DATA> : ViewModel() {
 
@@ -41,7 +40,7 @@ abstract class BaseViewModel<DATA> : ViewModel() {
                 isLoading || uiDataState == null -> UiState.Loading
                 else -> UiState.Success(uiDataState)
             }
-        }.flowOn(Dispatchers.Default)
+        }.flowOn(Dispatchers.Main.immediate)
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(),
