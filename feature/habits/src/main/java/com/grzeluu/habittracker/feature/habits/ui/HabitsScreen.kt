@@ -16,7 +16,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.grzeluu.habittracker.base.ui.BaseScreenContainer
 import com.grzeluu.habittracker.common.ui.R
@@ -58,7 +57,7 @@ private fun HabitsScreenContent(
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(pagerState.currentPage) {
-        val selectedDay = data.daysOfWeek.getOrNull(pagerState.currentPage)?.second
+        val selectedDay = data.daysOfWeek.getOrNull(pagerState.currentPage)
         if (selectedDay != null) {
             viewModel.onEvent(HabitsEvent.OnChangeSelectedDay(selectedDay))
         }
@@ -77,7 +76,7 @@ private fun HabitsScreenContent(
                 }
             }
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(AppSizes.spaceBetweenScreenSections))
         HorizontalPager(
             state = pagerState, modifier = Modifier.fillMaxSize()
         ) { pageIndex ->
@@ -85,7 +84,7 @@ private fun HabitsScreenContent(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = AppSizes.screenPadding),
-                date = data.daysOfWeek[pageIndex].second,
+                date = data.daysOfWeek[pageIndex],
             )
         }
     }

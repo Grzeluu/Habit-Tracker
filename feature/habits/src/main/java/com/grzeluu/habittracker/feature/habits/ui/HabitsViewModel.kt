@@ -31,8 +31,8 @@ class HabitsViewModel @Inject constructor(
     private val _areHabitsAdded = MutableStateFlow<Boolean?>(null)
     private val areHabitsAdded: StateFlow<Boolean?> = _areHabitsAdded.asStateFlow()
 
-    private val _daysOfWeek = MutableStateFlow<List<Pair<Day, LocalDate>>?>(null)
-    private val daysOfWeek: StateFlow<List<Pair<Day, LocalDate>>?> = _daysOfWeek.asStateFlow()
+    private val _daysOfWeek = MutableStateFlow<List<LocalDate>?>(null)
+    private val daysOfWeek: StateFlow<List<LocalDate>?> = _daysOfWeek.asStateFlow()
 
     private val _selectedDay = MutableStateFlow(getCurrentDate())
     private val selectedDay: StateFlow<LocalDate> = _selectedDay.asStateFlow()
@@ -77,11 +77,11 @@ class HabitsViewModel @Inject constructor(
         loadingState.incrementTasksInProgress()
         val today = selectedDay.value
         val currentDayOfWeek = today.dayOfWeek.value
-        val days = mutableListOf<Pair<Day, LocalDate>>()
+        val days = mutableListOf<LocalDate>()
 
         for (i in 0..6) {
             val dayDate = today.plus(i - (currentDayOfWeek - 1), DateTimeUnit.DAY)
-            days.add(Pair(Day.get(dayDate.dayOfWeek.value), dayDate))
+            days.add(dayDate)
         }
         _daysOfWeek.value = days.toList()
         loadingState.decrementTasksInProgress()
