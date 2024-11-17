@@ -9,7 +9,7 @@
     <string name="notifications">Notifications</string>
     <string name="choose_notifications">Enable notifications to keep track of your progress and stay motivated.</string>
     <string name="add_habit">Add Habit</string>
-    <string name="add_your_first_habit">Add your first habit or go directly to the app.</string>
+    <string name="add_your_first_habit_title">Add your first habit or go directly to the app.</string>
     <string name="skip">Skip</string>
     <string name="add_your_first_habit_massage">Now is a great time to add your first habit to the app and start something new!</string>
     <string name="go_to_previous_step">Go to previous step</string>
@@ -69,5 +69,6 @@
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
     <string name="no_habits_for_this_day">You don\'t have any habits planned for this day.</string>
+    <string name="add_your_first_habit">Add your first habit.</string>
 
 </resources>

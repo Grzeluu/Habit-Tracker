@@ -10,4 +10,6 @@ interface HabitRepository {
     suspend fun addHabit(habit: Habit)
 
     fun getDailyHabitInfos(day: Day, dateTime: LocalDate): Flow<List<DailyHabitInfo>>
+
+    fun getHabitsCount(): Flow<Int>
 }

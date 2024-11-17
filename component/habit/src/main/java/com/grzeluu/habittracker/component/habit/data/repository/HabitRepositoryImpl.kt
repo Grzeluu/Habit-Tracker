@@ -29,4 +29,8 @@ class HabitRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getHabitsCount(): Flow<Int> {
+        return habitDao.getHabitsCount()
+    }
+
 }

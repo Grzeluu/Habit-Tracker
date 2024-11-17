@@ -2,22 +2,19 @@ package com.grzeluu.habittracker.feature.habits.ui
 
 import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.ui.BaseViewModel
-import com.grzeluu.habittracker.component.habit.domain.model.DailyHabitInfo
-import com.grzeluu.habittracker.component.habit.domain.usecase.GetDailyHabitInfosUseCase
+import com.grzeluu.habittracker.component.habit.domain.usecase.CheckIfHabitsAreAddedUseCase
 import com.grzeluu.habittracker.feature.habits.ui.event.HabitsEvent
-import com.grzeluu.habittracker.feature.habits.ui.state.DailyStatisticsData
 import com.grzeluu.habittracker.feature.habits.ui.state.HabitsDataState
 import com.grzeluu.habittracker.util.date.getCurrentDate
 import com.grzeluu.habittracker.util.enums.Day
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -28,24 +25,31 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HabitsViewModel @Inject constructor(
+    private val checkIfHabitsAreAddedUseCase: CheckIfHabitsAreAddedUseCase
 ) : BaseViewModel<HabitsDataState>() {
 
-    private val _daysOfWeek = MutableStateFlow<List<Pair<Day, LocalDate>>>(emptyList())
-    private val daysOfWeek: StateFlow<List<Pair<Day, LocalDate>>> = _daysOfWeek.asStateFlow()
+    private val _areHabitsAdded = MutableStateFlow<Boolean?>(null)
+    private val areHabitsAdded: StateFlow<Boolean?> = _areHabitsAdded.asStateFlow()
+
+    private val _daysOfWeek = MutableStateFlow<List<Pair<Day, LocalDate>>?>(null)
+    private val daysOfWeek: StateFlow<List<Pair<Day, LocalDate>>?> = _daysOfWeek.asStateFlow()
 
     private val _selectedDay = MutableStateFlow(getCurrentDate())
     private val selectedDay: StateFlow<LocalDate> = _selectedDay.asStateFlow()
 
     override val uiDataState: StateFlow<HabitsDataState?>
         get() = combine(
-            daysOfWeek,
+            daysOfWeek.filterNotNull(),
             selectedDay,
-        ) { daysOfWeek, selectedDay->
+            areHabitsAdded.filterNotNull()
+        ) { daysOfWeek, selectedDay, areHabitsAdded ->
             HabitsDataState(
                 daysOfWeek = daysOfWeek,
                 selectedDay = selectedDay,
+                areHabitsAdded = areHabitsAdded
             )
         }.onStart {
+            checkIfHabitsAreAdded()
             initDays()
         }.stateIn(
             scope = viewModelScope,
@@ -54,9 +58,17 @@ class HabitsViewModel @Inject constructor(
         )
 
     fun onEvent(event: HabitsEvent) {
-        when(event) {
+        when (event) {
             is HabitsEvent.OnChangeSelectedDay -> {
                 _selectedDay.value = event.dateTime
+            }
+        }
+    }
+
+    private fun checkIfHabitsAreAdded() {
+        viewModelScope.launch(Dispatchers.IO) {
+            checkIfHabitsAreAddedUseCase(Unit).collectLatestResult { result ->
+                _areHabitsAdded.emit(result)
             }
         }
     }

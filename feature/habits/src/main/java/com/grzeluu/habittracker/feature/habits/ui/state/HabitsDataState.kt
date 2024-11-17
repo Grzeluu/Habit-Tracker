@@ -6,5 +6,6 @@ import kotlinx.datetime.LocalDate
 data class HabitsDataState(
     val daysOfWeek: List<Pair<Day, LocalDate>>,
     val selectedDay: LocalDate,
+    val areHabitsAdded: Boolean,
 )
 
