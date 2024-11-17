@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -36,10 +37,13 @@ class DailyViewModel @AssistedInject constructor(
         fun create(date: LocalDate): DailyViewModel
     }
 
-    private val _dailyHabits = MutableStateFlow<List<DailyHabitInfo>>(emptyList())
-    private val dailyHabits: StateFlow<List<DailyHabitInfo>> = _dailyHabits.asStateFlow()
+    private val _dailyHabits = MutableStateFlow<List<DailyHabitInfo>?>(null)
+    private val dailyHabits: StateFlow<List<DailyHabitInfo>?> = _dailyHabits.asStateFlow()
 
-    private val dailyStatisticsData = dailyHabits.mapLatest {
+    private val _isHabitsLoading = MutableStateFlow(false)
+    private val isHabitsLoading = _isHabitsLoading.asStateFlow()
+
+    private val dailyStatisticsData = dailyHabits.filterNotNull().mapLatest {
         DailyStatisticsData(
             totalHabits = it.size,
             totalProgress = it.map { habit -> habit.effortProgress }.sum(),
@@ -49,7 +53,7 @@ class DailyViewModel @AssistedInject constructor(
 
     override val uiDataState: StateFlow<DailyDataState?>
         get() = combine(
-            dailyHabits,
+            dailyHabits.filterNotNull(),
             dailyStatisticsData,
         ) { dailyHabits, dailyStatisticsData ->
             DailyDataState(
@@ -72,6 +76,7 @@ class DailyViewModel @AssistedInject constructor(
 
     private fun getHabitsData() {
         viewModelScope.launch(Dispatchers.IO) {
+
             getDailyHabitInfosUseCase.invoke(
                 GetDailyHabitInfosUseCase.Request(date = date)
             ).collectLatestResult {

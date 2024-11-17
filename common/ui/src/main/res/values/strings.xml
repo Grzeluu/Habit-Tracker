@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="onboarding_welcome_title">Welcome to Habit Tracker!</string>
-    <string name="onboarding_welcome_message"> An app to help you track your habits, organize plans, and achieve them.</string>
+    <string name="onboarding_welcome_message"> An app to help you track your habits and achieve them.</string>
     <string name="lets_begin">Let\'s begin!</string>
     <string name="cont">Continue</string>
     <string name="chooseDarkMode">Choose between Light and Dark mode to personalize your app experience.</string>
@@ -68,5 +68,6 @@
     <string name="friday">Friday</string>
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
+    <string name="no_habits_for_this_day">You don\'t have any habits planned for this day.</string>
 
 </resources>
