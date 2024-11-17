@@ -1,7 +1,6 @@
 package com.grzeluu.habittracker.component.habit.domain.usecase
 
 
-import androidx.compose.ui.res.integerResource
 import com.grzeluu.habittracker.base.domain.error.BaseError
 import com.grzeluu.habittracker.base.domain.result.Result
 import com.grzeluu.habittracker.base.domain.usecase.FlowUseCase
@@ -22,14 +21,14 @@ class GetDailyHabitInfosUseCase @Inject constructor(
 ) : FlowUseCase<GetDailyHabitInfosUseCase.Request, List<DailyHabitInfo>, BaseError>() {
 
     data class Request(
-        val dateTime: LocalDate
+        val date: LocalDate
     )
 
     override fun execute(params: Request): Flow<Result<List<DailyHabitInfo>, BaseError>> = flow {
-        val day = Day.get(params.dateTime.dayOfWeek.value)
+        val day = Day.get(params.date.dayOfWeek.value)
         emitAll(habitRepository.getDailyHabitInfos(
             day = day,
-            dateTime = params.dateTime
+            dateTime = params.date
         ).map { data ->
             Result.Success(data)
         }.catch { e ->

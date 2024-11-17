@@ -25,7 +25,7 @@ fun GenericErrorView(
 ) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier.background(MaterialTheme.colorScheme.errorContainer)
+        modifier = modifier
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
