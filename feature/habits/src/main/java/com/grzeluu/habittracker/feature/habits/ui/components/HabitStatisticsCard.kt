@@ -57,7 +57,7 @@ fun HabitStatisticsCard(
                     fontSize = 16.scaledSp(),
                 )
                 CircularProgressIndicator(
-                    progress = { currentEffort / totalHabits },
+                    progress = { if (totalHabits > 0) currentEffort / totalHabits else 0f },
                     modifier = Modifier
                         .size(72.dp),
                     trackColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f),

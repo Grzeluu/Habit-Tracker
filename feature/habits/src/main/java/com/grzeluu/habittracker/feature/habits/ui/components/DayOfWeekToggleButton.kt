@@ -1,5 +1,6 @@
 package com.grzeluu.habittracker.feature.habits.ui.components
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,6 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,18 +40,31 @@ fun DayOfWeekToggleButton(
     onClicked: () -> Unit,
 
     ) {
+
+    val containerColor by animateColorAsState(
+        targetValue = when {
+            isChecked -> MaterialTheme.colorScheme.tertiaryContainer
+            isToday -> MaterialTheme.colorScheme.secondaryContainer
+            else -> MaterialTheme.colorScheme.surfaceVariant
+        }, label = "DayOfWeekToggleButtonContainerColor"
+    )
+
+    val contentColor by animateColorAsState(
+        targetValue = when {
+            isChecked -> MaterialTheme.colorScheme.onTertiaryContainer
+            isToday -> MaterialTheme.colorScheme.onSecondaryContainer
+            else -> MaterialTheme.colorScheme.onSurfaceVariant
+        }, label = "DayOfWeekToggleButtonContentColor"
+    )
+
     Button(
         onClick = onClicked,
         contentPadding = PaddingValues(0.dp),
         modifier = modifier.clip(RoundedCornerShape(12.dp)),
         shape = RectangleShape,
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = when {
-                isChecked -> MaterialTheme.colorScheme.tertiaryContainer
-                isToday -> MaterialTheme.colorScheme.secondaryContainer
-                else -> MaterialTheme.colorScheme.surfaceVariant
-            },
-            contentColor = if (isChecked) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+            containerColor = containerColor,
+            contentColor = contentColor,
         )
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

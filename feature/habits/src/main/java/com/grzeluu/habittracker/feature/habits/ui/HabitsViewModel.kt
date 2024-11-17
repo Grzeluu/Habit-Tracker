@@ -26,10 +26,8 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
 import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class HabitsViewModel @Inject constructor(
-    private val getDailyHabitInfosUseCase: GetDailyHabitInfosUseCase
 ) : BaseViewModel<HabitsDataState>() {
 
     private val _daysOfWeek = MutableStateFlow<List<Pair<Day, LocalDate>>>(emptyList())
@@ -38,32 +36,16 @@ class HabitsViewModel @Inject constructor(
     private val _selectedDay = MutableStateFlow(getCurrentDate())
     private val selectedDay: StateFlow<LocalDate> = _selectedDay.asStateFlow()
 
-    private val _dailyHabits = MutableStateFlow<List<DailyHabitInfo>>(emptyList())
-    private val dailyHabits: StateFlow<List<DailyHabitInfo>> = _dailyHabits.asStateFlow()
-
-    private val dailyStatisticsData = dailyHabits.mapLatest {
-        DailyStatisticsData(
-            totalHabits = it.size,
-            totalProgress = it.map { habit -> habit.effortProgress }.sum(),
-            habitsDone = it.count { habit -> habit.isDone },
-        )
-    }
-
     override val uiDataState: StateFlow<HabitsDataState?>
         get() = combine(
             daysOfWeek,
             selectedDay,
-            dailyHabits,
-            dailyStatisticsData,
-        ) { daysOfWeek, selectedDay, dailyHabits, dailyStatisticsData ->
+        ) { daysOfWeek, selectedDay->
             HabitsDataState(
                 daysOfWeek = daysOfWeek,
                 selectedDay = selectedDay,
-                dailyHabits = dailyHabits,
-                dailyStatistics = dailyStatisticsData,
             )
         }.onStart {
-            getHabitsData()
             initDays()
         }.stateIn(
             scope = viewModelScope,
@@ -75,18 +57,6 @@ class HabitsViewModel @Inject constructor(
         when(event) {
             is HabitsEvent.OnChangeSelectedDay -> {
                 _selectedDay.value = event.dateTime
-            }
-        }
-    }
-
-    private fun getHabitsData() {
-        viewModelScope.launch {
-            selectedDay.flatMapLatest { date ->
-                getDailyHabitInfosUseCase.invoke(
-                    GetDailyHabitInfosUseCase.Request(dateTime = date)
-                )
-            }.collectLatestResult { habitInfos ->
-                _dailyHabits.emit(habitInfos)
             }
         }
     }
