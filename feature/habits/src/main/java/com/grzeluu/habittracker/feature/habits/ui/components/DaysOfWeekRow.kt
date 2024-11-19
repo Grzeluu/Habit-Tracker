@@ -18,23 +18,22 @@ import kotlinx.datetime.LocalDate
 fun DaysOfWeekRow(
     modifier: Modifier = Modifier,
     selectedDay: LocalDate,
-    daysOfWeek: List<Pair<Day, LocalDate>>,
+    daysOfWeek: List<LocalDate>,
     onDayClicked: (LocalDate) -> Unit,
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        daysOfWeek.forEachIndexed { index, day ->
+        daysOfWeek.forEachIndexed { index, date ->
             DayOfWeekToggleButton(
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(12.dp)),
-                isChecked = selectedDay == day.second,
-                day = day.first,
-                date = day.second,
-                onClicked = { onDayClicked(day.second) },
-                isToday = day.second == getCurrentDate()
+                isChecked = selectedDay == date,
+                date = date,
+                onClicked = { onDayClicked(date) },
+                isToday = date == getCurrentDate()
             )
             if (index != Day.entries.lastIndex) Spacer(modifier = Modifier.width(4.dp))
         }

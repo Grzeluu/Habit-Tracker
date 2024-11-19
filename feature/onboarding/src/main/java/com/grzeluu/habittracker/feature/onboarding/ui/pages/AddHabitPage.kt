@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.grzeluu.habittracker.common.ui.padding.AppSizes.spaceBetweenIconAndText
 import com.grzeluu.habittracker.feature.onboarding.R
 import com.grzeluu.habittracker.feature.onboarding.ui.components.OnboardingContentPage
 import com.grzeluu.habittracker.common.ui.R as comR
@@ -42,7 +43,7 @@ fun AddHabitPage(
             contentColor = MaterialTheme.colorScheme.onPrimary
         ) {
             Icon(painterResource(comR.drawable.ic_add), stringResource(comR.string.add_habit))
-            Spacer(modifier = Modifier.padding(4.dp))
+            Spacer(modifier = Modifier.padding(spaceBetweenIconAndText))
             Text(stringResource(comR.string.add_habit))
         }
         Text(

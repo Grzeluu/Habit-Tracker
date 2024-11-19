@@ -51,4 +51,12 @@ interface HabitDao {
         """
     )
     fun getHabitsWithDailyEntryByDayAndDate(day: String, date: LocalDate): Flow<List<HabitWithOneDayHistoryEntryDbModel>>
+
+    @Query(
+        """
+        SELECT Count(*) 
+        FROM habits
+        """
+    )
+    fun getHabitsCount(): Flow<Int>
 }

@@ -1,17 +1,14 @@
 package com.grzeluu.habittracker.feature.habits.ui.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -25,21 +22,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.grzeluu.habittracker.common.ui.mapper.mapToUiText
+import com.grzeluu.habittracker.common.ui.theme.HabitTrackerTheme
 import com.grzeluu.habittracker.util.enums.Day
 import kotlinx.datetime.LocalDate
 
 @Composable
 fun DayOfWeekToggleButton(
     modifier: Modifier = Modifier,
-    day: Day,
     date: LocalDate,
     isToday: Boolean,
     isChecked: Boolean,
     onClicked: () -> Unit,
-
-    ) {
+) {
 
     val containerColor by animateColorAsState(
         targetValue = when {
@@ -83,9 +80,51 @@ fun DayOfWeekToggleButton(
             )
             Text(
                 modifier = Modifier.padding(bottom = 8.dp),
-                text = day.mapToUiText().asString(),
+                text = Day.get(date.dayOfWeek.value).mapToUiText().asString(),
                 style = TextStyle.Default.copy(fontWeight = FontWeight.Medium)
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun DayOfWeekToggleButtonPreview() {
+    HabitTrackerTheme {
+        DayOfWeekToggleButton(
+            modifier = Modifier.width(52.dp),
+            date = LocalDate(2024, 1, 15),
+            isToday = false,
+            isChecked = false,
+            onClicked = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun DayOfWeekToggleButtonCheckedPreview() {
+    HabitTrackerTheme {
+        DayOfWeekToggleButton(
+            modifier = Modifier.width(52.dp),
+            date = LocalDate(2024, 1, 15),
+            isToday = false,
+            isChecked = true,
+            onClicked = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun DayOfWeekToggleButtonTodayPreview() {
+    HabitTrackerTheme {
+        DayOfWeekToggleButton(
+            modifier = Modifier.width(52.dp),
+            date = LocalDate(2024, 1, 15),
+            isToday = true,
+            isChecked = false,
+            onClicked = {}
+        )
     }
 }

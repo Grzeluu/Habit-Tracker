@@ -42,11 +42,7 @@ fun EffortUnit.mapToUiText(mappingType: MappingType = MappingType.ABBREVIATION):
             }
         }
 
-        EffortUnit.TIMES -> when (mappingType) {
-            MappingType.ABBREVIATION -> UiText.Empty
-            MappingType.PLURAL -> UiText.StringResource(R.string.times)
-            MappingType.SINGULAR -> UiText.StringResource(R.string.time)
-        }
+        EffortUnit.REPEAT -> UiText.Empty
 
         EffortUnit.STEPS -> {
             UiText.StringResource(R.string.steps)
