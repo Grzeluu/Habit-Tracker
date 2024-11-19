@@ -43,19 +43,13 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 @Composable
-fun HabitCard(
+fun SimpleHabitCard(
     modifier: Modifier = Modifier,
     habitInfo: DailyHabitInfo,
-    onButtonClicked: () -> Unit,
 ) {
-    val filled = (habitInfo.dailyHistoryEntry?.currentEffort ?: 0f) / habitInfo.effort.desiredValue
     val effortString =
         buildString {
             with(habitInfo) {
-                if (currentEffort > 0) {
-                    append(currentEffort.formatFloat())
-                    append(" / ")
-                }
                 append(effort.desiredValue.formatFloat())
                 append(" ")
                 append(effort.effortUnit.mapToUiText().asString())
@@ -75,7 +69,7 @@ fun HabitCard(
             FilledBackground(
                 modifier = Modifier.fillMaxWidth(),
                 color = habitInfo.color.mapToColor().copy(alpha = 0.25f),
-                fill = filled
+                fill = 1f
             )
             Row(
                 modifier = Modifier.padding(AppSizes.cardInnerPadding)
@@ -115,28 +109,6 @@ fun HabitCard(
                     style = MaterialTheme.typography.labelMedium
                 )
                 Spacer(modifier = Modifier.width(12.dp))
-                IconButton(
-                    modifier = Modifier
-                        .size(42.dp)
-                        .align(Alignment.CenterVertically),
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor =
-                        if (habitInfo.effortProgress > 0f) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
-                    ),
-                    onClick = onButtonClicked,
-                ) {
-                    Icon(
-                        modifier = Modifier.size(32.dp),
-                        painter = painterResource(
-                            when {
-                                habitInfo.effortProgress >= 1f -> R.drawable.ic_checked_filled
-                                habitInfo.effortProgress > 0f -> R.drawable.ic_add_circle
-                                else -> R.drawable.ic_radio_unchecked
-                            }
-                        ),
-                        contentDescription = stringResource(R.string.done),
-                    )
-                }
             }
         }
     }
@@ -144,9 +116,9 @@ fun HabitCard(
 
 @Preview
 @Composable
-fun HabitCardPreviewDone1() {
+fun SimpleHabitCardPreview() {
     HabitTrackerTheme {
-        HabitCard(
+        SimpleHabitCard(
             modifier = Modifier.wrapContentHeight(),
             habitInfo = DailyHabitInfo(
                 name = "Drink water",
@@ -162,82 +134,7 @@ fun HabitCardPreviewDone1() {
                     currentEffort = 2.5f,
                     note = null,
                 ),
-            ),
-            onButtonClicked = {}
-        )
-    }
-}
-
-@Preview
-@Composable
-fun HabitCardPreviewAlmostDone1() {
-    HabitTrackerTheme {
-        HabitCard(
-            modifier = Modifier.wrapContentHeight(),
-            habitInfo = DailyHabitInfo(
-                name = "Running",
-                icon = CardIcon.RUN,
-                color = CardColor.RED,
-                description = "5km - moderate pace",
-                effort = HabitDesiredEffort(
-                    effortUnit = EffortUnit.KM,
-                    desiredValue = 5f,
-                ),
-                dailyHistoryEntry = HabitHistoryEntry(
-                    date = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).date,
-                    currentEffort = 4f,
-                    note = null,
-                ),
-            ),
-            onButtonClicked = {}
-        )
-    }
-}
-
-@Preview
-@Composable
-fun HabitCardPreviewAlmostDone2() {
-    HabitTrackerTheme {
-        HabitCard(
-            modifier = Modifier.wrapContentHeight(),
-            habitInfo = DailyHabitInfo(
-                name = "Reading",
-                icon = CardIcon.BOOK,
-                color = CardColor.GREEN,
-                description = "30 pages daily",
-                effort = HabitDesiredEffort(
-                    effortUnit = EffortUnit.KM,
-                    desiredValue = 5f,
-                ),
-                dailyHistoryEntry = HabitHistoryEntry(
-                    date = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).date,
-                    currentEffort = 2.5f,
-                    note = null,
-                ),
-            ),
-            onButtonClicked = {}
-        )
-    }
-}
-
-@Preview
-@Composable
-fun HabitCardNotDone() {
-    HabitTrackerTheme {
-        HabitCard(
-            modifier = Modifier.wrapContentHeight(),
-            habitInfo = DailyHabitInfo(
-                name = "Rest",
-                icon = CardIcon.WELLNESS,
-                color = CardColor.PURPLE,
-                description = null,
-                effort = HabitDesiredEffort(
-                    effortUnit = EffortUnit.REPEAT,
-                    desiredValue = 1f,
-                ),
-                dailyHistoryEntry = null,
-            ),
-            onButtonClicked = {}
+            )
         )
     }
 }

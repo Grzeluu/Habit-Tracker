@@ -13,7 +13,7 @@ fun BasicLabel(modifier: Modifier = Modifier, text: String) {
     Text(
         text = text,
         modifier = modifier
-            .padding(start = 4.dp, bottom = 4.dp),
+            .padding(start = 4.dp, bottom = 4.dp, end = 4.dp),
         textAlign = TextAlign.Start,
         style = MaterialTheme.typography.labelLarge
     )

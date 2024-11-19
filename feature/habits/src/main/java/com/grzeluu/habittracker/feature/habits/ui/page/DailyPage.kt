@@ -11,6 +11,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -21,9 +24,12 @@ import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.label.BasicLabel
 import com.grzeluu.habittracker.common.ui.mapper.mapToUiText
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
+import com.grzeluu.habittracker.component.habit.domain.model.DailyHabitInfo
 import com.grzeluu.habittracker.feature.habits.ui.components.HabitCard
+import com.grzeluu.habittracker.feature.habits.ui.components.HabitEffortDialog
 import com.grzeluu.habittracker.feature.habits.ui.components.HabitStatisticsCard
 import com.grzeluu.habittracker.feature.habits.ui.components.HabitsImageWithDescription
+import com.grzeluu.habittracker.feature.habits.ui.event.DailyEvent
 import com.grzeluu.habittracker.feature.habits.ui.state.DailyDataState
 import com.grzeluu.habittracker.util.date.getCurrentDate
 import com.grzeluu.habittracker.util.enums.Day
@@ -41,6 +47,20 @@ fun DailyPage(
         factory.create(date)
     }
     val uiState by viewModel.uiState.collectAsState()
+    var selectedHabit by remember { mutableStateOf<DailyHabitInfo?>(null) }
+
+    HabitEffortDialog(
+        dailyHabitInfo = selectedHabit,
+        onSetProgress = { habit, effort ->
+            viewModel.onEvent(
+                DailyEvent.OnSaveDailyEffort(
+                    habitId = habit.id,
+                    effort = effort
+                )
+            )
+        },
+        onDismissRequest = { selectedHabit = null }
+    )
 
     BaseScreenContainer(
         modifier = modifier.fillMaxSize(),
@@ -48,7 +68,9 @@ fun DailyPage(
     ) { data ->
         if (data.dailyHabits.isEmpty()) {
             HabitsImageWithDescription(
-                modifier = Modifier.fillMaxSize().padding(AppSizes.screenPadding),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(AppSizes.screenPadding),
                 painter = painterResource(id = com.grzeluu.habittracker.feature.habits.R.drawable.rest),
                 description = stringResource(R.string.no_habits_for_this_day)
             )
@@ -56,7 +78,8 @@ fun DailyPage(
             DailyHabitsContent(
                 modifier = Modifier.fillMaxSize(),
                 data = data,
-                date = date
+                date = date,
+                onHabitEffortClicked = { selectedHabit = it }
             )
         }
     }
@@ -66,7 +89,8 @@ fun DailyPage(
 private fun DailyHabitsContent(
     modifier: Modifier,
     data: DailyDataState,
-    date: LocalDate
+    date: LocalDate,
+    onHabitEffortClicked: (DailyHabitInfo) -> Unit
 ) {
     Column(modifier) {
         HabitStatisticsCard(
@@ -92,7 +116,7 @@ private fun DailyHabitsContent(
                         .animateItem(),
 
                     habitInfo = it,
-                    onButtonClicked = { /* TODO */ }
+                    onButtonClicked = { onHabitEffortClicked(it) }
                 )
                 Spacer(modifier = Modifier.height(AppSizes.spaceBetweenCards))
             }

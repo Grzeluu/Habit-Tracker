@@ -49,7 +49,7 @@
     <string name="friday_short">F</string>
     <string name="saturday_short">S</string>
     <string name="sunday_short">S</string>
-    <string name="set_your_daily_goal">Set your daily goal</string>
+    <string name="set_your_daily_goal">Daily goal</string>
     <string name="plus">Plus</string>
     <string name="minus">Minus</string>
     <string name="get_notifications">Get notifications</string>
@@ -70,5 +70,7 @@
     <string name="sunday">Sunday</string>
     <string name="no_habits_for_this_day">You don\'t have any habits planned for this day.</string>
     <string name="add_your_first_habit">Add your first habit.</string>
-
+    <string name="add_progress">Set progress</string>
+    <string name="set_your_daily_progress">Set your daily progress:</string>
+    <string name="or">Or</string>
 </resources>

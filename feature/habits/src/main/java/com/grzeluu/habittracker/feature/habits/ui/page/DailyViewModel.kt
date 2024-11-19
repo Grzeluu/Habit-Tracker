@@ -3,7 +3,9 @@ package com.grzeluu.habittracker.feature.habits.ui.page
 import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.ui.BaseViewModel
 import com.grzeluu.habittracker.component.habit.domain.model.DailyHabitInfo
+import com.grzeluu.habittracker.component.habit.domain.model.HabitHistoryEntry
 import com.grzeluu.habittracker.component.habit.domain.usecase.GetDailyHabitInfosUseCase
+import com.grzeluu.habittracker.component.habit.domain.usecase.SaveHabitHistoryEntryUseCase
 import com.grzeluu.habittracker.feature.habits.ui.event.DailyEvent
 import com.grzeluu.habittracker.feature.habits.ui.state.DailyDataState
 import com.grzeluu.habittracker.feature.habits.ui.state.DailyStatisticsData
@@ -11,6 +13,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,7 +32,8 @@ import kotlinx.datetime.LocalDate
 @HiltViewModel(assistedFactory = DailyViewModel.DailyViewModelFactory::class)
 class DailyViewModel @AssistedInject constructor(
     @Assisted val date: LocalDate,
-    private val getDailyHabitInfosUseCase: GetDailyHabitInfosUseCase
+    private val getDailyHabitInfosUseCase: GetDailyHabitInfosUseCase,
+    private val saveHabitHistoryEntryUseCase: SaveHabitHistoryEntryUseCase
 ) : BaseViewModel<DailyDataState>() {
 
     @AssistedFactory
@@ -70,13 +74,28 @@ class DailyViewModel @AssistedInject constructor(
 
     fun onEvent(event: DailyEvent) {
         when (event) {
-            else -> {}
+            is DailyEvent.OnSaveDailyEffort -> {
+                handleSaveDailyEffortEvent(event)
+            }
+        }
+    }
+
+    private fun handleSaveDailyEffortEvent(event: DailyEvent.OnSaveDailyEffort) {
+        viewModelScope.launch(Dispatchers.IO) {
+            saveHabitHistoryEntryUseCase.invoke(
+                SaveHabitHistoryEntryUseCase.Request(
+                    habitId = event.habitId,
+                    historyEntry = HabitHistoryEntry(
+                        date = date,
+                        currentEffort = event.effort
+                    )
+                )
+            ).handleResult()
         }
     }
 
     private fun getHabitsData() {
         viewModelScope.launch(Dispatchers.IO) {
-
             getDailyHabitInfosUseCase.invoke(
                 GetDailyHabitInfosUseCase.Request(date = date)
             ).collectLatestResult {
