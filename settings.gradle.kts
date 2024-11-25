@@ -38,6 +38,7 @@ include(":feature:notifications")
 include(":feature:onboarding")
 include(":feature:settings")
 include(":feature:calendar")
+include(":feature:details")
 
 include(":source")
 include(":source:database")
