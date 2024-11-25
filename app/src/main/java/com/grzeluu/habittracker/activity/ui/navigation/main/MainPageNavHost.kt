@@ -12,13 +12,17 @@ import com.grzeluu.habittracker.feature.settings.ui.SettingsScreen
 
 
 @Composable
-fun MainPageNavigationHost(navController: NavHostController, modifier: Modifier) {
+fun MainPageNavigationHost(
+    navController: NavHostController,
+    modifier: Modifier,
+    onNavigateToDetails: (habitId: Long) -> Unit
+) {
     NavHost(
         modifier = modifier,
         navController = navController,
         startDestination = BottomNavItem.Habits.route
     ) {
-        composable(BottomNavItem.Habits.route) { HabitsScreen() }
+        composable(BottomNavItem.Habits.route) { HabitsScreen(onNavigateToDetails) }
         composable(BottomNavItem.Calendar.route) { CalendarScreen() }
         composable(BottomNavItem.Notifications.route) { NotificationsScreen() }
         composable(BottomNavItem.Settings.route) { SettingsScreen() }

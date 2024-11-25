@@ -47,6 +47,7 @@ fun HabitCard(
     modifier: Modifier = Modifier,
     habitInfo: DailyHabitInfo,
     onButtonClicked: () -> Unit,
+    onCardClicked: () -> Unit,
 ) {
     val filled = (habitInfo.dailyHistoryEntry?.currentEffort ?: 0f) / habitInfo.effort.desiredValue
     val effortString =
@@ -66,6 +67,7 @@ fun HabitCard(
 
     Card(
         modifier = modifier,
+        onClick = onCardClicked,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
             contentColor = MaterialTheme.colorScheme.onSurface
@@ -163,7 +165,8 @@ fun HabitCardPreviewDone1() {
                     note = null,
                 ),
             ),
-            onButtonClicked = {}
+            onButtonClicked = {},
+            onCardClicked = {}
         )
     }
 }
@@ -189,7 +192,8 @@ fun HabitCardPreviewAlmostDone1() {
                     note = null,
                 ),
             ),
-            onButtonClicked = {}
+            onButtonClicked = {},
+            onCardClicked = {}
         )
     }
 }
@@ -215,7 +219,8 @@ fun HabitCardPreviewAlmostDone2() {
                     note = null,
                 ),
             ),
-            onButtonClicked = {}
+            onButtonClicked = {},
+            onCardClicked = {}
         )
     }
 }
@@ -237,7 +242,8 @@ fun HabitCardNotDone() {
                 ),
                 dailyHistoryEntry = null,
             ),
-            onButtonClicked = {}
+            onButtonClicked = {},
+            onCardClicked = {}
         )
     }
 }

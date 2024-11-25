@@ -15,12 +15,12 @@ import com.grzeluu.habittracker.common.ui.R
 @Composable
 fun BasicTopAppBar(
     modifier: Modifier = Modifier,
-    title: String,
+    title: String? = null,
     onNavigateBack: () -> Unit,
 ) {
     TopAppBar(
         modifier = modifier,
-        title = { Text(text = title) },
+        title = { title?.let { Text(text = title) } },
         navigationIcon = {
             IconButton(onClick = onNavigateBack) {
                 Icon(painterResource(R.drawable.ic_back), contentDescription = stringResource(R.string.navigate_back))

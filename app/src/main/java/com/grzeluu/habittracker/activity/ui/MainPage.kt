@@ -24,7 +24,11 @@ import com.grzeluu.habittracker.common.ui.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainPage(modifier: Modifier = Modifier, onNavigateToAddHabit: () -> Unit) {
+fun MainPage(
+    modifier: Modifier = Modifier,
+    onNavigateToAddHabit: () -> Unit,
+    onNavigateToDetails: (habitId: Long) -> Unit
+) {
 
     val mainPageNavController = rememberNavController()
     val navBackStackEntry by mainPageNavController.currentBackStackEntryAsState()
@@ -68,7 +72,8 @@ fun MainPage(modifier: Modifier = Modifier, onNavigateToAddHabit: () -> Unit) {
     ) { innerPadding ->
         MainPageNavigationHost(
             modifier = Modifier.padding(innerPadding),
-            navController = mainPageNavController
+            navController = mainPageNavController,
+            onNavigateToDetails = onNavigateToDetails
         )
     }
 }

@@ -28,7 +28,9 @@ import com.grzeluu.habittracker.feature.habits.ui.state.HabitsDataState
 import kotlinx.coroutines.launch
 
 @Composable
-fun HabitsScreen() {
+fun HabitsScreen(
+    onNavigateToDetails: (habitId: Long) -> Unit
+) {
     val viewModel: HabitsViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -37,10 +39,12 @@ fun HabitsScreen() {
         uiState = uiState,
     ) { data ->
         if (data.areHabitsAdded) {
-            HabitsScreenContent(data, viewModel)
+            HabitsScreenContent(data, viewModel, onNavigateToDetails)
         } else {
             HabitsImageWithDescription(
-                modifier = Modifier.fillMaxSize().padding(AppSizes.screenPadding),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(AppSizes.screenPadding),
                 painter = painterResource(id = com.grzeluu.habittracker.feature.habits.R.drawable.goals),
                 description = stringResource(R.string.add_your_first_habit)
             )
@@ -51,7 +55,8 @@ fun HabitsScreen() {
 @Composable
 private fun HabitsScreenContent(
     data: HabitsDataState,
-    viewModel: HabitsViewModel
+    viewModel: HabitsViewModel,
+    onNavigateToDetails: (habitId: Long) -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { 7 }, initialPage = data.selectedDay.dayOfWeek.value - 1)
     val coroutineScope = rememberCoroutineScope()
@@ -85,6 +90,7 @@ private fun HabitsScreenContent(
                     .fillMaxSize()
                     .padding(horizontal = AppSizes.screenPadding),
                 date = data.daysOfWeek[pageIndex],
+                onNavigateToDetails = onNavigateToDetails
             )
         }
     }

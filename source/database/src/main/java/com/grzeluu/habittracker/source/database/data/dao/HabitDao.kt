@@ -59,4 +59,13 @@ interface HabitDao {
         """
     )
     fun getHabitsCount(): Flow<Int>
+
+    @Query(
+        """
+        UPDATE habits
+        SET is_archive = 1
+        WHERE id = :habitId
+        """
+    )
+    fun markHabitAsArchived(habitId: Long)
 }
