@@ -36,16 +36,22 @@ fun EffortUnit.mapToUiText(mappingType: MappingType = MappingType.ABBREVIATION):
 
         EffortUnit.LITERS -> {
             when (mappingType) {
-                MappingType.ABBREVIATION ->UiText.StringResource(R.string.liters_abr)
+                MappingType.ABBREVIATION -> UiText.StringResource(R.string.liters_abr)
                 MappingType.PLURAL -> UiText.StringResource(R.string.liters)
                 MappingType.SINGULAR -> UiText.StringResource(R.string.liter)
             }
         }
 
-        EffortUnit.REPEAT -> UiText.Empty
+        EffortUnit.REPEAT ->
+            when (mappingType) {
+                MappingType.ABBREVIATION -> UiText.Empty
+                MappingType.PLURAL -> UiText.StringResource(R.string.repeats)
+                MappingType.SINGULAR -> UiText.StringResource(R.string.repeat)
+            }
 
         EffortUnit.STEPS -> {
             UiText.StringResource(R.string.steps)
         }
     }
+
 

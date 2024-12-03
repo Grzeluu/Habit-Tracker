@@ -38,7 +38,8 @@ import kotlinx.datetime.LocalDate
 @Composable
 fun DailyPage(
     modifier: Modifier = Modifier,
-    date: LocalDate
+    date: LocalDate,
+    onNavigateToDetails: (habitId: Long) -> Unit
 ) {
 
     val viewModel: DailyViewModel = hiltViewModel<DailyViewModel, DailyViewModel.DailyViewModelFactory>(
@@ -79,7 +80,8 @@ fun DailyPage(
                 modifier = Modifier.fillMaxSize(),
                 data = data,
                 date = date,
-                onHabitEffortClicked = { selectedHabit = it }
+                onHabitEffortClicked = { selectedHabit = it },
+                onNavigateToDetails = onNavigateToDetails
             )
         }
     }
@@ -90,7 +92,8 @@ private fun DailyHabitsContent(
     modifier: Modifier,
     data: DailyDataState,
     date: LocalDate,
-    onHabitEffortClicked: (DailyHabitInfo) -> Unit
+    onHabitEffortClicked: (DailyHabitInfo) -> Unit,
+    onNavigateToDetails: (habitId: Long) -> Unit
 ) {
     Column(modifier) {
         HabitStatisticsCard(
@@ -116,7 +119,8 @@ private fun DailyHabitsContent(
                         .animateItem(),
 
                     habitInfo = it,
-                    onButtonClicked = { onHabitEffortClicked(it) }
+                    onButtonClicked = { onHabitEffortClicked(it) },
+                    onCardClicked = { onNavigateToDetails(it.id) }
                 )
                 Spacer(modifier = Modifier.height(AppSizes.spaceBetweenCards))
             }

@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.grzeluu.habittracker.activity.ui.MainPage
 import com.grzeluu.habittracker.feature.addhabit.ui.AddHabitScreen
+import com.grzeluu.habittracker.feature.details.ui.DetailsScreen
 import com.grzeluu.habittracker.feature.onboarding.ui.OnboardingScreen
 
 @Composable
@@ -36,6 +37,11 @@ fun AppNavHost(
                     navController.navigate(NavRoute.AddHabit) {
                         launchSingleTop = true
                     }
+                },
+                onNavigateToDetails = { habitId ->
+                    navController.navigate(NavRoute.Details(habitId)) {
+                        launchSingleTop = true
+                    }
                 }
             )
         }
@@ -46,6 +52,13 @@ fun AppNavHost(
                         launchSingleTop = true
                         popUpTo(NavRoute.MainPage) { inclusive = true }
                     }
+                }
+            )
+        }
+        composable<NavRoute.Details> {
+            DetailsScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
                 }
             )
         }

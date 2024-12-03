@@ -8,11 +8,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 
 interface HabitRepository {
-    suspend fun addHabit(habit: Habit)
-
-    suspend fun addHabitHistoryEntry(habitId: Long, habitHistoryEntry: HabitHistoryEntry)
+    fun getHabit(habitId: Long): Flow<Habit?>
 
     fun getDailyHabitInfos(day: Day, dateTime: LocalDate): Flow<List<DailyHabitInfo>>
 
     fun getHabitsCount(): Flow<Int>
+
+    suspend fun addHabit(habit: Habit)
+
+    suspend fun addHabitHistoryEntry(habitId: Long, habitHistoryEntry: HabitHistoryEntry)
+
+    suspend fun deleteHabit(habit: Habit)
+
+    suspend fun markHabitAsArchived(habitId: Long)
 }

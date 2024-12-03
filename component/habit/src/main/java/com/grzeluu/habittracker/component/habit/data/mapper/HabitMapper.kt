@@ -11,6 +11,7 @@ import com.grzeluu.habittracker.source.database.data.model.HabitWithHistoryDbMod
 import com.grzeluu.habittracker.source.database.data.model.HabitWithOneDayHistoryEntryDbModel
 import com.grzeluu.habittracker.util.enums.CardColor
 import com.grzeluu.habittracker.util.enums.CardIcon
+import com.grzeluu.habittracker.util.enums.Day
 import com.grzeluu.habittracker.util.enums.EffortUnit
 
 fun Habit.mapToDbModel(): HabitWithHistoryDbModel =
@@ -20,7 +21,7 @@ fun Habit.mapToDbModel(): HabitWithHistoryDbModel =
 
     )
 
-private fun Habit.mapToEntity() =
+fun Habit.mapToEntity() =
     HabitEntity(
         id = id,
         name = name,
@@ -61,5 +62,21 @@ fun HabitWithOneDayHistoryEntryDbModel.mapToDomain() = DailyHabitInfo(
         desiredValue = habit.desiredEffortValue
     ),
     dailyHistoryEntry = historyEntry?.mapToDomain()
+)
+
+fun HabitWithHistoryDbModel.mapToDomain() = Habit(
+    id = habit.id,
+    name = habit.name,
+    icon = CardIcon.valueOf(habit.iconValue),
+    color = CardColor.valueOf(habit.colorValue),
+    description = habit.description,
+    effort = HabitDesiredEffort(
+        effortUnit = EffortUnit.valueOf(habit.effortUnit),
+        desiredValue = habit.desiredEffortValue
+    ),
+    history = historyEntries.map { it.mapToDomain() },
+    habitNotification = if (habit.isNotificationEnabled) HabitNotification.Enabled(habit.notificationTime!!) else HabitNotification.Disabled,
+    isArchive = habit.isArchive,
+    desirableDays = habit.desirableDays?.map { Day.valueOf(it) }
 )
 

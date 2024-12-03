@@ -33,8 +33,8 @@
     <string name="liter">liter</string>
     <string name="liters_abr">l</string>
     <string name="kcal">kcal</string>
-    <string name="times">times</string>
-    <string name="time">time</string>
+    <string name="repeats">repeats</string>
+    <string name="repeat">repeat</string>
     <string name="steps">steps</string>
     <string name="navigate_back">Navigate back</string>
     <string name="name">Name</string>
@@ -49,7 +49,7 @@
     <string name="friday_short">F</string>
     <string name="saturday_short">S</string>
     <string name="sunday_short">S</string>
-    <string name="set_your_daily_goal">Daily goal</string>
+    <string name="daily_goal">Daily goal</string>
     <string name="plus">Plus</string>
     <string name="minus">Minus</string>
     <string name="get_notifications">Get notifications</string>
@@ -73,4 +73,10 @@
     <string name="add_progress">Set progress</string>
     <string name="set_your_daily_progress">Set your daily progress:</string>
     <string name="or">Or</string>
+    <string name="delete_habit">Delete habit</string>
+    <string name="edit_habit">Edit habit</string>
+    <string name="archive_habit">Archive habit</string>
+    <string name="current_streak">Current streak</string>
+    <string name="days">%s days</string>
+    <string name="day">1 day</string>
 </resources>

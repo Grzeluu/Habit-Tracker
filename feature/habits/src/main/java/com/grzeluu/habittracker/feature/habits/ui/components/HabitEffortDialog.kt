@@ -130,7 +130,7 @@ fun HabitEffortDialog(
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            onSetProgress.invoke(dailyHabitInfo, progressTextValue.toFloat())
+                            onSetProgress.invoke(dailyHabitInfo, progressTextValue.toFloatOrNull() ?: 0f)
                             onDismissRequest()
                         }
                     ) {

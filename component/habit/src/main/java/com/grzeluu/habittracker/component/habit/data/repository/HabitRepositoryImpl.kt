@@ -19,12 +19,8 @@ import javax.inject.Singleton
 class HabitRepositoryImpl @Inject constructor(
     private val habitDao: HabitDao
 ) : HabitRepository {
-    override suspend fun addHabit(habit: Habit) {
-        habitDao.insertHabitWithHistoryEntries(habit.mapToDbModel())
-    }
-
-    override suspend fun addHabitHistoryEntry(habitId: Long, habitHistoryEntry: HabitHistoryEntry) {
-        habitDao.insertHabitHistoryEntry(habitHistoryEntry.mapToEntity(habitId))
+    override fun getHabit(habitId: Long): Flow<Habit?> {
+        return habitDao.getHabitWithHistoryEntriesByHabitId(habitId).map { it?.mapToDomain() }
     }
 
     override fun getDailyHabitInfos(day: Day, dateTime: LocalDate): Flow<List<DailyHabitInfo>> {
@@ -37,6 +33,22 @@ class HabitRepositoryImpl @Inject constructor(
 
     override fun getHabitsCount(): Flow<Int> {
         return habitDao.getHabitsCount()
+    }
+
+    override suspend fun addHabit(habit: Habit) {
+        habitDao.insertHabitWithHistoryEntries(habit.mapToDbModel())
+    }
+
+    override suspend fun addHabitHistoryEntry(habitId: Long, habitHistoryEntry: HabitHistoryEntry) {
+        habitDao.insertHabitHistoryEntry(habitHistoryEntry.mapToEntity(habitId))
+    }
+
+    override suspend fun deleteHabit(habit: Habit) {
+        return habitDao.deleteHabit(habit.mapToEntity())
+    }
+
+    override suspend fun markHabitAsArchived(habitId: Long) {
+        return habitDao.markHabitAsArchived(habitId)
     }
 
 }

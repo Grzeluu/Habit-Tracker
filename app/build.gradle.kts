@@ -58,6 +58,7 @@ dependencies {
     implementation(project(":feature:addhabit"))
     implementation(project(":feature:habits"))
     implementation(project(":feature:calendar"))
+    implementation(project(":feature:details"))
     implementation(project(":feature:notifications"))
     implementation(project(":feature:onboarding"))
     implementation(project(":feature:settings"))
