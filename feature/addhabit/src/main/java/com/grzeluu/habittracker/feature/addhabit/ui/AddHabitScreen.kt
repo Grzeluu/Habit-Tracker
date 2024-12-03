@@ -63,7 +63,7 @@ fun AddHabitScreen(
         topBar = {
             BasicTopAppBar(
                 title = stringResource(R.string.add_habit),
-                onNavigateBack = onNavigateToMainPage
+                onNavigateBack = onNavigateToMainPage,
             )
         },
     ) { innerPadding ->
@@ -108,7 +108,7 @@ fun AddHabitScreen(
                     toggleSelectAll = { viewModel.onEvent(AddHabitEvent.OnAllDaysToggled) }
                 )
                 Spacer(modifier = Modifier.height(spaceBetweenFormSections))
-                BasicLabel(text = stringResource(R.string.set_your_daily_goal))
+                BasicLabel(text = stringResource(R.string.daily_goal))
                 SetDailyGoalView(
                     goalTextState = uiData.dailyEffort.orEmpty(),
                     onTextChanged = { viewModel.onEvent(AddHabitEvent.OnDailyGoalTextChanged(it)) },

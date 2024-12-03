@@ -34,6 +34,7 @@ import com.grzeluu.habittracker.common.ui.theme.HabitTrackerTheme
 import com.grzeluu.habittracker.component.habit.domain.model.DailyHabitInfo
 import com.grzeluu.habittracker.component.habit.domain.model.HabitDesiredEffort
 import com.grzeluu.habittracker.component.habit.domain.model.HabitHistoryEntry
+import com.grzeluu.habittracker.util.date.getCurrentDate
 import com.grzeluu.habittracker.util.enums.CardColor
 import com.grzeluu.habittracker.util.enums.CardIcon
 import com.grzeluu.habittracker.util.enums.EffortUnit
@@ -56,60 +57,51 @@ fun SimpleHabitCard(
             }
         }
 
-
-
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            containerColor = habitInfo.color.mapToColor().copy(alpha = 0.25f),
             contentColor = MaterialTheme.colorScheme.onSurface
         )
     ) {
-        Box(Modifier.fillMaxWidth()) {
-            FilledBackground(
-                modifier = Modifier.fillMaxWidth(),
-                color = habitInfo.color.mapToColor().copy(alpha = 0.25f),
-                fill = 1f
+        Row(
+            modifier = Modifier.padding(AppSizes.cardInnerPadding)
+        ) {
+            Icon(
+                modifier = Modifier
+                    .padding(top = 4.dp, start = 8.dp)
+                    .size(28.dp),
+                painter = painterResource(habitInfo.icon.mapToDrawableRes()),
+                contentDescription = null,
+                tint = habitInfo.color.mapToColor(),
             )
-            Row(
-                modifier = Modifier.padding(AppSizes.cardInnerPadding)
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(
+                Modifier
+                    .weight(1f)
+                    .align(Alignment.CenterVertically)
             ) {
-                Icon(
-                    modifier = Modifier
-                        .padding(top = 4.dp, start = 8.dp)
-                        .size(28.dp),
-                    painter = painterResource(habitInfo.icon.mapToDrawableRes()),
-                    contentDescription = null,
-                    tint = habitInfo.color.mapToColor(),
+                Text(
+                    text = habitInfo.name,
+                    style = MaterialTheme.typography.titleSmall,
+                    overflow = TextOverflow.Ellipsis
                 )
-                Spacer(modifier = Modifier.width(12.dp))
-                Column(
-                    Modifier
-                        .weight(1f)
-                        .align(Alignment.CenterVertically)
-                ) {
+                if (!habitInfo.description.isNullOrEmpty()) {
+                    Spacer(modifier = Modifier.size(4.dp))
                     Text(
-                        text = habitInfo.name,
-                        style = MaterialTheme.typography.titleSmall,
+                        text = habitInfo.description ?: "",
+                        style = MaterialTheme.typography.labelSmall,
                         overflow = TextOverflow.Ellipsis
                     )
-                    if (!habitInfo.description.isNullOrEmpty()) {
-                        Spacer(modifier = Modifier.size(4.dp))
-                        Text(
-                            text = habitInfo.description ?: "",
-                            style = MaterialTheme.typography.labelSmall,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
                 }
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    text = effortString,
-                    style = MaterialTheme.typography.labelMedium
-                )
-                Spacer(modifier = Modifier.width(12.dp))
             }
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                text = effortString,
+                style = MaterialTheme.typography.labelMedium
+            )
+            Spacer(modifier = Modifier.width(12.dp))
         }
     }
 }
@@ -130,7 +122,7 @@ fun SimpleHabitCardPreview() {
                     desiredValue = 2.5f,
                 ),
                 dailyHistoryEntry = HabitHistoryEntry(
-                    date = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).date,
+                    date = getCurrentDate(),
                     currentEffort = 2.5f,
                     note = null,
                 ),

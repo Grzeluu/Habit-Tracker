@@ -49,8 +49,8 @@ class DetailsViewModel @Inject constructor(
 
     fun onEvent(event: DetailsEvent) {
         when (event) {
-            DetailsEvent.onArchiveHabit -> archiveHabit()
-            DetailsEvent.onDeleteHabit -> deleteHabit()
+            DetailsEvent.OnArchiveHabit -> archiveHabit()
+            DetailsEvent.OnDeleteHabit -> deleteHabit()
         }
     }
 

@@ -104,7 +104,7 @@ fun HabitCard(
                     if (!habitInfo.description.isNullOrEmpty()) {
                         Spacer(modifier = Modifier.size(4.dp))
                         Text(
-                            text = habitInfo.description ?: "",
+                            text = habitInfo.description.orEmpty(),
                             style = MaterialTheme.typography.labelSmall,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -133,7 +133,7 @@ fun HabitCard(
                             when {
                                 habitInfo.effortProgress >= 1f -> R.drawable.ic_checked_filled
                                 habitInfo.effortProgress > 0f -> R.drawable.ic_add_circle
-                                else -> R.drawable.ic_radio_unchecked
+                                else -> R.drawable.ic_checked
                             }
                         ),
                         contentDescription = stringResource(R.string.done),

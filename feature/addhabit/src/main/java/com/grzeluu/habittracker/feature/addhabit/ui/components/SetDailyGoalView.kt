@@ -35,7 +35,7 @@ fun SetDailyGoalView(
             keyboardType = KeyboardType.Number,
             withClearTextOption = false,
             onValueChange = {
-                if (it.isEmpty() || (it.toFloatOrNull() != null && it.toFloat() >= 0f) ) onTextChanged(it)
+                if (it.isEmpty() || (it.toFloatOrNull() != null && it.toFloat() >= 0f)) onTextChanged(it)
             },
             alignment = TextAlign.End
         )
@@ -46,8 +46,8 @@ fun SetDailyGoalView(
             options = EffortUnit.entries,
             getTextValue = {
                 it.mapToUiText(
-                    if (goalTextState.toFloatOrNull() == 1.0f) MappingType.SINGULAR else MappingType.PLURAL
-                ).asString() ?: ""
+                    if ((goalTextState.toFloatOrNull() ?: 0f) <= 1.0f) MappingType.SINGULAR else MappingType.PLURAL
+                ).asString()
             },
             onSelectOption = onChangeEffortUnit
 
