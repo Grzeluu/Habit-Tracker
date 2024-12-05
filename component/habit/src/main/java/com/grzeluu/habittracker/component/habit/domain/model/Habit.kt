@@ -21,7 +21,7 @@ data class Habit(
 ) {
     fun currentStreak(currentDate: LocalDate): Int {
         val sortedHistory = history.sortedByDescending { it.date }
-        val latestEntryDate = sortedHistory.first().date
+        val latestEntryDate = sortedHistory.firstOrNull()?.date ?: return 0
 
         if (latestEntryDate != currentDate && latestEntryDate != currentDate.minus(1, DateTimeUnit.DAY)) return 0
 

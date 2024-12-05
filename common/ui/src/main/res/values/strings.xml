@@ -73,10 +73,14 @@
     <string name="add_progress">Set progress</string>
     <string name="set_your_daily_progress">Set your daily progress:</string>
     <string name="or">Or</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
     <string name="delete_habit">Delete habit</string>
+    <string name="delete_habit_message">Are you sure you want to delete this habit? All tracked progress will be lost.</string>
     <string name="edit_habit">Edit habit</string>
     <string name="archive_habit">Archive habit</string>
     <string name="current_streak">Current streak</string>
     <string name="days">%s days</string>
     <string name="day">1 day</string>
+    <string name="ok">OK</string>
 </resources>
