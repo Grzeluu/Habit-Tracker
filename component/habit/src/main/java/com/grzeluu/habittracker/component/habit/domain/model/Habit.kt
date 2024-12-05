@@ -13,7 +13,7 @@ data class Habit(
     val icon: CardIcon,
     val color: CardColor,
     val description: String?,
-    val desirableDays: List<Day>?,
+    val desirableDays: List<Day>,
     val habitNotification: HabitNotification,
     val effort: HabitDesiredEffort,
     val history: List<HabitHistoryEntry> = emptyList(),
@@ -26,12 +26,23 @@ data class Habit(
         if (latestEntryDate != currentDate && latestEntryDate != currentDate.minus(1, DateTimeUnit.DAY)) return 0
 
         var currentStreak = 0
+        var lastDate = currentDate
+
+        fun lastDateIsNotDesirable() = !desirableDays.contains(Day.get(lastDate.dayOfWeek.value))
+
         for (entry in sortedHistory) {
-            if (entry.currentEffort > 0f) {
-                currentStreak++
-            } else if (entry.date != currentDate) {
-                break
+            when {
+                entry.currentEffort > 0f && entry.date == lastDate -> {
+                    currentStreak++
+                }
+
+                entry.date != currentDate -> {
+                    break
+                }
             }
+            do {
+                lastDate = lastDate.minus(1, DateTimeUnit.DAY)
+            } while (lastDateIsNotDesirable())
         }
         return currentStreak
     }

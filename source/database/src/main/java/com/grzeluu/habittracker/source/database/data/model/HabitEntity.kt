@@ -21,7 +21,7 @@ data class HabitEntity(
     @ColumnInfo(name = "description")
     val description: String?,
     @ColumnInfo(name = "desirable_days")
-    val desirableDays: List<String>?,
+    val desirableDays: List<String>,
     @ColumnInfo(name = "is_notifications_enabled")
     val isNotificationEnabled: Boolean,
     @ColumnInfo(name = "notification_time")
