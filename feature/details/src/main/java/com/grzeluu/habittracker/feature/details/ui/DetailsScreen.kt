@@ -27,6 +27,7 @@ import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.mapper.mapToColor
 import com.grzeluu.habittracker.common.ui.mapper.mapToUiText
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
+import com.grzeluu.habittracker.feature.details.ui.components.ConfirmArchiveHabitDialog
 import com.grzeluu.habittracker.feature.details.ui.components.ConfirmDeleteHabitDialog
 import com.grzeluu.habittracker.feature.details.ui.components.DetailsCardWithIcon
 import com.grzeluu.habittracker.feature.details.ui.components.DetailsTitleCard
@@ -59,6 +60,12 @@ fun DetailsScreen(onNavigateBack: () -> Unit) {
         isVisible = isDeleteDialogVisible,
         onDismissRequest = { isDeleteDialogVisible = false },
         onDeleteConfirmed = { viewModel.onEvent(DetailsEvent.OnDeleteHabit) }
+    )
+
+    ConfirmArchiveHabitDialog(
+        isVisible = isArchiveDialogVisible,
+        onDismissRequest = { isArchiveDialogVisible = false },
+        onDeleteConfirmed = { viewModel.onEvent(DetailsEvent.OnArchiveHabit) }
     )
 
     Scaffold(

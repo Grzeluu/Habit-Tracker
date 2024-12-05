@@ -70,6 +70,7 @@ class DetailsViewModel @Inject constructor(
     private fun archiveHabit() {
         viewModelScope.launch(Dispatchers.IO) {
             habit.value?.let { archiveHabitUseCase(it) }
+            navigationChannel.send(DetailsNavigationEvent.NAVIGATE_BACK)
         }
     }
 
