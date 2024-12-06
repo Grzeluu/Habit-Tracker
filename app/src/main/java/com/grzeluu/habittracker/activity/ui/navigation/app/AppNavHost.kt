@@ -34,7 +34,7 @@ fun AppNavHost(
         composable<NavRoute.MainPage> {
             MainPage(
                 onNavigateToAddHabit = {
-                    navController.navigate(NavRoute.AddHabit) {
+                    navController.navigate(NavRoute.AddHabit()) {
                         launchSingleTop = true
                     }
                 },

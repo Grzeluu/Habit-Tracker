@@ -19,6 +19,7 @@ import com.grzeluu.habittracker.util.enums.CardIcon
 import com.grzeluu.habittracker.util.enums.Day
 import com.grzeluu.habittracker.util.enums.EffortUnit
 import com.grzeluu.habittracker.util.flow.combine
+import com.grzeluu.habittracker.util.numbers.formatFloat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -40,7 +41,7 @@ class AddHabitViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<AddHabitDataState>() {
 
-    private val habitId = savedStateHandle.get<Long>(AddHabitArgument.HABIT_ID)
+    val habitId = savedStateHandle.get<Long?>(AddHabitArgument.HABIT_ID)
 
     private val navigationChannel = Channel<AddHabitNavigationEvent>()
     val navigationEventsChannelFlow = navigationChannel.receiveAsFlow()
@@ -106,7 +107,7 @@ class AddHabitViewModel @Inject constructor(
         _color.emit(habit.color)
         _icon.emit(habit.icon)
         _selectedDays.emit(habit.desirableDays)
-        _dailyEffort.emit(habit.effort.desiredValue.toString())
+        _dailyEffort.emit(habit.effort.desiredValue.formatFloat())
         _effortUnit.emit(habit.effort.effortUnit)
         _isNotificationsEnabled.emit(habit.habitNotification is HabitNotification.Enabled)
     }

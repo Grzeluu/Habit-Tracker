@@ -62,7 +62,7 @@ fun AddHabitScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             BasicTopAppBar(
-                title = stringResource(R.string.add_habit),
+                title = if (viewModel.habitId != null) stringResource(R.string.edit_habit) else stringResource(R.string.add_habit),
                 onNavigateBack = onNavigateToMainPage,
             )
         },
