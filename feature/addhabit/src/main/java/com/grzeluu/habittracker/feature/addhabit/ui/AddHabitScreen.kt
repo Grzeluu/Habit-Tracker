@@ -42,7 +42,7 @@ import com.grzeluu.habittracker.util.flow.ObserveAsEvent
 
 @Composable
 fun AddHabitScreen(
-    onNavigateToMainPage: () -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
 
     val viewModel: AddHabitViewModel = hiltViewModel()
@@ -50,12 +50,12 @@ fun AddHabitScreen(
 
     ObserveAsEvent(viewModel.navigationEventsChannelFlow) { event ->
         when (event) {
-            AddHabitNavigationEvent.NAVIGATE_AFTER_SAVE -> onNavigateToMainPage()
+            AddHabitNavigationEvent.NAVIGATE_AFTER_SAVE -> onNavigateBack()
         }
     }
 
     BackHandler {
-        onNavigateToMainPage()
+        onNavigateBack()
     }
 
     Scaffold(
@@ -63,7 +63,7 @@ fun AddHabitScreen(
         topBar = {
             BasicTopAppBar(
                 title = if (viewModel.habitId != null) stringResource(R.string.edit_habit) else stringResource(R.string.add_habit),
-                onNavigateBack = onNavigateToMainPage,
+                onNavigateBack = onNavigateBack,
             )
         },
     ) { innerPadding ->
