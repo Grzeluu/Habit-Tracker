@@ -59,7 +59,12 @@ fun AppNavHost(
             DetailsScreen(
                 onNavigateBack = {
                     navController.popBackStack()
-                }
+                },
+                onNavigateToAddHabit = { habitId ->
+                    navController.navigate(NavRoute.AddHabit(habitId)) {
+                        launchSingleTop = true
+                    }
+                },
             )
         }
     }

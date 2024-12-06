@@ -23,14 +23,6 @@ interface HabitDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertHabitHistoryEntry(habitEntry: HabitHistoryEntryEntity)
 
-    @Transaction
-    suspend fun insertHabitWithHistoryEntries(habitWithHistory: HabitWithHistoryDbModel) {
-        val habitId = insertHabit(habitWithHistory.habit)
-        habitWithHistory.historyEntries.forEach { historyEntry ->
-            insertHabitHistoryEntry(historyEntry.copy(habitId = habitId))
-        }
-    }
-
     @Update
     suspend fun updateHabit(habit: HabitEntity)
 

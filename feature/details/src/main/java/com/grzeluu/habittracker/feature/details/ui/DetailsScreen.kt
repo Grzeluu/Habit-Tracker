@@ -37,9 +37,13 @@ import com.grzeluu.habittracker.feature.details.ui.event.DetailsNavigationEvent
 import com.grzeluu.habittracker.feature.details.ui.state.DetailsDataState
 import com.grzeluu.habittracker.util.date.getCurrentDate
 import com.grzeluu.habittracker.util.flow.ObserveAsEvent
+import com.grzeluu.habittracker.util.numbers.formatFloat
 
 @Composable
-fun DetailsScreen(onNavigateBack: () -> Unit) {
+fun DetailsScreen(
+    onNavigateBack: () -> Unit,
+    onNavigateToAddHabit: (Long) -> Unit
+) {
     val viewModel = hiltViewModel<DetailsViewModel>()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -75,7 +79,7 @@ fun DetailsScreen(onNavigateBack: () -> Unit) {
                 uiState = uiState,
                 onNavigateBack = onNavigateBack,
                 onDelete = { isDeleteDialogVisible = true },
-                onEdit = { /* TODO */ },
+                onEdit = { onNavigateToAddHabit(viewModel.habitId) },
                 onArchive = { isArchiveDialogVisible = true }
             )
         }
@@ -107,7 +111,7 @@ private fun DetailsScreenContent(uiData: DetailsDataState) {
                         iconPainter = painterResource(R.drawable.ic_goal),
                         iconColor = color.mapToColor(),
                         label = stringResource(R.string.daily_goal),
-                        body = "${effort.desiredValue} ${effort.effortUnit.mapToUiText().asString()}"
+                        body = "${effort.desiredValue.formatFloat()} ${effort.effortUnit.mapToUiText().asString()}"
                     )
                     Spacer(modifier = Modifier.width(AppSizes.spaceBetweenScreenSections))
                     DetailsCardWithIcon(

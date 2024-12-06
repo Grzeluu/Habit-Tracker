@@ -1,13 +1,18 @@
 package com.grzeluu.habittracker.feature.addhabit.ui
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.grzeluu.habittracker.base.domain.error.BaseError
+import com.grzeluu.habittracker.base.domain.result.Result
 import com.grzeluu.habittracker.base.ui.BaseViewModel
 import com.grzeluu.habittracker.component.habit.domain.model.Habit
 import com.grzeluu.habittracker.component.habit.domain.model.HabitDesiredEffort
 import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
-import com.grzeluu.habittracker.component.habit.domain.usecase.AddHabitUseCase
+import com.grzeluu.habittracker.component.habit.domain.usecase.AddOrUpdateHabitUseCase
+import com.grzeluu.habittracker.component.habit.domain.usecase.GetHabitUseCase
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitEvent
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitNavigationEvent
+import com.grzeluu.habittracker.feature.addhabit.ui.navigation.AddHabitArgument
 import com.grzeluu.habittracker.feature.addhabit.ui.state.AddHabitDataState
 import com.grzeluu.habittracker.util.enums.CardColor
 import com.grzeluu.habittracker.util.enums.CardIcon
@@ -20,6 +25,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -28,8 +35,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddHabitViewModel @Inject constructor(
-    private val addHabitUseCase: AddHabitUseCase
+    private val getHabitUseCase: GetHabitUseCase,
+    private val addOrUpdateHabitUseCase: AddOrUpdateHabitUseCase,
+    savedStateHandle: SavedStateHandle
 ) : BaseViewModel<AddHabitDataState>() {
+
+    private val habitId = savedStateHandle.get<Long>(AddHabitArgument.HABIT_ID)
 
     private val navigationChannel = Channel<AddHabitNavigationEvent>()
     val navigationEventsChannelFlow = navigationChannel.receiveAsFlow()
@@ -60,22 +71,8 @@ class AddHabitViewModel @Inject constructor(
 
     override val uiDataState: StateFlow<AddHabitDataState?>
         get() = combine(
-            name,
-            description,
-            color,
-            icon,
-            selectedDays,
-            dailyEffort,
-            effortUnit,
-            isNotificationsEnabled
-        ) { name,
-            description,
-            color,
-            icon,
-            selectedDays,
-            dailyEffort,
-            effortUnit,
-            isNotificationsEnabled ->
+            name, description, color, icon, selectedDays, dailyEffort, effortUnit, isNotificationsEnabled
+        ) { name, description, color, icon, selectedDays, dailyEffort, effortUnit, isNotificationsEnabled ->
             AddHabitDataState(
                 name = name,
                 description = description,
@@ -86,11 +83,33 @@ class AddHabitViewModel @Inject constructor(
                 effortUnit = effortUnit,
                 isNotificationsEnabled = isNotificationsEnabled
             )
+        }.onStart {
+            getEditedHabitData()
         }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = null
+            scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = null
         )
+
+    private fun getEditedHabitData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (habitId != null) {
+                when (val result = getHabitUseCase(GetHabitUseCase.Request(habitId)).firstOrNull()) {
+                    is Result.Success -> result.data?.let { handleHabitData(it) }
+                    else -> errorChannel.send(BaseError.READ_ERROR)
+                }
+            }
+        }
+    }
+
+    private suspend fun handleHabitData(habit: Habit) {
+        _name.emit(habit.name)
+        _description.emit(habit.description)
+        _color.emit(habit.color)
+        _icon.emit(habit.icon)
+        _selectedDays.emit(habit.desirableDays)
+        _dailyEffort.emit(habit.effort.desiredValue.toString())
+        _effortUnit.emit(habit.effort.effortUnit)
+        _isNotificationsEnabled.emit(habit.habitNotification is HabitNotification.Enabled)
+    }
 
     fun onEvent(event: AddHabitEvent) {
         when (event) {
@@ -147,16 +166,16 @@ class AddHabitViewModel @Inject constructor(
     private fun addHabit() {
         viewModelScope.launch(Dispatchers.IO) {
             loadingState.incrementTasksInProgress()
-            addHabitUseCase.execute(
+            addOrUpdateHabitUseCase.invoke(
                 Habit(
+                    id = habitId ?: 0L,
                     name = name.value,
                     description = description.value,
                     color = color.value,
                     icon = icon.value,
                     desirableDays = selectedDays.value,
                     effort = HabitDesiredEffort(
-                        desiredValue = dailyEffort.value?.toFloat() ?: 1f,
-                        effortUnit = effortUnit.value
+                        desiredValue = dailyEffort.value?.toFloat() ?: 1f, effortUnit = effortUnit.value
                     ),
                     habitNotification = HabitNotification.Disabled
                 )

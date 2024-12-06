@@ -34,7 +34,7 @@ class DetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<DetailsDataState>() {
 
-    private val habitId = requireNotNull(savedStateHandle.get<Long>(DetailsArguments.HABIT_ID))
+    val habitId = requireNotNull(savedStateHandle.get<Long>(DetailsArguments.HABIT_ID))
 
     private val navigationChannel = Channel<DetailsNavigationEvent>()
     val navigationEventsChannelFlow = navigationChannel.receiveAsFlow()

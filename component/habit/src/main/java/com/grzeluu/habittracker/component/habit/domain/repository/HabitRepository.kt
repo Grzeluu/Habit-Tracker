@@ -14,7 +14,7 @@ interface HabitRepository {
 
     fun getHabitsCount(): Flow<Int>
 
-    suspend fun addHabit(habit: Habit)
+    suspend fun addOrUpdateHabit(habit: Habit)
 
     suspend fun addHabitHistoryEntry(habitId: Long, habitHistoryEntry: HabitHistoryEntry)
 
