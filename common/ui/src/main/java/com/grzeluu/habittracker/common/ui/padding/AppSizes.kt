@@ -4,7 +4,7 @@ import androidx.compose.ui.unit.dp
 
 object AppSizes {
     val screenPadding = 16.dp
-    val dialogPadding = 24.dp
+    val dialogPadding = 20.dp
 
     val spaceBetweenScreenSections = 16.dp
 

@@ -1,6 +1,5 @@
 package com.grzeluu.habittracker.component.habit.data.repository
 
-import com.grzeluu.habittracker.component.habit.data.mapper.mapToDbModel
 import com.grzeluu.habittracker.component.habit.data.mapper.mapToDomain
 import com.grzeluu.habittracker.component.habit.data.mapper.mapToEntity
 import com.grzeluu.habittracker.component.habit.domain.model.DailyHabitInfo
@@ -35,8 +34,12 @@ class HabitRepositoryImpl @Inject constructor(
         return habitDao.getHabitsCount()
     }
 
-    override suspend fun addHabit(habit: Habit) {
-        habitDao.insertHabitWithHistoryEntries(habit.mapToDbModel())
+    override suspend fun addOrUpdateHabit(habit: Habit) {
+        if (habit.id == 0L) {
+            habitDao.insertHabit(habit.mapToEntity())
+        } else {
+            habitDao.updateHabit(habit.mapToEntity())
+        }
     }
 
     override suspend fun addHabitHistoryEntry(habitId: Long, habitHistoryEntry: HabitHistoryEntry) {
@@ -50,5 +53,4 @@ class HabitRepositoryImpl @Inject constructor(
     override suspend fun markHabitAsArchived(habitId: Long) {
         return habitDao.markHabitAsArchived(habitId)
     }
-
 }

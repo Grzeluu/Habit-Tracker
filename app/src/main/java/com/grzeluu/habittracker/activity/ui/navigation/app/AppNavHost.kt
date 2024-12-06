@@ -24,9 +24,12 @@ fun AppNavHost(
                     }
                 },
                 onNavigateToAddHabit = {
-                    navController.navigate(NavRoute.AddHabit) {
+                    navController.navigate(NavRoute.MainPage) {
                         launchSingleTop = true
                         popUpTo(NavRoute.Onboarding) { inclusive = true }
+                    }
+                    navController.navigate(NavRoute.AddHabit()) {
+                        launchSingleTop = true
                     }
                 }
             )
@@ -34,7 +37,7 @@ fun AppNavHost(
         composable<NavRoute.MainPage> {
             MainPage(
                 onNavigateToAddHabit = {
-                    navController.navigate(NavRoute.AddHabit) {
+                    navController.navigate(NavRoute.AddHabit()) {
                         launchSingleTop = true
                     }
                 },
@@ -47,11 +50,8 @@ fun AppNavHost(
         }
         composable<NavRoute.AddHabit> {
             AddHabitScreen(
-                onNavigateToMainPage = {
-                    navController.navigate(NavRoute.MainPage) {
-                        launchSingleTop = true
-                        popUpTo(NavRoute.MainPage) { inclusive = true }
-                    }
+                onNavigateBack = {
+                    navController.popBackStack()
                 }
             )
         }
@@ -59,7 +59,12 @@ fun AppNavHost(
             DetailsScreen(
                 onNavigateBack = {
                     navController.popBackStack()
-                }
+                },
+                onNavigateToAddHabit = { habitId ->
+                    navController.navigate(NavRoute.AddHabit(habitId)) {
+                        launchSingleTop = true
+                    }
+                },
             )
         }
     }

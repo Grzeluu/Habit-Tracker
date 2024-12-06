@@ -8,10 +8,12 @@ import com.grzeluu.habittracker.component.habit.domain.usecase.ArchiveHabitUseCa
 import com.grzeluu.habittracker.component.habit.domain.usecase.DeleteHabitUseCase
 import com.grzeluu.habittracker.component.habit.domain.usecase.GetHabitUseCase
 import com.grzeluu.habittracker.feature.details.ui.event.DetailsEvent
+import com.grzeluu.habittracker.feature.details.ui.event.DetailsNavigationEvent
 import com.grzeluu.habittracker.feature.details.ui.navigation.DetailsArguments
 import com.grzeluu.habittracker.feature.details.ui.state.DetailsDataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,7 +34,10 @@ class DetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<DetailsDataState>() {
 
-    private val habitId = requireNotNull(savedStateHandle.get<Long>(DetailsArguments.HABIT_ID))
+    val habitId = requireNotNull(savedStateHandle.get<Long>(DetailsArguments.HABIT_ID))
+
+    private val navigationChannel = Channel<DetailsNavigationEvent>()
+    val navigationEventsChannelFlow = navigationChannel.receiveAsFlow()
 
     private val _habit = MutableStateFlow<Habit?>(null)
     private val habit: StateFlow<Habit?> = _habit.asStateFlow()
@@ -57,12 +63,14 @@ class DetailsViewModel @Inject constructor(
     private fun deleteHabit() {
         viewModelScope.launch(Dispatchers.IO) {
             habit.value?.let { deleteHabitUseCase(it) }
+            navigationChannel.send(DetailsNavigationEvent.NAVIGATE_BACK)
         }
     }
 
     private fun archiveHabit() {
         viewModelScope.launch(Dispatchers.IO) {
             habit.value?.let { archiveHabitUseCase(it) }
+            navigationChannel.send(DetailsNavigationEvent.NAVIGATE_BACK)
         }
     }
 
