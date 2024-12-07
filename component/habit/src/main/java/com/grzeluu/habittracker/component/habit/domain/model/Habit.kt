@@ -26,7 +26,7 @@ data class Habit(
         if (latestEntryDate != currentDate && latestEntryDate != currentDate.minus(1, DateTimeUnit.DAY)) return 0
 
         var currentStreak = 0
-        var lastDate = currentDate
+        var lastDate = latestEntryDate
 
         fun lastDateIsNotDesirable() = !desirableDays.contains(Day.get(lastDate.dayOfWeek.value))
 
