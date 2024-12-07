@@ -2,10 +2,10 @@ package com.grzeluu.habittracker.util.enums
 
 enum class CardColor {
     YELLOW,
-    GREEN,
     ORANGE,
     RED,
     PINK,
+    GREEN,
     BLUE,
     PURPLE,
     MAGENTA,

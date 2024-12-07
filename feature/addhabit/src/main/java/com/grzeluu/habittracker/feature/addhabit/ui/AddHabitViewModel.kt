@@ -5,6 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.domain.error.BaseError
 import com.grzeluu.habittracker.base.domain.result.Result
 import com.grzeluu.habittracker.base.ui.BaseViewModel
+import com.grzeluu.habittracker.common.ui.state.FieldState
+import com.grzeluu.habittracker.common.ui.text.UiText
+import com.grzeluu.habittracker.component.habit.domain.error.HabitValidationError
 import com.grzeluu.habittracker.component.habit.domain.model.Habit
 import com.grzeluu.habittracker.component.habit.domain.model.HabitDesiredEffort
 import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
@@ -12,6 +15,7 @@ import com.grzeluu.habittracker.component.habit.domain.usecase.AddOrUpdateHabitU
 import com.grzeluu.habittracker.component.habit.domain.usecase.GetHabitUseCase
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitEvent
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitNavigationEvent
+import com.grzeluu.habittracker.feature.addhabit.ui.mapper.asUiText
 import com.grzeluu.habittracker.feature.addhabit.ui.navigation.AddHabitArgument
 import com.grzeluu.habittracker.feature.addhabit.ui.state.AddHabitDataState
 import com.grzeluu.habittracker.util.enums.CardColor
@@ -26,6 +30,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -49,6 +55,13 @@ class AddHabitViewModel @Inject constructor(
     private var _name = MutableStateFlow("")
     private val name: StateFlow<String> = _name
 
+    private val _nameValidationError = MutableStateFlow<UiText?>(null)
+    private val nameValidationError: StateFlow<UiText?> = _nameValidationError.asStateFlow()
+
+    private val nameFieldState = combine(
+        name, nameValidationError
+    ) { name, nameValidationError -> FieldState(name, nameValidationError) }
+
     private var _description = MutableStateFlow<String?>(null)
     private val description: StateFlow<String?> = _description
 
@@ -61,6 +74,13 @@ class AddHabitViewModel @Inject constructor(
     private var _selectedDays = MutableStateFlow<List<Day>>(emptyList())
     private val selectedDays: StateFlow<List<Day>> = _selectedDays
 
+    private val _selectedDaysValidationError = MutableStateFlow<UiText?>(null)
+    private val selectedDaysValidationError: StateFlow<UiText?> = _selectedDaysValidationError.asStateFlow()
+
+    private val selectedDaysFieldState = combine(
+        selectedDays, selectedDaysValidationError
+    ) { selectedDays, selectedDaysValidationError -> FieldState(selectedDays, selectedDaysValidationError) }
+
     private var _dailyEffort = MutableStateFlow<String>("1")
     private val dailyEffort: StateFlow<String?> = _dailyEffort
 
@@ -72,14 +92,21 @@ class AddHabitViewModel @Inject constructor(
 
     override val uiDataState: StateFlow<AddHabitDataState?>
         get() = combine(
-            name, description, color, icon, selectedDays, dailyEffort, effortUnit, isNotificationsEnabled
-        ) { name, description, color, icon, selectedDays, dailyEffort, effortUnit, isNotificationsEnabled ->
+            nameFieldState,
+            description,
+            color,
+            icon,
+            selectedDaysFieldState,
+            dailyEffort,
+            effortUnit,
+            isNotificationsEnabled
+        ) { nameFieldState, description, color, icon, selectedDaysFieldState, dailyEffort, effortUnit, isNotificationsEnabled ->
             AddHabitDataState(
-                name = name,
+                nameField = nameFieldState,
                 description = description,
                 color = color,
                 icon = icon,
-                selectedDays = selectedDays,
+                selectedDaysField = selectedDaysFieldState,
                 dailyEffort = dailyEffort,
                 effortUnit = effortUnit,
                 isNotificationsEnabled = isNotificationsEnabled
@@ -140,6 +167,7 @@ class AddHabitViewModel @Inject constructor(
                 if (event.isChecked) currentDays.add(event.day)
                 else currentDays.remove(event.day)
                 _selectedDays.value = currentDays
+                _selectedDaysValidationError.value = null
             }
 
             is AddHabitEvent.OnDescriptionChanged -> {
@@ -152,6 +180,7 @@ class AddHabitViewModel @Inject constructor(
 
             is AddHabitEvent.OnNameChanged -> {
                 _name.value = event.value
+                _nameValidationError.value = null
             }
 
             is AddHabitEvent.OnNotificationsEnabledChanged -> {
@@ -167,7 +196,7 @@ class AddHabitViewModel @Inject constructor(
     private fun addHabit() {
         viewModelScope.launch(Dispatchers.IO) {
             loadingState.incrementTasksInProgress()
-            addOrUpdateHabitUseCase.invoke(
+            val result = addOrUpdateHabitUseCase.invoke(
                 Habit(
                     id = habitId ?: 0L,
                     name = name.value,
@@ -180,10 +209,23 @@ class AddHabitViewModel @Inject constructor(
                     ),
                     habitNotification = HabitNotification.Disabled
                 )
-            ).handleResult()
-            withContext(Dispatchers.Main) {
-                navigationChannel.send(AddHabitNavigationEvent.NAVIGATE_AFTER_SAVE)
+            )
+            when (result) {
+                is Result.Error -> {
+                    when (result.error) {
+                        HabitValidationError.EMPTY_DAYS -> _selectedDaysValidationError.emit(result.error.asUiText())
+                        HabitValidationError.EMPTY_NAME -> _nameValidationError.emit(result.error.asUiText())
+                        else -> errorChannel.send(result.error)
+                    }
+                }
+
+                is Result.Success -> {
+                    withContext(Dispatchers.Main) {
+                        navigationChannel.send(AddHabitNavigationEvent.NAVIGATE_AFTER_SAVE)
+                    }
+                }
             }
+
             loadingState.decrementTasksInProgress()
         }
     }

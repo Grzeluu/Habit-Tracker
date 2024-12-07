@@ -44,9 +44,6 @@ class DailyViewModel @AssistedInject constructor(
     private val _dailyHabits = MutableStateFlow<List<DailyHabitInfo>?>(null)
     private val dailyHabits: StateFlow<List<DailyHabitInfo>?> = _dailyHabits.asStateFlow()
 
-    private val _isHabitsLoading = MutableStateFlow(false)
-    private val isHabitsLoading = _isHabitsLoading.asStateFlow()
-
     private val dailyStatisticsData = dailyHabits.filterNotNull().mapLatest {
         DailyStatisticsData(
             totalHabits = it.size,
@@ -96,9 +93,11 @@ class DailyViewModel @AssistedInject constructor(
 
     private fun getHabitsData() {
         viewModelScope.launch(Dispatchers.IO) {
+            loadingState.incrementTasksInProgress()
             getDailyHabitInfosUseCase.invoke(
                 GetDailyHabitInfosUseCase.Request(date = date)
             ).collectLatestResult {
+                loadingState.decrementTasksInProgress()
                 _dailyHabits.value = it
             }
         }

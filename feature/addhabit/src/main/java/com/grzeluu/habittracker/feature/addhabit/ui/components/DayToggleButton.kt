@@ -1,5 +1,6 @@
 package com.grzeluu.habittracker.feature.addhabit.ui.components
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,14 +21,22 @@ fun DayToggleButton(
     day: Day,
     isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isError: Boolean
 ) {
     Button(
         onClick = { onCheckedChange(!isChecked) },
         contentPadding = PaddingValues(0.dp),
         modifier = modifier
             .size(48.dp)
-            .clip(RoundedCornerShape(8.dp)),
+            .clip(RoundedCornerShape(12.dp))
+            .let {
+                if (isError) it.border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.error,
+                    shape = RoundedCornerShape(12.dp)
+                ) else it
+            },
         shape = RectangleShape,
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = if (isChecked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
