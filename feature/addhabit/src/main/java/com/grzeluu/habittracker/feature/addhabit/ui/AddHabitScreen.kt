@@ -1,7 +1,10 @@
 package com.grzeluu.habittracker.feature.addhabit.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement.Absolute.SpaceBetween
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.grzeluu.habittracker.base.ui.BaseScreenContainer
@@ -80,11 +84,27 @@ fun AddHabitScreen(
                     .verticalScroll(rememberScrollState())
                     .fillMaxWidth()
             ) {
+                val nameMaxLength = 30
                 CustomTextField(
-                    value = uiData.name,
+                    value = uiData.nameField.value,
+                    isError = uiData.nameField.errorMassage != null,
                     imeAction = ImeAction.Done,
-                    onValueChange = { viewModel.onEvent(AddHabitEvent.OnNameChanged(it)) },
-                    label = stringResource(R.string.name)
+                    onValueChange = {
+                        if (it.count() <= nameMaxLength)
+                            viewModel.onEvent(AddHabitEvent.OnNameChanged(it))
+                    },
+                    label = stringResource(R.string.name),
+                    supportingText = {
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = SpaceBetween
+                        ) {
+                            Text(uiData.nameField.errorMassage?.asString() ?: stringResource(R.string.required_field))
+                            AnimatedVisibility(visible = uiData.nameField.value.isNotEmpty()) {
+                                Text("${uiData.nameField.value.count()}/$nameMaxLength")
+                            }
+                        }
+                    }
                 )
                 Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormElements))
                 BasicLabel(text = stringResource(R.string.color))
@@ -101,14 +121,16 @@ fun AddHabitScreen(
                 )
                 Spacer(modifier = Modifier.height(spaceBetweenFormSections))
                 DaySelectionView(
-                    selectedDays = uiData.selectedDays,
+                    selectedDays = uiData.selectedDaysField.value,
                     onDayCheckedChange = { day, isChecked ->
                         viewModel.onEvent(AddHabitEvent.OnDayChanged(day, isChecked))
                     },
-                    toggleSelectAll = { viewModel.onEvent(AddHabitEvent.OnAllDaysToggled) }
+                    toggleSelectAll = { viewModel.onEvent(AddHabitEvent.OnAllDaysToggled) },
+                    isError = uiData.selectedDaysField.errorMassage != null,
+                    supportingText = uiData.selectedDaysField.errorMassage?.asString()
+                        ?: stringResource(R.string.select_at_least_one_day)
                 )
                 Spacer(modifier = Modifier.height(spaceBetweenFormSections))
-                BasicLabel(text = stringResource(R.string.daily_goal))
                 SetDailyGoalView(
                     goalTextState = uiData.dailyEffort.orEmpty(),
                     onTextChanged = { viewModel.onEvent(AddHabitEvent.OnDailyGoalTextChanged(it)) },
@@ -116,12 +138,26 @@ fun AddHabitScreen(
                     onChangeEffortUnit = { viewModel.onEvent(AddHabitEvent.OnDailyGoalUnitChanged(it)) }
                 )
                 Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormElements))
+                val descriptionMaxLength = 50
                 CustomTextField(
                     maxLines = 2,
                     imeAction = ImeAction.Done,
                     value = uiData.description.orEmpty(),
-                    onValueChange = { viewModel.onEvent(AddHabitEvent.OnDescriptionChanged(it)) },
-                    label = stringResource(R.string.description)
+                    onValueChange = {
+                        if (it.count() <= descriptionMaxLength) {
+                            viewModel.onEvent(AddHabitEvent.OnDescriptionChanged(it))
+                        }
+                    },
+                    label = stringResource(R.string.description),
+                    supportingText = {
+                        AnimatedVisibility(visible = !uiData.description.isNullOrEmpty()) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = "${uiData.description?.count() ?: 0}/$descriptionMaxLength",
+                                textAlign = TextAlign.End
+                            )
+                        }
+                    }
                 )
                 Spacer(modifier = Modifier.height(spaceBetweenFormSections))
                 SetNotificationsView(
@@ -137,10 +173,13 @@ fun AddHabitScreen(
                         .align(Alignment.CenterHorizontally),
                     onClick = { viewModel.onEvent(AddHabitEvent.AddHabit) }
                 ) {
-                    Icon(painterResource(R.drawable.ic_add), null)
+                    Icon(
+                        painterResource(if (viewModel.habitId != null) R.drawable.ic_edit else R.drawable.ic_add),
+                        contentDescription = null
+                    )
                     Text(
                         modifier = Modifier.padding(start = spaceBetweenIconAndText),
-                        text = stringResource(R.string.add_habit)
+                        text = stringResource(if (viewModel.habitId != null) R.string.edit_habit else R.string.add_habit)
                     )
                 }
             }

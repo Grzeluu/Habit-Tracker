@@ -9,6 +9,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,6 +25,8 @@ import com.grzeluu.habittracker.common.ui.label.BasicLabel
 fun CustomTextField(
     modifier: Modifier = Modifier,
     value: String,
+    isError: Boolean = false,
+    supportingText: @Composable (() -> Unit)? = null,
     withClearTextOption: Boolean = true,
     onValueChange: (String) -> Unit,
     label: String? = null,
@@ -47,6 +50,7 @@ fun CustomTextField(
                 }
             }
         }
+
         else -> null
     }
 
@@ -55,6 +59,8 @@ fun CustomTextField(
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = value,
+            isError = isError,
+            supportingText = supportingText,
             readOnly = readOnly,
             onValueChange = onValueChange,
             shape = RoundedCornerShape(8.dp),

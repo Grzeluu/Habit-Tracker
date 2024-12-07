@@ -85,4 +85,9 @@
     <string name="days">%s days</string>
     <string name="day">1 day</string>
     <string name="ok">OK</string>
+    <string name="required_field">*required</string>
+    <string name="select_at_least_one_day">*select at least one day</string>
+    <string name="unit">Unit</string>
+    <string name="habit_validation_error_empty_name">Name cannot be empty.</string>
+    <string name="habit_validation_error_empty_days">Please select at least one day."</string>
 </resources>

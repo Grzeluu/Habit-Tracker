@@ -30,6 +30,7 @@ fun <T> FormDropdown(
     options: List<T>,
     getTextValue: @Composable (T) -> String,
     onSelectOption: (T) -> Unit,
+    label: String? = null
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
@@ -44,6 +45,7 @@ fun <T> FormDropdown(
                 .menuAnchor(),
             value = getTextValue(selectedItem),
             readOnly = true,
+            label = label,
             onValueChange = {},
             trailingIcon = {
                 Icon(
