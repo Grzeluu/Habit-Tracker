@@ -15,7 +15,9 @@ import androidx.navigation.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.grzeluu.habittracker.activity.ui.navigation.app.AppNavHost
 import com.grzeluu.habittracker.activity.ui.navigation.app.NavRoute
+import com.grzeluu.habittracker.activity.ui.state.MainActivityStateData
 import com.grzeluu.habittracker.base.ui.BaseScreenContainer
+import com.grzeluu.habittracker.base.ui.state.UiState
 import com.grzeluu.habittracker.common.ui.theme.HabitTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,13 +30,15 @@ class MainActivity : ComponentActivity() {
             val viewModel = hiltViewModel<MainActivityViewModel>()
             val uiState by viewModel.uiState.collectAsState()
 
-            BaseScreenContainer(
-                modifier = Modifier.fillMaxSize(),
-                uiState = uiState
-            ) { data ->
-                HabitTrackerTheme(
-                    darkTheme = data.settings?.isDarkModeEnabled ?: isSystemInDarkTheme()
-                ) {
+            val isDarkMode = (uiState as? UiState.Success<MainActivityStateData>)?.data?.settings?.isDarkModeEnabled
+
+            HabitTrackerTheme(
+                darkTheme = isDarkMode ?: isSystemInDarkTheme()
+            ) {
+                BaseScreenContainer(
+                    modifier = Modifier.fillMaxSize(),
+                    uiState = uiState
+                ) { data ->
                     val navController = rememberNavController()
                     AppNavHost(
                         navController = navController,

@@ -18,12 +18,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,9 +43,18 @@ class DetailsViewModel @Inject constructor(
     private val _habit = MutableStateFlow<Habit?>(null)
     private val habit: StateFlow<Habit?> = _habit.asStateFlow()
 
+    private val _lastDays = MutableStateFlow<List<LocalDate>?>(null)
+    private val lastDays: StateFlow<List<LocalDate>?> = _lastDays.asStateFlow()
+
     override val uiDataState: StateFlow<DetailsDataState?>
-        get() = habit.filterNotNull().mapNotNull {
-            DetailsDataState(habit = it)
+        get() = combine(
+            habit.filterNotNull(),
+            lastDays.filterNotNull()
+        ) { habit, daysOfWeek ->
+            DetailsDataState(
+                habit = habit,
+                lastDays = daysOfWeek
+            )
         }.onStart {
             getHabit()
         }.stateIn(

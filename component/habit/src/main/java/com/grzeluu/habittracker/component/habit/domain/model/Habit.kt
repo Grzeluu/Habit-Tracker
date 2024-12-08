@@ -6,6 +6,7 @@ import com.grzeluu.habittracker.util.enums.Day
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
+import kotlin.math.min
 
 data class Habit(
     val id: Long = 0,
@@ -19,7 +20,12 @@ data class Habit(
     val history: List<HabitHistoryEntry> = emptyList(),
     val isArchive: Boolean = false
 ) {
-    fun currentStreak(currentDate: LocalDate): Int {
+    fun getProgress(currentDate: LocalDate): Float {
+        val historyEntry = history.find { it.date == currentDate } ?: return 0f
+        return min(historyEntry.currentEffort / effort.desiredValue, 1f)
+    }
+
+    fun getCurrentStreak(currentDate: LocalDate): Int {
         val sortedHistory = history.sortedByDescending { it.date }
         val latestEntryDate = sortedHistory.firstOrNull()?.date ?: return 0
 

@@ -133,7 +133,7 @@ fun HabitCard(
                             when {
                                 habitInfo.effortProgress >= 1f -> R.drawable.ic_checked_filled
                                 habitInfo.effortProgress > 0f -> R.drawable.ic_add_circle
-                                else -> R.drawable.ic_checked
+                                else -> R.drawable.ic_add_outlined
                             }
                         ),
                         contentDescription = stringResource(R.string.done),

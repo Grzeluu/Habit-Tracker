@@ -118,11 +118,11 @@ private fun DetailsScreenContent(uiData: DetailsDataState) {
                         modifier = Modifier.weight(1f),
                         iconPainter = painterResource(R.drawable.ic_streak),
                         label = stringResource(R.string.current_streak),
-                        iconColor = if (currentStreak(getCurrentDate()) > 0) MaterialTheme.colorScheme.tertiary else null,
-                        body = when (currentStreak(getCurrentDate())) {
+                        iconColor = if (getCurrentStreak(getCurrentDate()) > 0) MaterialTheme.colorScheme.tertiary else null,
+                        body = when (getCurrentStreak(getCurrentDate())) {
                             0 -> "-"
                             1 -> stringResource(R.string.day)
-                            else -> stringResource(R.string.days, currentStreak(getCurrentDate()).toString())
+                            else -> stringResource(R.string.days, getCurrentStreak(getCurrentDate()).toString())
                         }
                     )
                 }
