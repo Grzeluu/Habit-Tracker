@@ -44,4 +44,5 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.timber)
     debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.kotlinx.datetime)
 }

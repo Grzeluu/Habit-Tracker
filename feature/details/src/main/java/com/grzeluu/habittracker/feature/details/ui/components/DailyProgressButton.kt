@@ -55,7 +55,7 @@ fun DailyProgressButton(
     ) {
         Box(modifier.drawBehind {
             drawCircle(
-                color = color.copy(0.35f),
+                color = color.copy(0.5f),
                 center = Offset(x = 0f, y = 0f),
                 radius = sqrt(size.width.pow(2) + size.height.pow(2)) * progress
             )

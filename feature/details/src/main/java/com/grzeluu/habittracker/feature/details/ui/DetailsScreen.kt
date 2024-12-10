@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.grzeluu.habittracker.base.ui.BaseScreenContainer
 import com.grzeluu.habittracker.common.ui.R
+import com.grzeluu.habittracker.common.ui.dialog.HabitEffortDialog
 import com.grzeluu.habittracker.common.ui.label.BasicLabel
 import com.grzeluu.habittracker.common.ui.mapper.mapToColor
 import com.grzeluu.habittracker.common.ui.mapper.mapToUiText
@@ -99,14 +100,41 @@ fun DetailsScreen(
                 .fillMaxSize(),
             uiState
         ) { uiData ->
-            DetailsScreenContent(uiData)
+            DetailsScreenContent(viewModel, uiData)
         }
     }
 }
 
 @Composable
-private fun DetailsScreenContent(uiData: DetailsDataState) {
+private fun DetailsScreenContent(
+    viewModel: DetailsViewModel,
+    uiData: DetailsDataState
+) {
     with(uiData.habit) {
+        var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+
+        selectedDate?.let { date ->
+            HabitEffortDialog(
+                habitName = name,
+                entryDate = selectedDate,
+                isDialogVisible = true,
+                currentEffort = history.find { it.date == date }?.currentEffort ?: 0f,
+                habitIcon = icon,
+                habitColor = color,
+                habitDescription = description,
+                effortUnit = effort.effortUnit,
+                desiredEffortValue = effort.desiredValue,
+                onDismissRequest = { selectedDate = null },
+                onSetProgress = { effort ->
+                    viewModel.onEvent(
+                        DetailsEvent.OnSaveDailyEffort(
+                            date = date,
+                            effort = effort
+                        )
+                    )
+                }
+            )
+        }
 
         Column(modifier = Modifier) {
             Column(
@@ -165,7 +193,7 @@ private fun DetailsScreenContent(uiData: DetailsDataState) {
                             isActive = shouldDailyButtonBeActive(date),
                             color = color.mapToColor(),
                             progress = getProgress(date),
-                            onClicked = {}
+                            onClicked = { selectedDate = date }
                         )
                         if (index != Day.entries.lastIndex) Spacer(modifier = Modifier.width(8.dp))
                     }

@@ -4,9 +4,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.ui.BaseViewModel
 import com.grzeluu.habittracker.component.habit.domain.model.Habit
+import com.grzeluu.habittracker.component.habit.domain.model.HabitHistoryEntry
 import com.grzeluu.habittracker.component.habit.domain.usecase.ArchiveHabitUseCase
 import com.grzeluu.habittracker.component.habit.domain.usecase.DeleteHabitUseCase
 import com.grzeluu.habittracker.component.habit.domain.usecase.GetHabitUseCase
+import com.grzeluu.habittracker.component.habit.domain.usecase.SaveHabitHistoryEntryUseCase
 import com.grzeluu.habittracker.feature.details.ui.event.DetailsEvent
 import com.grzeluu.habittracker.feature.details.ui.event.DetailsNavigationEvent
 import com.grzeluu.habittracker.feature.details.ui.navigation.DetailsArguments
@@ -35,6 +37,7 @@ class DetailsViewModel @Inject constructor(
     private val getHabitUseCase: GetHabitUseCase,
     private val deleteHabitUseCase: DeleteHabitUseCase,
     private val archiveHabitUseCase: ArchiveHabitUseCase,
+    private val saveHabitHistoryEntryUseCase: SaveHabitHistoryEntryUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<DetailsDataState>() {
 
@@ -71,6 +74,21 @@ class DetailsViewModel @Inject constructor(
         when (event) {
             DetailsEvent.OnArchiveHabit -> archiveHabit()
             DetailsEvent.OnDeleteHabit -> deleteHabit()
+            is DetailsEvent.OnSaveDailyEffort -> saveDailyEffort(event)
+        }
+    }
+
+    private fun saveDailyEffort(event: DetailsEvent.OnSaveDailyEffort) {
+        viewModelScope.launch(Dispatchers.IO) {
+            saveHabitHistoryEntryUseCase.invoke(
+                SaveHabitHistoryEntryUseCase.Request(
+                    habitId = habitId,
+                    historyEntry = HabitHistoryEntry(
+                        date = event.date,
+                        currentEffort = event.effort
+                    )
+                )
+            ).handleResult()
         }
     }
 

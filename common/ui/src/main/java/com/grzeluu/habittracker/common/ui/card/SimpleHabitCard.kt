@@ -1,4 +1,4 @@
-package com.grzeluu.habittracker.feature.habits.ui.components
+package com.grzeluu.habittracker.common.ui.card
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,10 +24,6 @@ import com.grzeluu.habittracker.common.ui.mapper.mapToDrawableRes
 import com.grzeluu.habittracker.common.ui.mapper.mapToUiText
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
 import com.grzeluu.habittracker.common.ui.theme.HabitTrackerTheme
-import com.grzeluu.habittracker.component.habit.domain.model.DailyHabitInfo
-import com.grzeluu.habittracker.component.habit.domain.model.HabitDesiredEffort
-import com.grzeluu.habittracker.component.habit.domain.model.HabitHistoryEntry
-import com.grzeluu.habittracker.util.datetime.getCurrentDate
 import com.grzeluu.habittracker.util.enums.CardColor
 import com.grzeluu.habittracker.util.enums.CardIcon
 import com.grzeluu.habittracker.util.enums.EffortUnit
@@ -36,21 +32,24 @@ import com.grzeluu.habittracker.util.numbers.formatFloat
 @Composable
 fun SimpleHabitCard(
     modifier: Modifier = Modifier,
-    habitInfo: DailyHabitInfo,
+    desiredEffortValue: Float,
+    effortUnit: EffortUnit,
+    habitName: String,
+    habitDescription: String?,
+    habitColor: CardColor,
+    habitIcon: CardIcon,
 ) {
     val effortString =
         buildString {
-            with(habitInfo) {
-                append(effort.desiredValue.formatFloat())
-                append(" ")
-                append(effort.effortUnit.mapToUiText().asString())
-            }
+            append(desiredEffortValue.formatFloat())
+            append(" ")
+            append(effortUnit.mapToUiText().asString())
         }
 
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = habitInfo.color.mapToColor().copy(alpha = 0.25f),
+            containerColor = habitColor.mapToColor().copy(alpha = 0.25f),
             contentColor = MaterialTheme.colorScheme.onSurface
         )
     ) {
@@ -61,9 +60,9 @@ fun SimpleHabitCard(
                 modifier = Modifier
                     .padding(top = 4.dp, start = 8.dp)
                     .size(28.dp),
-                painter = painterResource(habitInfo.icon.mapToDrawableRes()),
+                painter = painterResource(habitIcon.mapToDrawableRes()),
                 contentDescription = null,
-                tint = habitInfo.color.mapToColor(),
+                tint = habitColor.mapToColor(),
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column(
@@ -72,14 +71,14 @@ fun SimpleHabitCard(
                     .align(Alignment.CenterVertically)
             ) {
                 Text(
-                    text = habitInfo.name,
+                    text = habitName,
                     style = MaterialTheme.typography.titleSmall,
                     overflow = TextOverflow.Ellipsis
                 )
-                if (!habitInfo.description.isNullOrEmpty()) {
+                if (!habitDescription.isNullOrEmpty()) {
                     Spacer(modifier = Modifier.size(4.dp))
                     Text(
-                        text = habitInfo.description ?: "",
+                        text = habitDescription,
                         style = MaterialTheme.typography.labelSmall,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -102,21 +101,12 @@ fun SimpleHabitCardPreview() {
     HabitTrackerTheme {
         SimpleHabitCard(
             modifier = Modifier.wrapContentHeight(),
-            habitInfo = DailyHabitInfo(
-                name = "Drink water",
-                icon = CardIcon.DRINK,
-                color = CardColor.BLUE,
-                description = "At least 2.5l daily",
-                effort = HabitDesiredEffort(
-                    effortUnit = EffortUnit.LITERS,
-                    desiredValue = 2.5f,
-                ),
-                dailyHistoryEntry = HabitHistoryEntry(
-                    date = getCurrentDate(),
-                    currentEffort = 2.5f,
-                    note = null,
-                ),
-            )
+            habitName = "Drink water",
+            habitIcon = CardIcon.DRINK,
+            habitColor = CardColor.BLUE,
+            habitDescription = "At least 2.5l daily",
+            effortUnit = EffortUnit.LITERS,
+            desiredEffortValue = 2.5f,
         )
     }
 }
