@@ -33,7 +33,8 @@ fun Habit.mapToEntity() =
         notificationTime = if (habitNotification is HabitNotification.Enabled) habitNotification.time else null,
         effortUnit = effort.effortUnit.name,
         desiredEffortValue = effort.desiredValue,
-        isArchive = isArchive
+        additionDate = additionDate,
+        isArchive = isArchive,
     )
 
 fun HabitHistoryEntry.mapToEntity(habitId: Long) =
@@ -76,6 +77,7 @@ fun HabitWithHistoryDbModel.mapToDomain() = Habit(
     ),
     history = historyEntries.map { it.mapToDomain() },
     habitNotification = if (habit.isNotificationEnabled) HabitNotification.Enabled(habit.notificationTime!!) else HabitNotification.Disabled,
+    additionDate = habit.additionDate,
     isArchive = habit.isArchive,
     desirableDays = habit.desirableDays.map { Day.valueOf(it) }
 )

@@ -43,7 +43,8 @@ fun DayOfWeekToggleButton(
             isChecked -> MaterialTheme.colorScheme.tertiaryContainer
             isToday -> MaterialTheme.colorScheme.secondaryContainer
             else -> MaterialTheme.colorScheme.surfaceVariant
-        }, label = "DayOfWeekToggleButtonContainerColor"
+        },
+        label = "DayOfWeekToggleButtonContainerColor"
     )
 
     val contentColor by animateColorAsState(
@@ -51,7 +52,8 @@ fun DayOfWeekToggleButton(
             isChecked -> MaterialTheme.colorScheme.onTertiaryContainer
             isToday -> MaterialTheme.colorScheme.onSecondaryContainer
             else -> MaterialTheme.colorScheme.onSurfaceVariant
-        }, label = "DayOfWeekToggleButtonContentColor"
+        },
+        label = "DayOfWeekToggleButtonContentColor"
     )
 
     Button(

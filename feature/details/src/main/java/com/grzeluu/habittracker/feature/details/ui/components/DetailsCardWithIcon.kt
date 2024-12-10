@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
 
@@ -34,7 +34,7 @@ fun DetailsCardWithIcon(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                modifier = Modifier.size(36.dp),
+                modifier = Modifier.size(28.dp),
                 painter = iconPainter,
                 contentDescription = null,
                 tint = iconColor ?: LocalContentColor.current,
@@ -45,11 +45,12 @@ fun DetailsCardWithIcon(
                 Text(
                     text = label,
                     style = MaterialTheme.typography.labelMedium,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = body,
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Bold
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }

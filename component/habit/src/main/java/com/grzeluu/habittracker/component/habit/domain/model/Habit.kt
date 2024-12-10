@@ -6,6 +6,7 @@ import com.grzeluu.habittracker.util.enums.Day
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
+import kotlin.math.min
 
 data class Habit(
     val id: Long = 0,
@@ -16,17 +17,26 @@ data class Habit(
     val desirableDays: List<Day>,
     val habitNotification: HabitNotification,
     val effort: HabitDesiredEffort,
+    val additionDate: LocalDate,
     val history: List<HabitHistoryEntry> = emptyList(),
-    val isArchive: Boolean = false
+    val isArchive: Boolean = false,
 ) {
-    fun currentStreak(currentDate: LocalDate): Int {
+    val totalEffort: Float
+        get() = history.map { it.currentEffort.toDouble() }.sumOf { it }.toFloat()
+
+    fun getProgress(currentDate: LocalDate): Float {
+        val historyEntry = history.find { it.date == currentDate } ?: return 0f
+        return min(historyEntry.currentEffort / effort.desiredValue, 1f)
+    }
+
+    fun getCurrentStreak(currentDate: LocalDate): Int {
         val sortedHistory = history.sortedByDescending { it.date }
         val latestEntryDate = sortedHistory.firstOrNull()?.date ?: return 0
 
         if (latestEntryDate != currentDate && latestEntryDate != currentDate.minus(1, DateTimeUnit.DAY)) return 0
 
         var currentStreak = 0
-        var lastDate = currentDate
+        var lastDate = latestEntryDate
 
         fun lastDateIsNotDesirable() = !desirableDays.contains(Day.get(lastDate.dayOfWeek.value))
 

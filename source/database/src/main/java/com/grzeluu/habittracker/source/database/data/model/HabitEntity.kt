@@ -5,6 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
 @Entity(tableName = "habits")
@@ -30,6 +31,8 @@ data class HabitEntity(
     val effortUnit: String,
     @ColumnInfo(name = "desired_effort_value")
     val desiredEffortValue: Float,
+    @ColumnInfo(name = "addition_date")
+    val additionDate: LocalDate,
     @ColumnInfo(name = "is_archive")
     val isArchive: Boolean,
 )

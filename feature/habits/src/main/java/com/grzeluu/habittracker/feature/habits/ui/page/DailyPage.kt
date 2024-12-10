@@ -26,12 +26,12 @@ import com.grzeluu.habittracker.common.ui.mapper.mapToUiText
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
 import com.grzeluu.habittracker.component.habit.domain.model.DailyHabitInfo
 import com.grzeluu.habittracker.feature.habits.ui.components.HabitCard
-import com.grzeluu.habittracker.feature.habits.ui.components.HabitEffortDialog
+import com.grzeluu.habittracker.common.ui.dialog.HabitEffortDialog
 import com.grzeluu.habittracker.feature.habits.ui.components.HabitStatisticsCard
 import com.grzeluu.habittracker.feature.habits.ui.components.HabitsImageWithDescription
 import com.grzeluu.habittracker.feature.habits.ui.event.DailyEvent
 import com.grzeluu.habittracker.feature.habits.ui.state.DailyDataState
-import com.grzeluu.habittracker.util.date.getCurrentDate
+import com.grzeluu.habittracker.util.datetime.getCurrentDate
 import com.grzeluu.habittracker.util.enums.Day
 import kotlinx.datetime.LocalDate
 
@@ -50,18 +50,22 @@ fun DailyPage(
     val uiState by viewModel.uiState.collectAsState()
     var selectedHabit by remember { mutableStateOf<DailyHabitInfo?>(null) }
 
-    HabitEffortDialog(
-        dailyHabitInfo = selectedHabit,
-        onSetProgress = { habit, effort ->
-            viewModel.onEvent(
-                DailyEvent.OnSaveDailyEffort(
-                    habitId = habit.id,
-                    effort = effort
-                )
-            )
-        },
-        onDismissRequest = { selectedHabit = null }
-    )
+    selectedHabit?.let { habit ->
+        HabitEffortDialog(
+            habitName = habit.name,
+            isDialogVisible = true,
+            currentEffort = habit.currentEffort,
+            habitIcon = habit.icon,
+            habitColor = habit.color,
+            habitDescription = habit.description,
+            effortUnit = habit.effort.effortUnit,
+            desiredEffortValue = habit.effort.desiredValue,
+            onDismissRequest = { selectedHabit = null },
+            onSetProgress = { effort ->
+                selectedHabit?.let { viewModel.onEvent(DailyEvent.OnSaveDailyEffort(habitId = it.id, effort = effort)) }
+            },
+        )
+    }
 
     BaseScreenContainer(
         modifier = modifier.fillMaxSize(),

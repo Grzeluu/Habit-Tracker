@@ -9,7 +9,10 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun FilledBackground(modifier: Modifier = Modifier, color: Color, fill: Float) {
+fun FilledBackground(
+    modifier: Modifier = Modifier,
+    color: Color,
+    fill: Float) {
 
     Canvas(
         modifier = modifier

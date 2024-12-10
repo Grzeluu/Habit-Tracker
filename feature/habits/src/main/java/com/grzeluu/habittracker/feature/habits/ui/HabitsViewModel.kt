@@ -5,8 +5,7 @@ import com.grzeluu.habittracker.base.ui.BaseViewModel
 import com.grzeluu.habittracker.component.habit.domain.usecase.CheckIfHabitsAreAddedUseCase
 import com.grzeluu.habittracker.feature.habits.ui.event.HabitsEvent
 import com.grzeluu.habittracker.feature.habits.ui.state.HabitsDataState
-import com.grzeluu.habittracker.util.date.getCurrentDate
-import com.grzeluu.habittracker.util.enums.Day
+import com.grzeluu.habittracker.util.datetime.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

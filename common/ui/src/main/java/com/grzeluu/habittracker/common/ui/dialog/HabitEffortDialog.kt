@@ -1,4 +1,4 @@
-package com.grzeluu.habittracker.feature.habits.ui.components
+package com.grzeluu.habittracker.common.ui.dialog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.grzeluu.habittracker.common.ui.R
+import com.grzeluu.habittracker.common.ui.card.SimpleHabitCard
+import com.grzeluu.habittracker.common.ui.label.BasicLabel
 import com.grzeluu.habittracker.common.ui.mapper.MappingType
 import com.grzeluu.habittracker.common.ui.mapper.mapToColor
 import com.grzeluu.habittracker.common.ui.mapper.mapToUiText
@@ -38,31 +40,37 @@ import com.grzeluu.habittracker.common.ui.padding.AppSizes
 import com.grzeluu.habittracker.common.ui.text.UiText
 import com.grzeluu.habittracker.common.ui.textfield.CustomTextField
 import com.grzeluu.habittracker.common.ui.theme.HabitTrackerTheme
-import com.grzeluu.habittracker.component.habit.domain.model.DailyHabitInfo
-import com.grzeluu.habittracker.component.habit.domain.model.HabitDesiredEffort
-import com.grzeluu.habittracker.component.habit.domain.model.HabitHistoryEntry
+import com.grzeluu.habittracker.util.datetime.DateFormat
+import com.grzeluu.habittracker.util.datetime.format
+import com.grzeluu.habittracker.util.datetime.getCurrentDate
 import com.grzeluu.habittracker.util.enums.CardColor
 import com.grzeluu.habittracker.util.enums.CardIcon
 import com.grzeluu.habittracker.util.enums.EffortUnit
 import com.grzeluu.habittracker.util.numbers.formatFloat
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun HabitEffortDialog(
-    dailyHabitInfo: DailyHabitInfo?,
-    onSetProgress: (DailyHabitInfo, Float) -> Unit,
+    isDialogVisible: Boolean,
+    currentEffort: Float,
+    desiredEffortValue: Float,
+    effortUnit: EffortUnit,
+    habitName: String,
+    habitDescription: String?,
+    habitColor: CardColor,
+    habitIcon: CardIcon,
+    onSetProgress: (Float) -> Unit,
     onDismissRequest: () -> Unit,
+    entryDate: LocalDate? = null,
 ) {
-    if (dailyHabitInfo == null) return
+    if (!isDialogVisible) return
 
     var progressTextValue by remember {
         mutableStateOf(
-            if (dailyHabitInfo.currentEffort > 0) {
-                dailyHabitInfo.currentEffort.formatFloat()
+            if (currentEffort > 0) {
+                currentEffort.formatFloat()
             } else {
-                dailyHabitInfo.effort.desiredValue.formatFloat()
+                desiredEffortValue.formatFloat()
             }
         )
     }
@@ -83,8 +91,13 @@ fun HabitEffortDialog(
                 SimpleHabitCard(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .shadow(ambientColor = dailyHabitInfo.color.mapToColor(), elevation = 4.dp),
-                    habitInfo = dailyHabitInfo,
+                        .shadow(ambientColor = habitColor.mapToColor(), elevation = 4.dp),
+                    habitName = habitName,
+                    habitDescription = habitDescription,
+                    habitColor = habitColor,
+                    habitIcon = habitIcon,
+                    effortUnit = effortUnit,
+                    desiredEffortValue = desiredEffortValue
                 )
                 Column(
                     modifier = Modifier
@@ -92,12 +105,24 @@ fun HabitEffortDialog(
                         .padding(AppSizes.dialogInnerPadding),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    entryDate?.let {
+                        Text(
+                            text = stringResource(
+                                R.string.set_for_the_date,
+                                entryDate.format(DateFormat.DAY_MONTH_YEAR),
+                            ),
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
                         CustomTextField(
-                            modifier = Modifier.weight(1f).padding(16.dp),
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(16.dp),
                             value = progressTextValue,
                             onValueChange = {
                                 if (it.isEmpty() || (it.toFloatOrNull() != null && it.toFloat() >= 0f)) {
@@ -110,7 +135,7 @@ fun HabitEffortDialog(
                             imeAction = ImeAction.Done
                         )
 
-                        val unitText = dailyHabitInfo.effort.effortUnit.mapToUiText(MappingType.PLURAL)
+                        val unitText = effortUnit.mapToUiText(MappingType.PLURAL)
                         if (unitText !is UiText.Empty) {
                             Text(
                                 text = "✕",
@@ -130,7 +155,7 @@ fun HabitEffortDialog(
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            onSetProgress.invoke(dailyHabitInfo, progressTextValue.toFloatOrNull() ?: 0f)
+                            onSetProgress.invoke(progressTextValue.toFloatOrNull() ?: 0f)
                             onDismissRequest()
                         }
                     ) {
@@ -139,7 +164,7 @@ fun HabitEffortDialog(
                         )
                         Spacer(modifier = Modifier.width(AppSizes.spaceBetweenIconAndText))
                         Text(
-                            stringResource( R.string.add_progress)
+                            stringResource(R.string.add_progress)
                         )
                     }
                 }
@@ -156,22 +181,16 @@ fun HabitEffortDialogPreview() {
         darkTheme = true
     ) {
         HabitEffortDialog(
-            dailyHabitInfo = DailyHabitInfo(
-                name = "Running",
-                icon = CardIcon.RUN,
-                color = CardColor.RED,
-                description = "Moderate pace",
-                effort = HabitDesiredEffort(
-                    effortUnit = EffortUnit.KM,
-                    desiredValue = 5f,
-                ),
-                dailyHistoryEntry = HabitHistoryEntry(
-                    date = Clock.System.now().toLocalDateTime(timeZone = TimeZone.currentSystemDefault()).date,
-                    currentEffort = 4f,
-                    note = null,
-                ),
-            ),
-            onSetProgress = { _, _ -> },
+            habitName = "Drink water",
+            entryDate = getCurrentDate(),
+            isDialogVisible = true,
+            currentEffort = 0f,
+            habitIcon = CardIcon.DRINK,
+            habitColor = CardColor.BLUE,
+            habitDescription = "At least 2.5l daily",
+            effortUnit = EffortUnit.LITERS,
+            desiredEffortValue = 2.5f,
+            onSetProgress = { _ -> },
             onDismissRequest = {}
         )
     }

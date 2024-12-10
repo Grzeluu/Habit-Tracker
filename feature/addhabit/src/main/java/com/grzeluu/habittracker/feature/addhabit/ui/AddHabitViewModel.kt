@@ -18,6 +18,7 @@ import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitNavigationEven
 import com.grzeluu.habittracker.feature.addhabit.ui.mapper.asUiText
 import com.grzeluu.habittracker.feature.addhabit.ui.navigation.AddHabitArgument
 import com.grzeluu.habittracker.feature.addhabit.ui.state.AddHabitDataState
+import com.grzeluu.habittracker.util.datetime.getCurrentDate
 import com.grzeluu.habittracker.util.enums.CardColor
 import com.grzeluu.habittracker.util.enums.CardIcon
 import com.grzeluu.habittracker.util.enums.Day
@@ -207,6 +208,7 @@ class AddHabitViewModel @Inject constructor(
                     effort = HabitDesiredEffort(
                         desiredValue = dailyEffort.value?.toFloat() ?: 1f, effortUnit = effortUnit.value
                     ),
+                    additionDate = getCurrentDate(),
                     habitNotification = HabitNotification.Disabled
                 )
             )
