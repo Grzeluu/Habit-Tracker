@@ -92,5 +92,5 @@
     <string name="habit_validation_error_empty_days">Please select at least one day."</string>
     <string name="total_effort">Total effort</string>
     <string name="notification_time">Notification time</string>
-    <string name="set_for_the_date">Set your progress for: %1$s</string>
+    <string name="set_for_the_date">Set your progress for %1$s</string>
 </resources>
