@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
 
@@ -44,10 +45,12 @@ fun DetailsCardWithIcon(
                 Text(
                     text = label,
                     style = MaterialTheme.typography.labelMedium,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = body,
                     style = MaterialTheme.typography.bodyMedium,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }

@@ -164,7 +164,7 @@ private fun DetailsScreenContent(
                         }
                     )
                 }
-                Spacer(modifier = Modifier.height(AppSizes.spaceBetweenScreenSections))
+                Spacer(modifier = Modifier.height(8.dp))
                 Row {
                     DetailsCardWithIcon(
                         modifier = Modifier.weight(1f),
@@ -180,8 +180,9 @@ private fun DetailsScreenContent(
                         body = if (habitNotification is HabitNotification.Enabled) (habitNotification as HabitNotification.Enabled).time.format() else "-"
                     )
                 }
-                Spacer(modifier = Modifier.height(AppSizes.spaceBetweenScreenSections))
-                BasicLabel(text = "Your latest effort:")
+                Spacer(modifier = Modifier.height(24.dp))
+                BasicLabel(text = stringResource(R.string.your_latest_effort))
+                Spacer(modifier = Modifier.height(4.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
