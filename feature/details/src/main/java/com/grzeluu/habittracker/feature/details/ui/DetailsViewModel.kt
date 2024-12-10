@@ -11,6 +11,7 @@ import com.grzeluu.habittracker.feature.details.ui.event.DetailsEvent
 import com.grzeluu.habittracker.feature.details.ui.event.DetailsNavigationEvent
 import com.grzeluu.habittracker.feature.details.ui.navigation.DetailsArguments
 import com.grzeluu.habittracker.feature.details.ui.state.DetailsDataState
+import com.grzeluu.habittracker.util.datetime.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -24,7 +25,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.minus
 import javax.inject.Inject
 
 @HiltViewModel
@@ -84,10 +87,29 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
+    private fun initDays() {
+        viewModelScope.launch(Dispatchers.Default) {
+            loadingState.incrementTasksInProgress()
+            val today = getCurrentDate()
+            val days = mutableListOf<LocalDate>()
+
+            for (i in 0..5) {
+                val dayDate = today.minus(i, DateTimeUnit.DAY)
+                days.add(dayDate)
+            }
+            _lastDays.value = days.toList().sorted()
+            loadingState.decrementTasksInProgress()
+        }
+    }
+
     private fun getHabit() {
         viewModelScope.launch(Dispatchers.IO) {
+            loadingState.incrementTasksInProgress()
             getHabitUseCase(GetHabitUseCase.Request(habitId)).collectLatestResult { habit ->
                 _habit.emit(habit)
+                loadingState.decrementTasksInProgress()
+
+                initDays()
             }
         }
     }

@@ -80,7 +80,8 @@ fun HabitCard(
                 fill = filled
             )
             Row(
-                modifier = Modifier.padding(AppSizes.cardInnerPadding)
+                modifier = Modifier.padding(AppSizes.cardInnerPadding),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     modifier = Modifier
@@ -91,11 +92,7 @@ fun HabitCard(
                     tint = habitInfo.color.mapToColor(),
                 )
                 Spacer(modifier = Modifier.width(12.dp))
-                Column(
-                    Modifier
-                        .weight(1f)
-                        .align(Alignment.CenterVertically)
-                ) {
+                Column(Modifier.weight(1f)) {
                     Text(
                         text = habitInfo.name,
                         style = MaterialTheme.typography.titleSmall,
@@ -112,15 +109,12 @@ fun HabitCard(
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    modifier = Modifier.align(Alignment.CenterVertically),
                     text = effortString,
                     style = MaterialTheme.typography.labelMedium
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 IconButton(
-                    modifier = Modifier
-                        .size(42.dp)
-                        .align(Alignment.CenterVertically),
+                    modifier = Modifier.size(42.dp),
                     colors = IconButtonDefaults.iconButtonColors(
                         contentColor =
                         if (habitInfo.effortProgress > 0f) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline

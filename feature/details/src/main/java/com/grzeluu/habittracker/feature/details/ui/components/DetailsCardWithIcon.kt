@@ -34,7 +34,7 @@ fun DetailsCardWithIcon(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                modifier = Modifier.size(36.dp),
+                modifier = Modifier.size(28.dp),
                 painter = iconPainter,
                 contentDescription = null,
                 tint = iconColor ?: LocalContentColor.current,
@@ -49,7 +49,6 @@ fun DetailsCardWithIcon(
                 Text(
                     text = body,
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Bold
                 )
             }
         }

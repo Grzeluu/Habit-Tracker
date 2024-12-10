@@ -6,10 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -30,11 +32,15 @@ class MainActivity : ComponentActivity() {
             val viewModel = hiltViewModel<MainActivityViewModel>()
             val uiState by viewModel.uiState.collectAsState()
 
-            val isDarkMode = (uiState as? UiState.Success<MainActivityStateData>)?.data?.settings?.isDarkModeEnabled
+            val isDarkMode = (uiState as? UiState.Success<MainActivityStateData>)?.data?.settings?.isDarkModeEnabled ?: isSystemInDarkTheme()
 
             HabitTrackerTheme(
-                darkTheme = isDarkMode ?: isSystemInDarkTheme()
+                darkTheme = isDarkMode
             ) {
+                LaunchedEffect(isDarkMode) {
+                    WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = !isDarkMode
+                }
+
                 BaseScreenContainer(
                     modifier = Modifier.fillMaxSize(),
                     uiState = uiState

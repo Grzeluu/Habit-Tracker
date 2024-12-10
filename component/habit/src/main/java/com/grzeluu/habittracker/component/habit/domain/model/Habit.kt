@@ -17,9 +17,13 @@ data class Habit(
     val desirableDays: List<Day>,
     val habitNotification: HabitNotification,
     val effort: HabitDesiredEffort,
+    val additionDate: LocalDate,
     val history: List<HabitHistoryEntry> = emptyList(),
-    val isArchive: Boolean = false
+    val isArchive: Boolean = false,
 ) {
+    val totalEffort: Float
+        get() = history.map { it.currentEffort.toDouble() }.sumOf { it }.toFloat()
+
     fun getProgress(currentDate: LocalDate): Float {
         val historyEntry = history.find { it.date == currentDate } ?: return 0f
         return min(historyEntry.currentEffort / effort.desiredValue, 1f)

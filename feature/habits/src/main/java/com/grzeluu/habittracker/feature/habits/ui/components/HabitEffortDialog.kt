@@ -81,9 +81,7 @@ fun HabitEffortDialog(
                 )
             ) {
                 SimpleHabitCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .shadow(ambientColor = dailyHabitInfo.color.mapToColor(), elevation = 4.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     habitInfo = dailyHabitInfo,
                 )
                 Column(

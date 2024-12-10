@@ -1,60 +1,65 @@
 package com.grzeluu.habittracker.feature.details.ui.components
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.grzeluu.habittracker.common.ui.R
-import com.grzeluu.habittracker.common.ui.background.FilledBackground
 import com.grzeluu.habittracker.common.ui.color.CardColors.ORANGE
-import com.grzeluu.habittracker.common.ui.mapper.mapToColor
 import com.grzeluu.habittracker.common.ui.mapper.mapToUiText
 import com.grzeluu.habittracker.common.ui.theme.HabitTrackerTheme
 import com.grzeluu.habittracker.util.enums.Day
 import kotlinx.datetime.LocalDate
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 @Composable
-fun DayToggleButton(
+fun DailyProgressButton(
     modifier: Modifier = Modifier,
     date: LocalDate,
     onClicked: () -> Unit,
     progress: Float,
     color: Color,
+    isActive: Boolean,
 ) {
     Button(
         onClick = onClicked,
+        enabled = isActive,
         contentPadding = PaddingValues(0.dp),
-        modifier = modifier.clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.surfaceVariant),
+        modifier = modifier.clip(RoundedCornerShape(8.dp)),
         shape = RectangleShape,
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = color.copy(alpha = progress),
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     ) {
-        Box {
+        Box(modifier.drawBehind {
+            drawCircle(
+                color = color.copy(0.35f),
+                center = Offset(x = 0f, y = 0f),
+                radius = sqrt(size.width.pow(2) + size.height.pow(2)) * progress
+            )
+        }) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -78,12 +83,13 @@ fun DayToggleButton(
 @Composable
 fun DayToggleButtonPreview() {
     HabitTrackerTheme {
-        DayToggleButton(
+        DailyProgressButton(
             modifier = Modifier.width(52.dp),
             date = LocalDate(2024, 12, 12),
             onClicked = {},
             progress = 0.5f,
-            color = ORANGE
+            color = ORANGE,
+            isActive = true
         )
     }
 }
@@ -92,12 +98,13 @@ fun DayToggleButtonPreview() {
 @Composable
 fun DayToggleButtonPreviewDone() {
     HabitTrackerTheme {
-        DayToggleButton(
+        DailyProgressButton(
             modifier = Modifier.width(52.dp),
             date = LocalDate(2024, 12, 12),
             onClicked = {},
             progress = 1f,
-            color = ORANGE
+            color = Color.Blue,
+            isActive = true
         )
     }
 }
@@ -106,12 +113,13 @@ fun DayToggleButtonPreviewDone() {
 @Composable
 fun DayToggleButtonPreviewNoProgress() {
     HabitTrackerTheme {
-        DayToggleButton(
+        DailyProgressButton(
             modifier = Modifier.width(52.dp),
             date = LocalDate(2024, 12, 12),
             onClicked = {},
             progress = 0f,
-            color = ORANGE
+            color = ORANGE,
+            isActive = false
         )
     }
 }

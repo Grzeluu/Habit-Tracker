@@ -1,4 +1,4 @@
-package com.grzeluu.habittracker.util.date
+package com.grzeluu.habittracker.util.datetime
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone

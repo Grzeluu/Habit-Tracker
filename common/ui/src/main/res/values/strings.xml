@@ -90,4 +90,6 @@
     <string name="unit">Unit</string>
     <string name="habit_validation_error_empty_name">Name cannot be empty.</string>
     <string name="habit_validation_error_empty_days">Please select at least one day."</string>
+    <string name="total_effort">Total effort</string>
+    <string name="notification_time">Notification time</string>
 </resources>

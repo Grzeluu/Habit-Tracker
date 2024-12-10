@@ -31,7 +31,7 @@ import com.grzeluu.habittracker.feature.habits.ui.components.HabitStatisticsCard
 import com.grzeluu.habittracker.feature.habits.ui.components.HabitsImageWithDescription
 import com.grzeluu.habittracker.feature.habits.ui.event.DailyEvent
 import com.grzeluu.habittracker.feature.habits.ui.state.DailyDataState
-import com.grzeluu.habittracker.util.date.getCurrentDate
+import com.grzeluu.habittracker.util.datetime.getCurrentDate
 import com.grzeluu.habittracker.util.enums.Day
 import kotlinx.datetime.LocalDate
 
