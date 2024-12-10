@@ -60,6 +60,7 @@ class DetailsViewModel @Inject constructor(
             )
         }.onStart {
             getHabit()
+            initDays()
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
@@ -108,8 +109,6 @@ class DetailsViewModel @Inject constructor(
             getHabitUseCase(GetHabitUseCase.Request(habitId)).collectLatestResult { habit ->
                 _habit.emit(habit)
                 loadingState.decrementTasksInProgress()
-
-                initDays()
             }
         }
     }

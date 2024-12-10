@@ -46,7 +46,7 @@ fun DailyProgressButton(
         onClick = onClicked,
         enabled = isActive,
         contentPadding = PaddingValues(0.dp),
-        modifier = modifier.clip(RoundedCornerShape(8.dp)),
+        modifier = modifier.clip(RoundedCornerShape(12.dp)),
         shape = RectangleShape,
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
