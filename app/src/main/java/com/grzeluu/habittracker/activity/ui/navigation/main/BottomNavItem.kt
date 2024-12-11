@@ -6,9 +6,9 @@ import com.grzeluu.habittracker.common.ui.text.UiText
 
 sealed class BottomNavItem(val route: String, @DrawableRes val iconResId: Int, val text: UiText) {
     data object Habits : BottomNavItem(
-        "habits",
+        "home",
         R.drawable.ic_home,
-        UiText.StringResource(R.string.habits)
+        UiText.StringResource(R.string.my_habits)
     )
 
     data object Calendar : BottomNavItem(
@@ -21,7 +21,7 @@ sealed class BottomNavItem(val route: String, @DrawableRes val iconResId: Int, v
         BottomNavItem(
             "notifications",
             R.drawable.ic_notification,
-            UiText.StringResource(R.string.notification)
+            UiText.StringResource(R.string.notifications)
         )
 
     data object Settings : BottomNavItem(

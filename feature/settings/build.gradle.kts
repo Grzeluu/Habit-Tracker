@@ -30,6 +30,11 @@ android {
 }
 
 dependencies {
+    implementation(project(":base"))
+    implementation(project(":common:ui"))
+    implementation(project(":common:util"))
+    implementation(project(":component:settings"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel)
