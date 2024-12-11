@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.grzeluu.habittracker.activity.ui.animation.MainPageAnimations
@@ -45,7 +46,13 @@ fun MainPage(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        topBar = { TopAppBar(title = { Text("Your goals") }) },
+        topBar = {
+            TopAppBar(title = {
+                Text(
+                    bottomNavItems.firstOrNull() { it.route == currentRoute }?.text?.asString().orEmpty()
+                )
+            })
+        },
         floatingActionButton = {
             AnimatedVisibility(
                 visible = currentRoute == BottomNavItem.Habits.route,

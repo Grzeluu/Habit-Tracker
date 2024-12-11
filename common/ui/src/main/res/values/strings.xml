@@ -54,7 +54,6 @@
     <string name="minus">Minus</string>
     <string name="get_notifications">Get notifications</string>
     <string name="lets_">Get notifications</string>
-    <string name="today_habits">Today habits</string>
     <string name="day_habits">%s habits</string>
     <string name="great_job_today">Great job today!</string>
     <string name="you_are_on_fire">You\'re on fire!</string>
@@ -94,4 +93,5 @@
     <string name="notification_time">Notification time</string>
     <string name="set_for_the_date">Set your progress for %1$s</string>
     <string name="your_latest_effort">Your latest effort</string>
+    <string name="my_habits">My Habits</string>
 </resources>
