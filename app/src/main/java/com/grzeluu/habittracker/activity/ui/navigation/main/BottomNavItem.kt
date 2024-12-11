@@ -21,7 +21,7 @@ sealed class BottomNavItem(val route: String, @DrawableRes val iconResId: Int, v
         BottomNavItem(
             "notifications",
             R.drawable.ic_notification,
-            UiText.StringResource(R.string.notification)
+            UiText.StringResource(R.string.notifications)
         )
 
     data object Settings : BottomNavItem(

@@ -126,8 +126,7 @@ fun HabitCard(
                         painter = painterResource(
                             when {
                                 habitInfo.effortProgress >= 1f -> R.drawable.ic_checked_filled
-                                habitInfo.effortProgress > 0f -> R.drawable.ic_add_circle
-                                else -> R.drawable.ic_add_outlined
+                                else -> R.drawable.ic_add_circle
                             }
                         ),
                         contentDescription = stringResource(R.string.done),
