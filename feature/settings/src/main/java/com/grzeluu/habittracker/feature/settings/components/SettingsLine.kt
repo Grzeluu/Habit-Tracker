@@ -16,7 +16,7 @@ fun ColumnScope.SettingsLine(
 ) {
     Box(modifier = Modifier
         .fillMaxWidth()
-        .padding(4.dp)
+        .padding(horizontal = 4.dp)
         .height(1.dp)
         .background(MaterialTheme.colorScheme.outline))
 }

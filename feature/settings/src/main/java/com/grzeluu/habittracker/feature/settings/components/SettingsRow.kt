@@ -24,7 +24,7 @@ fun ColumnScope.SettingsRow(
 ) {
     Row(modifier = modifier
         .clickable { onClick.invoke() }
-        .padding(vertical = 16.dp),
+        .padding(vertical = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(painter = icon, contentDescription = null)

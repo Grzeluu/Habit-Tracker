@@ -89,9 +89,7 @@ fun HabitEffortDialog(
                 )
             ) {
                 SimpleHabitCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .shadow(ambientColor = habitColor.mapToColor(), elevation = 4.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     habitName = habitName,
                     habitDescription = habitDescription,
                     habitColor = habitColor,
