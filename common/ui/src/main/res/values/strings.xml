@@ -53,7 +53,8 @@
     <string name="minus">Minus</string>
     <string name="get_notifications">Get notifications</string>
     <string name="lets_">Get notifications</string>
-    <string name="day_habits">%s habits</string>
+    <string name="today_habits">Today\'s habits</string>
+    <string name="day_habits">%s\'s habits</string>
     <string name="great_job_today">Great job today!</string>
     <string name="you_are_on_fire">You\'re on fire!</string>
     <string name="keep_it_up">Keep it up!</string>
