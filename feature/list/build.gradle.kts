@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.grzeluu.habittracker.feature.calendar"
+    namespace = "com.grzeluu.habittracker.feature.list"
     compileSdk = 34
 
     defaultConfig {
