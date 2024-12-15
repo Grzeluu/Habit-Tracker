@@ -41,6 +41,8 @@ import com.grzeluu.habittracker.feature.details.ui.components.DailyProgressButto
 import com.grzeluu.habittracker.feature.details.ui.components.DetailsCardWithIcon
 import com.grzeluu.habittracker.feature.details.ui.components.DetailsTitleCard
 import com.grzeluu.habittracker.feature.details.ui.components.DetailsTopBar
+import com.grzeluu.habittracker.feature.details.ui.components.HabitDetailsStatsCards
+import com.grzeluu.habittracker.feature.details.ui.components.LatestEffortButtons
 import com.grzeluu.habittracker.feature.details.ui.event.DetailsEvent
 import com.grzeluu.habittracker.feature.details.ui.event.DetailsNavigationEvent
 import com.grzeluu.habittracker.feature.details.ui.state.DetailsDataState
@@ -71,14 +73,6 @@ fun DetailsScreen(
         }
     }
 
-    ConfirmDeleteHabitDialog(isVisible = isDeleteDialogVisible,
-        onDismissRequest = { isDeleteDialogVisible = false },
-        onDeleteConfirmed = { viewModel.onEvent(DetailsEvent.OnDeleteHabit) })
-
-    ConfirmArchiveHabitDialog(isVisible = isArchiveDialogVisible,
-        onDismissRequest = { isArchiveDialogVisible = false },
-        onDeleteConfirmed = { viewModel.onEvent(DetailsEvent.OnArchiveHabit) })
-
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         DetailsTopBar(uiState = uiState,
             onNavigateBack = onNavigateBack,
@@ -91,6 +85,14 @@ fun DetailsScreen(
                 .padding(innerPadding)
                 .fillMaxSize(), uiState
         ) { uiData ->
+            ConfirmDeleteHabitDialog(isVisible = isDeleteDialogVisible,
+                onDismissRequest = { isDeleteDialogVisible = false },
+                onDeleteConfirmed = { viewModel.onEvent(DetailsEvent.OnDeleteHabit) })
+
+            ConfirmArchiveHabitDialog(isVisible = isArchiveDialogVisible,
+                onDismissRequest = { isArchiveDialogVisible = false },
+                onDeleteConfirmed = { viewModel.onEvent(DetailsEvent.OnArchiveHabit) })
+
             DetailsScreenContent(viewModel, uiData)
         }
     }
@@ -131,66 +133,16 @@ private fun DetailsScreenContent(
         ) {
             DetailsTitleCard(modifier = Modifier.fillMaxWidth(), habit = uiData.habit)
             Spacer(modifier = Modifier.height(AppSizes.spaceBetweenScreenSections))
-            Row {
-                DetailsCardWithIcon(
-                    modifier = Modifier.weight(1f),
-                    iconPainter = painterResource(R.drawable.ic_goal),
-                    iconColor = color.mapToColor(),
-                    label = stringResource(R.string.daily_goal),
-                    body = "${effort.desiredValue.formatFloat()} ${effort.effortUnit.mapToUiText().asString()}"
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                DetailsCardWithIcon(
-                    modifier = Modifier.weight(1f),
-                    iconPainter = painterResource(R.drawable.ic_streak),
-                    label = stringResource(R.string.current_streak),
-                    iconColor = if (getCurrentStreak(getCurrentDate()) > 0) MaterialTheme.colorScheme.tertiary else null,
-                    body = when (getCurrentStreak(getCurrentDate())) {
-                        0 -> "-"
-                        1 -> stringResource(R.string.day)
-                        else -> stringResource(R.string.days, getCurrentStreak(getCurrentDate()).toString())
-                    }
-                )
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Row {
-                DetailsCardWithIcon(
-                    modifier = Modifier.weight(1f),
-                    iconPainter = painterResource(R.drawable.ic_chart),
-                    label = stringResource(R.string.total_effort),
-                    iconColor = if (totalEffort > 0f) color.mapToColor() else null,
-                    body = "${totalEffort.formatFloat()} ${effort.effortUnit.mapToUiText().asString()}"
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                DetailsCardWithIcon(
-                    modifier = Modifier.weight(1f),
-                    iconPainter = painterResource(R.drawable.ic_notification),
-                    label = stringResource(R.string.notification_time),
-                    body = if (habitNotification is HabitNotification.Enabled) (habitNotification as HabitNotification.Enabled).time.format() else "-"
-                )
-            }
+            HabitDetailsStatsCards(habit = uiData.habit)
             Spacer(modifier = Modifier.height(24.dp))
             BasicLabel(text = stringResource(R.string.your_latest_effort))
             Spacer(modifier = Modifier.height(4.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                uiData.lastDays.forEachIndexed { index, date ->
-                    DailyProgressButton(modifier = Modifier.weight(1f),
-                        date = date,
-                        isActive = shouldDailyButtonBeActive(date),
-                        color = color.mapToColor(),
-                        progress = getProgress(date),
-                        onClicked = { selectedDate = date })
-                    if (index != Day.entries.lastIndex) Spacer(modifier = Modifier.width(8.dp))
-                }
+            LatestEffortButtons(uiData.habit, uiData.lastDays) {
+                selectedDate = it
             }
         }
     }
 }
 
-@Composable
-private fun Habit.shouldDailyButtonBeActive(date: LocalDate) =
-    (desirableDays.contains(Day.get(date.dayOfWeek.value)) || history.any { it.date == date })
 
 
