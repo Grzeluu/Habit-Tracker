@@ -29,7 +29,6 @@ fun DayToggleButton(
         contentPadding = PaddingValues(0.dp),
         modifier = modifier
             .size(48.dp)
-            .clip(RoundedCornerShape(12.dp))
             .let {
                 if (isError) it.border(
                     width = 1.dp,
@@ -37,7 +36,7 @@ fun DayToggleButton(
                     shape = RoundedCornerShape(12.dp)
                 ) else it
             },
-        shape = RectangleShape,
+        shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = if (isChecked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
         )

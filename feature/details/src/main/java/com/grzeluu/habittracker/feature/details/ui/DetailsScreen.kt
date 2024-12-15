@@ -1,18 +1,14 @@
 package com.grzeluu.habittracker.feature.details.ui
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,15 +25,9 @@ import com.grzeluu.habittracker.base.ui.BaseScreenContainer
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.dialog.HabitEffortDialog
 import com.grzeluu.habittracker.common.ui.label.BasicLabel
-import com.grzeluu.habittracker.common.ui.mapper.mapToColor
-import com.grzeluu.habittracker.common.ui.mapper.mapToUiText
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
-import com.grzeluu.habittracker.component.habit.domain.model.Habit
-import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
 import com.grzeluu.habittracker.feature.details.ui.components.ConfirmArchiveHabitDialog
 import com.grzeluu.habittracker.feature.details.ui.components.ConfirmDeleteHabitDialog
-import com.grzeluu.habittracker.feature.details.ui.components.DailyProgressButton
-import com.grzeluu.habittracker.feature.details.ui.components.DetailsCardWithIcon
 import com.grzeluu.habittracker.feature.details.ui.components.DetailsTitleCard
 import com.grzeluu.habittracker.feature.details.ui.components.DetailsTopBar
 import com.grzeluu.habittracker.feature.details.ui.components.HabitDetailsStatsCards
@@ -46,11 +35,7 @@ import com.grzeluu.habittracker.feature.details.ui.components.LatestEffortButton
 import com.grzeluu.habittracker.feature.details.ui.event.DetailsEvent
 import com.grzeluu.habittracker.feature.details.ui.event.DetailsNavigationEvent
 import com.grzeluu.habittracker.feature.details.ui.state.DetailsDataState
-import com.grzeluu.habittracker.util.datetime.format
-import com.grzeluu.habittracker.util.datetime.getCurrentDate
-import com.grzeluu.habittracker.util.enums.Day
 import com.grzeluu.habittracker.util.flow.ObserveAsEvent
-import com.grzeluu.habittracker.util.numbers.formatFloat
 import kotlinx.datetime.LocalDate
 
 @Composable
