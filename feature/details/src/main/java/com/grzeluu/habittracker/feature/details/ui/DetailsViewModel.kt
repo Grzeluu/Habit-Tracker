@@ -112,7 +112,7 @@ class DetailsViewModel @Inject constructor(
             val today = getCurrentDate()
             val days = mutableListOf<LocalDate>()
 
-            for (i in 0..5) {
+            for (i in 0..6) {
                 val dayDate = today.minus(i, DateTimeUnit.DAY)
                 days.add(dayDate)
             }
