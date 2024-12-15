@@ -33,7 +33,7 @@ include(":component:settings")
 
 include(":feature")
 include(":feature:addhabit")
-include(":feature:habits")
+include(":feature:home")
 include(":feature:notifications")
 include(":feature:onboarding")
 include(":feature:settings")
