@@ -165,17 +165,17 @@ private fun DetailsScreenContent(
             }
             Spacer(modifier = Modifier.height(4.dp))
             Card(
-                modifier = Modifier.fillMaxWidth().height(200.dp),
+                modifier = Modifier.fillMaxWidth().height(250.dp),
             ) {
                 Chart(
                     data = listOf(
-                        Pair(0.5f, "M"),
-                        Pair(6f, "T"),
-                        Pair(17f, "W"),
-                        Pair(5f, "T"),
+                        Pair(10f, "M"),
+                        Pair(35f, "T"),
+                        Pair(20f, "W"),
+                        Pair(0f, "T"),
                         Pair(35f, "F"),
                         Pair(30f, "S"),
-                        Pair(20f, "S")
+                        Pair(30f, "S")
                     ),
                     desiredEffort = effort.desiredValue,
                     modifier = Modifier.fillMaxSize().padding(AppSizes.cardInnerPadding),

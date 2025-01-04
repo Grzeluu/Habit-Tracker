@@ -29,25 +29,38 @@ fun Chart(
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface
     val maxValue = data.maxOfOrNull { it.first } ?: desiredEffort
 
-    val spacing = 90f
+    val spacing = 80f
     val density = LocalDensity.current
-    val textPaint = remember {
+
+    val verticalTextPaint = remember {
         Paint().apply {
             color = onSurfaceColor.toArgb()
             textSize = density.run { 14.sp.toPx() }
             textAlign = Paint.Align.LEFT
         }
     }
+
+    val horizontalTextPaint = remember {
+        Paint().apply {
+            color = onSurfaceColor.toArgb()
+            textSize = density.run { 14.sp.toPx() }
+            textAlign = Paint.Align.CENTER
+        }
+    }
     Canvas(modifier = modifier) {
-        val spacePerHorizontalLabel = (size.width - spacing) / data.size
+        val spacePerHorizontalLabel = (size.width) / data.size
+
+        fun getHeightGraphForCanvas(value: Float) = value + spacing
+        val graphHeight = size.height - spacing * 2
+
         (data.indices step (data.size / 7)).forEach { i ->
             val label = data[i].second
             drawContext.canvas.nativeCanvas.apply {
                 drawText(
                     label,
                     spacing + i * spacePerHorizontalLabel,
-                    size.height - 4,
-                    textPaint
+                    size.height,
+                    horizontalTextPaint
                 )
             }
         }
@@ -56,15 +69,14 @@ fun Chart(
                 drawText(
                     value.toInt().toString(),
                     12f,
-                    size.height - spacing - i * size.height / 3,
-                    textPaint
+                    getHeightGraphForCanvas(graphHeight - i * graphHeight / 2),
+                    verticalTextPaint
                 )
             }
         }
 
         var lastX = 0f
         val strokePath = Path().apply {
-            val height = size.height
             for (i in data.indices) {
                 val currentData = data[i]
                 val nextData = data.getOrNull(i + 1) ?: data.last()
@@ -73,16 +85,14 @@ fun Chart(
                 val rightRatio = nextData.first / maxValue
 
                 val x1 = spacing + i * spacePerHorizontalLabel
-                val y1 = height - spacing - leftRatio * height
-                val x2 = spacing + (i + 1) * spacePerHorizontalLabel
-                val y2 = height - spacing - rightRatio * height
+                val y1 = getHeightGraphForCanvas(graphHeight - leftRatio * graphHeight)
 
                 if (i == 0) {
                     moveTo(x1, y1)
                 }
-                lastX = (x1 + x2) / 2
-                this.quadraticTo(
-                    x1, y1, lastX, (y1 + y2) / 2f
+                lastX = (x1)
+                this.lineTo(
+                    x1, y1
                 )
             }
         }
