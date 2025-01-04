@@ -139,7 +139,7 @@ private fun DetailsScreenContent(
             Spacer(modifier = Modifier.height(4.dp))
             LatestEffortButtons(uiData.habit, uiData.lastDays) { selectedDate = it }
             Spacer(modifier = Modifier.height(24.dp))
-            BasicLabel(text = stringResource(R.string.your_progress_stats))
+            BasicLabel(text = stringResource(R.string.your_progress))
             var selectedIndex by remember { mutableIntStateOf(0) }
             val options = listOf("Week", "Month", "Year")
             SingleChoiceSegmentedButtonRow(
@@ -174,8 +174,8 @@ private fun DetailsScreenContent(
                         Pair(20f, "W"),
                         Pair(0f, "T"),
                         Pair(35f, "F"),
-                        Pair(30f, "S"),
-                        Pair(30f, "S")
+                        Pair(15f, "S"),
+                        Pair(25f, "S")
                     ),
                     desiredEffort = effort.desiredValue,
                     modifier = Modifier.fillMaxSize().padding(AppSizes.cardInnerPadding),

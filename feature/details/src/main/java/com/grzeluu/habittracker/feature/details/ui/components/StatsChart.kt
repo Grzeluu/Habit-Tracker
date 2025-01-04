@@ -25,7 +25,7 @@ fun Chart(
     modifier: Modifier = Modifier,
     graphColor: Color,
 ) {
-    val transparentColor = remember { graphColor.copy(alpha = 0.5f) }
+    val transparentColor = remember { graphColor.copy(alpha = 0f) }
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface
     val maxValue = data.maxOfOrNull { it.first } ?: desiredEffort
 
@@ -49,9 +49,15 @@ fun Chart(
     }
     Canvas(modifier = modifier) {
         val spacePerHorizontalLabel = (size.width) / data.size
-
-        fun getHeightGraphForCanvas(value: Float) = value + spacing
+        val strokeWidth = 3.dp.toPx()
         val graphHeight = size.height - spacing * 2
+
+        fun getHeightGraphForCanvas(value: Float): Float {
+            if( value == graphHeight ) {
+                return (graphHeight - strokeWidth / 2) + spacing
+            }
+            return value + spacing
+        }
 
         (data.indices step (data.size / 7)).forEach { i ->
             val label = data[i].second
@@ -86,14 +92,25 @@ fun Chart(
 
                 val x1 = spacing + i * spacePerHorizontalLabel
                 val y1 = getHeightGraphForCanvas(graphHeight - leftRatio * graphHeight)
+                val x2 = spacing + (i + 1) * spacePerHorizontalLabel
+                val y2 = getHeightGraphForCanvas(graphHeight - rightRatio * graphHeight)
 
                 if (i == 0) {
                     moveTo(x1, y1)
                 }
-                lastX = (x1)
-                this.lineTo(
-                    x1, y1
-                )
+
+                val controlX1 = x1 + (x2 - x1) / 3
+                val controlX2 = x1 + 2 * (x2 - x1) / 3
+
+                lastX = x1
+
+                if(i != data.lastIndex) {
+                    cubicTo(
+                        controlX1, y1,
+                        controlX2, y2,
+                        x2, y2
+                    )
+                }
             }
         }
         val fillPath = android.graphics.Path(strokePath.asAndroidPath())
@@ -113,7 +130,7 @@ fun Chart(
         drawPath(
             strokePath,
             color = graphColor,
-            style = Stroke(width = 3.dp.toPx(), cap = Stroke.DefaultCap)
+            style = Stroke(strokeWidth, cap = Stroke.DefaultCap)
         )
     }
 }
