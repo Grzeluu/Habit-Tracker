@@ -32,7 +32,7 @@ fun LatestEffortButtons(
                 progress = habit.getProgress(date),
                 onClicked = { onSelectDate(date) },
             )
-            if (index != Day.entries.lastIndex) Spacer(modifier = Modifier.width(8.dp))
+            if (index != Day.entries.lastIndex) Spacer(modifier = Modifier.width(4.dp))
         }
     }
 }

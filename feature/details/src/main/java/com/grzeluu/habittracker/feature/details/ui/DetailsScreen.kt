@@ -1,18 +1,29 @@
 package com.grzeluu.habittracker.feature.details.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -25,7 +36,9 @@ import com.grzeluu.habittracker.base.ui.BaseScreenContainer
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.dialog.HabitEffortDialog
 import com.grzeluu.habittracker.common.ui.label.BasicLabel
+import com.grzeluu.habittracker.common.ui.mapper.mapToColor
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
+import com.grzeluu.habittracker.feature.details.ui.components.Chart
 import com.grzeluu.habittracker.feature.details.ui.components.ConfirmArchiveHabitDialog
 import com.grzeluu.habittracker.feature.details.ui.components.ConfirmDeleteHabitDialog
 import com.grzeluu.habittracker.feature.details.ui.components.DetailsTitleCard
@@ -83,6 +96,7 @@ fun DetailsScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DetailsScreenContent(
     viewModel: DetailsViewModel, uiData: DetailsDataState
@@ -113,6 +127,7 @@ private fun DetailsScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .fillMaxSize()
                 .padding(horizontal = AppSizes.screenPadding)
                 .verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.Start
         ) {
@@ -122,8 +137,50 @@ private fun DetailsScreenContent(
             Spacer(modifier = Modifier.height(24.dp))
             BasicLabel(text = stringResource(R.string.your_latest_effort))
             Spacer(modifier = Modifier.height(4.dp))
-            LatestEffortButtons(uiData.habit, uiData.lastDays) {
-                selectedDate = it
+            LatestEffortButtons(uiData.habit, uiData.lastDays) { selectedDate = it }
+            Spacer(modifier = Modifier.height(24.dp))
+            BasicLabel(text = stringResource(R.string.your_progress_stats))
+            var selectedIndex by remember { mutableIntStateOf(0) }
+            val options = listOf("Week", "Month", "Year")
+            SingleChoiceSegmentedButtonRow(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                options.forEachIndexed { index, label ->
+                    SegmentedButton(
+                        shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
+                        onClick = { selectedIndex = index },
+                        selected = index == selectedIndex,
+                        border = BorderStroke(1.dp, color = color.mapToColor().copy(alpha = 0.5f)),
+                        colors = SegmentedButtonDefaults.colors(
+                            activeContainerColor = color.mapToColor().copy(alpha = 0.5f),
+                            activeContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            inactiveContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            inactiveContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        ),
+                        icon = {}
+                    ) {
+                        Text(label)
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth().height(200.dp),
+            ) {
+                Chart(
+                    data = listOf(
+                        Pair(0.5f, "M"),
+                        Pair(6f, "T"),
+                        Pair(17f, "W"),
+                        Pair(5f, "T"),
+                        Pair(35f, "F"),
+                        Pair(30f, "S"),
+                        Pair(20f, "S")
+                    ),
+                    desiredEffort = effort.desiredValue,
+                    modifier = Modifier.fillMaxSize().padding(AppSizes.cardInnerPadding),
+                    graphColor = color.mapToColor()
+                )
             }
         }
     }
