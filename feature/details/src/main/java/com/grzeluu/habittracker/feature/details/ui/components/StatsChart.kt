@@ -17,6 +17,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.grzeluu.habittracker.util.numbers.shortFormatFloat
+import kotlin.math.ceil
+import kotlin.math.roundToInt
 
 @Composable
 fun Chart(
@@ -25,9 +28,11 @@ fun Chart(
     modifier: Modifier = Modifier,
     graphColor: Color,
 ) {
+    if (data.isEmpty()) return
+
     val transparentColor = remember { graphColor.copy(alpha = 0f) }
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface
-    val maxValue = data.maxOfOrNull { it.first } ?: desiredEffort
+    val maxValue = maxOf(data.maxOfOrNull { it.first } ?: 0f, desiredEffort)
 
     val spacing = 80f
     val density = LocalDensity.current
@@ -48,23 +53,25 @@ fun Chart(
         }
     }
     Canvas(modifier = modifier) {
-        val spacePerHorizontalLabel = (size.width) / data.size
+        val spacePerHorizontalItem = (size.width)/ data.size
         val strokeWidth = 3.dp.toPx()
-        val graphHeight = size.height - spacing * 2
 
+        val graphHeight = size.height - spacing * 2
         fun getHeightGraphForCanvas(value: Float): Float {
-            if( value == graphHeight ) {
+            if (value == graphHeight) {
                 return (graphHeight - strokeWidth / 2) + spacing
             }
             return value + spacing
         }
 
-        (data.indices step (data.size / 7)).forEach { i ->
+        val stepSize = ceil((data.size / 7f)).toInt()
+        val indicesStep = if (stepSize > 0) stepSize else 1
+        (data.indices step indicesStep).forEach { i ->
             val label = data[i].second
             drawContext.canvas.nativeCanvas.apply {
                 drawText(
                     label,
-                    spacing + i * spacePerHorizontalLabel,
+                    spacing + i * spacePerHorizontalItem,
                     size.height,
                     horizontalTextPaint
                 )
@@ -73,7 +80,7 @@ fun Chart(
         listOf(maxValue, maxValue / 2, 0f).sorted().forEachIndexed { i, value ->
             drawContext.canvas.nativeCanvas.apply {
                 drawText(
-                    value.toInt().toString(),
+                    value.shortFormatFloat(),
                     12f,
                     getHeightGraphForCanvas(graphHeight - i * graphHeight / 2),
                     verticalTextPaint
@@ -90,9 +97,9 @@ fun Chart(
                 val leftRatio = currentData.first / maxValue
                 val rightRatio = nextData.first / maxValue
 
-                val x1 = spacing + i * spacePerHorizontalLabel
+                val x1 = spacing + i * spacePerHorizontalItem
                 val y1 = getHeightGraphForCanvas(graphHeight - leftRatio * graphHeight)
-                val x2 = spacing + (i + 1) * spacePerHorizontalLabel
+                val x2 = spacing + (i + 1) * spacePerHorizontalItem
                 val y2 = getHeightGraphForCanvas(graphHeight - rightRatio * graphHeight)
 
                 if (i == 0) {
@@ -104,7 +111,7 @@ fun Chart(
 
                 lastX = x1
 
-                if(i != data.lastIndex) {
+                if (i != data.lastIndex) {
                     cubicTo(
                         controlX1, y1,
                         controlX2, y2,

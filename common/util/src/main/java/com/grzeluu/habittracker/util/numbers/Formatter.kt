@@ -12,3 +12,14 @@ fun Float?.formatFloat(): String {
 
     }
 }
+
+@SuppressLint("DefaultLocale")
+fun Float?.shortFormatFloat(): String {
+    if (this == null) return ""
+    return if (this % 1 == 0f) {
+        this.toInt().toString()
+    } else {
+        String.format("%.1f", this).replace(Regex("0*$"), "").replace(Regex("\\.$"), "")
+
+    }
+}

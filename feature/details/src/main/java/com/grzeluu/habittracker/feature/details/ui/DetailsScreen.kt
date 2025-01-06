@@ -45,6 +45,7 @@ import com.grzeluu.habittracker.feature.details.ui.components.DetailsTitleCard
 import com.grzeluu.habittracker.feature.details.ui.components.DetailsTopBar
 import com.grzeluu.habittracker.feature.details.ui.components.HabitDetailsStatsCards
 import com.grzeluu.habittracker.feature.details.ui.components.LatestEffortButtons
+import com.grzeluu.habittracker.feature.details.ui.enum.ProgressPeriod
 import com.grzeluu.habittracker.feature.details.ui.event.DetailsEvent
 import com.grzeluu.habittracker.feature.details.ui.event.DetailsNavigationEvent
 import com.grzeluu.habittracker.feature.details.ui.state.DetailsDataState
@@ -140,16 +141,14 @@ private fun DetailsScreenContent(
             LatestEffortButtons(uiData.habit, uiData.lastDays) { selectedDate = it }
             Spacer(modifier = Modifier.height(24.dp))
             BasicLabel(text = stringResource(R.string.your_progress))
-            var selectedIndex by remember { mutableIntStateOf(0) }
-            val options = listOf("Week", "Month", "Year")
             SingleChoiceSegmentedButtonRow(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                options.forEachIndexed { index, label ->
+                ProgressPeriod.entries.forEachIndexed { index, period ->
                     SegmentedButton(
-                        shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
-                        onClick = { selectedIndex = index },
-                        selected = index == selectedIndex,
+                        shape = SegmentedButtonDefaults.itemShape(index = index, count = ProgressPeriod.entries.size),
+                        onClick = { viewModel.onEvent(DetailsEvent.OnSelectPeriod(period)) },
+                        selected = period == uiData.selectedPeriod,
                         border = BorderStroke(1.dp, color = color.mapToColor().copy(alpha = 0.5f)),
                         colors = SegmentedButtonDefaults.colors(
                             activeContainerColor = color.mapToColor().copy(alpha = 0.5f),
@@ -159,26 +158,22 @@ private fun DetailsScreenContent(
                         ),
                         icon = {}
                     ) {
-                        Text(label)
+                        Text(stringResource(period.label))
                     }
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))
             Card(
-                modifier = Modifier.fillMaxWidth().height(250.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp),
             ) {
                 Chart(
-                    data = listOf(
-                        Pair(10f, "M"),
-                        Pair(35f, "T"),
-                        Pair(20f, "W"),
-                        Pair(0f, "T"),
-                        Pair(35f, "F"),
-                        Pair(15f, "S"),
-                        Pair(25f, "S")
-                    ),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(AppSizes.cardInnerPadding),
+                    data = uiData.periodStats,
                     desiredEffort = effort.desiredValue,
-                    modifier = Modifier.fillMaxSize().padding(AppSizes.cardInnerPadding),
                     graphColor = color.mapToColor()
                 )
             }

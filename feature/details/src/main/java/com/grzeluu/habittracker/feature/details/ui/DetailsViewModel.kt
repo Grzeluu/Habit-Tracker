@@ -9,6 +9,7 @@ import com.grzeluu.habittracker.component.habit.domain.usecase.ArchiveHabitUseCa
 import com.grzeluu.habittracker.component.habit.domain.usecase.DeleteHabitUseCase
 import com.grzeluu.habittracker.component.habit.domain.usecase.GetHabitUseCase
 import com.grzeluu.habittracker.component.habit.domain.usecase.SaveHabitHistoryEntryUseCase
+import com.grzeluu.habittracker.feature.details.ui.enum.ProgressPeriod
 import com.grzeluu.habittracker.feature.details.ui.event.DetailsEvent
 import com.grzeluu.habittracker.feature.details.ui.event.DetailsNavigationEvent
 import com.grzeluu.habittracker.feature.details.ui.navigation.DetailsArguments
@@ -23,9 +24,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -52,14 +56,28 @@ class DetailsViewModel @Inject constructor(
     private val _lastDays = MutableStateFlow<List<LocalDate>?>(null)
     private val lastDays: StateFlow<List<LocalDate>?> = _lastDays.asStateFlow()
 
+    private val _selectedPeriod = MutableStateFlow(ProgressPeriod.WEEK)
+    private val selectedPeriod: StateFlow<ProgressPeriod> = _selectedPeriod.asStateFlow()
+
+    private val periodStats = combine(
+        habit.filterNotNull(),
+        selectedPeriod.filterNotNull()
+    ) { habit, period ->
+        updatePeriodStats(habit, period)
+    }.flowOn(Dispatchers.Default)
+
     override val uiDataState: StateFlow<DetailsDataState?>
         get() = combine(
             habit.filterNotNull(),
-            lastDays.filterNotNull()
-        ) { habit, daysOfWeek ->
+            lastDays.filterNotNull(),
+            selectedPeriod,
+            periodStats.filterNotNull()
+        ) { habit, daysOfWeek, selectedPeriod, periodStats ->
             DetailsDataState(
                 habit = habit,
-                lastDays = daysOfWeek
+                lastDays = daysOfWeek,
+                selectedPeriod = selectedPeriod,
+                periodStats = periodStats
             )
         }.onStart {
             getHabit()
@@ -75,6 +93,33 @@ class DetailsViewModel @Inject constructor(
             DetailsEvent.OnArchiveHabit -> archiveHabit()
             DetailsEvent.OnDeleteHabit -> deleteHabit()
             is DetailsEvent.OnSaveDailyEffort -> saveDailyEffort(event)
+            is DetailsEvent.OnSelectPeriod -> selectPeriod(event)
+        }
+    }
+
+    private fun selectPeriod(event: DetailsEvent.OnSelectPeriod) {
+        _selectedPeriod.update { event.period }
+    }
+
+    private fun updatePeriodStats(habit: Habit, period: ProgressPeriod): List<Pair<Float, String>> {
+        val dateFrom = getDateByPeriod(period)
+        val stats = habit.getDailyEffortEntries(dateFrom).map {
+            val dateString = when (period) {
+                ProgressPeriod.WEEK -> it.date.dayOfWeek.name[0].toString()
+                ProgressPeriod.MONTH -> it.date.dayOfMonth.toString()
+                ProgressPeriod.YEAR -> it.date.month.toString()[0].toString()
+            }
+            Pair(it.currentEffort, dateString)
+        }
+        return stats
+    }
+
+    private fun getDateByPeriod(period: ProgressPeriod): LocalDate {
+        val today = getCurrentDate()
+        return when (period) {
+            ProgressPeriod.WEEK -> today.minus(7, DateTimeUnit.DAY)
+            ProgressPeriod.MONTH -> today.minus(1, DateTimeUnit.MONTH)
+            ProgressPeriod.YEAR -> today.minus(1, DateTimeUnit.YEAR)
         }
     }
 
