@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.grzeluu.habittracker.feature.calendar.ui.CalendarScreen
-import com.grzeluu.habittracker.feature.habits.ui.HabitsScreen
+import com.grzeluu.habittracker.feature.home.ui.HabitsScreen
 import com.grzeluu.habittracker.feature.notifications.ui.NotificationsScreen
 import com.grzeluu.habittracker.feature.settings.ui.SettingsScreen
 

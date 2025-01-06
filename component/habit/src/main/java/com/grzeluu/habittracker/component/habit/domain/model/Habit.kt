@@ -1,11 +1,13 @@
 package com.grzeluu.habittracker.component.habit.domain.model
 
+import com.grzeluu.habittracker.util.datetime.getCurrentDate
 import com.grzeluu.habittracker.util.enums.CardColor
 import com.grzeluu.habittracker.util.enums.CardIcon
 import com.grzeluu.habittracker.util.enums.Day
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlin.math.min
 
 data class Habit(
@@ -31,29 +33,36 @@ data class Habit(
 
     fun getCurrentStreak(currentDate: LocalDate): Int {
         val sortedHistory = history.sortedByDescending { it.date }
-        val latestEntryDate = sortedHistory.firstOrNull()?.date ?: return 0
-
-        if (latestEntryDate != currentDate && latestEntryDate != currentDate.minus(1, DateTimeUnit.DAY)) return 0
-
         var currentStreak = 0
-        var lastDate = latestEntryDate
-
+        var lastDate = currentDate
         fun lastDateIsNotDesirable() = !desirableDays.contains(Day.get(lastDate.dayOfWeek.value))
 
         for (entry in sortedHistory) {
+            while (lastDateIsNotDesirable()) {
+                lastDate = lastDate.minus(1, DateTimeUnit.DAY)
+            }
             when {
                 entry.currentEffort > 0f && entry.date == lastDate -> {
                     currentStreak++
+                    lastDate = lastDate.minus(1, DateTimeUnit.DAY)
                 }
 
-                entry.date != currentDate -> {
-                    break
-                }
+                else -> break
+
             }
-            do {
-                lastDate = lastDate.minus(1, DateTimeUnit.DAY)
-            } while (lastDateIsNotDesirable())
         }
         return currentStreak
+    }
+
+    fun getDailyEffortEntries(dateFrom: LocalDate): List<HabitHistoryEntry> {
+        val historyEntries = history.filter { it.date > dateFrom }
+        val result = mutableListOf<HabitHistoryEntry>()
+        var date = dateFrom.plus(1, DateTimeUnit.DAY)
+        while (date <= getCurrentDate()) {
+            val historyEntry = historyEntries.find { it.date == date } ?: HabitHistoryEntry(date, 0f)
+            result.add(historyEntry)
+            date = date.plus(1, DateTimeUnit.DAY)
+        }
+        return result
     }
 }
