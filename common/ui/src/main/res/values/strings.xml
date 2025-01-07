@@ -93,7 +93,8 @@
     <string name="notification_time">Notification time</string>
     <string name="set_for_the_date">Set your progress for %1$s</string>
     <string name="your_latest_effort">Your latest effort</string>
-    <string name="my_habits">My Habits</string>
+    <string name="daily_habits">Daily Habits</string>
+    <string name="all_habits">All Habits</string>
     <string name="about_app">About App</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="your_progress">Your progress</string>

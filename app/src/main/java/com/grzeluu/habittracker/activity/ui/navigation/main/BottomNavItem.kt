@@ -8,13 +8,13 @@ sealed class BottomNavItem(val route: String, @DrawableRes val iconResId: Int, v
     data object Habits : BottomNavItem(
         "home",
         R.drawable.ic_home,
-        UiText.StringResource(R.string.my_habits)
+        UiText.StringResource(R.string.daily_habits)
     )
 
     data object Calendar : BottomNavItem(
-        "calendar",
-        R.drawable.ic_calendar,
-        UiText.StringResource(R.string.calendar)
+        "list",
+        R.drawable.ic_list,
+        UiText.StringResource(R.string.all_habits)
     )
 
     data object Notifications :
