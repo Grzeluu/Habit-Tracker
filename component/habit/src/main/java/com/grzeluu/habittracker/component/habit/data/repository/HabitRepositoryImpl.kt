@@ -18,6 +18,10 @@ import javax.inject.Singleton
 class HabitRepositoryImpl @Inject constructor(
     private val habitDao: HabitDao
 ) : HabitRepository {
+    override fun getHabits(): Flow<List<Habit>> {
+        return habitDao.getHabits().map { it.map { habit -> habit.mapToDomain() } }
+    }
+
     override fun getHabit(habitId: Long): Flow<Habit?> {
         return habitDao.getHabitWithHistoryEntriesByHabitId(habitId).map { it?.mapToDomain() }
     }

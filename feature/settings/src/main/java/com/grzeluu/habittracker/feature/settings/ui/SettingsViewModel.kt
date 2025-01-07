@@ -48,9 +48,11 @@ class SettingsViewModel @Inject constructor(
 
     private fun getSettings() {
         viewModelScope.launch(Dispatchers.IO) {
+            loadingState.incrementTasksInProgress()
             getSettings(Unit).collectLatestResult { data ->
                 _isDarkModeEnabled.emit(data.isDarkModeEnabled)
                 _isNotificationsEnabled.emit(data.isNotificationsEnabled)
+                loadingState.decrementTasksInProgress()
             }
         }
     }

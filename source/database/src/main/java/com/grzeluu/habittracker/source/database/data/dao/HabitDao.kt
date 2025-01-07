@@ -30,6 +30,10 @@ interface HabitDao {
     suspend fun deleteHabit(habit: HabitEntity)
 
     @Transaction
+    @Query("SELECT * FROM habits")
+    fun getHabits(): Flow<List<HabitWithHistoryDbModel>>
+
+    @Transaction
     @Query("SELECT * FROM habits WHERE id = :habitId")
     fun getHabitWithHistoryEntriesByHabitId(habitId: Long): Flow<HabitWithHistoryDbModel?>
 

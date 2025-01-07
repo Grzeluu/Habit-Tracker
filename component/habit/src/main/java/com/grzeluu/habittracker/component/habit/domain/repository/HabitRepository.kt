@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 
 interface HabitRepository {
+    fun getHabits(): Flow<List<Habit>>
+
     fun getHabit(habitId: Long): Flow<Habit?>
 
     fun getDailyHabitInfos(day: Day, dateTime: LocalDate): Flow<List<DailyHabitInfo>>

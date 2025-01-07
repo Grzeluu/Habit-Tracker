@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -32,9 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.card.SimpleHabitCard
-import com.grzeluu.habittracker.common.ui.label.BasicLabel
 import com.grzeluu.habittracker.common.ui.mapper.MappingType
-import com.grzeluu.habittracker.common.ui.mapper.mapToColor
 import com.grzeluu.habittracker.common.ui.mapper.mapToUiText
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
 import com.grzeluu.habittracker.common.ui.text.UiText
@@ -90,12 +87,12 @@ fun HabitEffortDialog(
             ) {
                 SimpleHabitCard(
                     modifier = Modifier.fillMaxWidth(),
+                    desiredEffortValue = desiredEffortValue,
+                    effortUnit = effortUnit,
                     habitName = habitName,
                     habitDescription = habitDescription,
                     habitColor = habitColor,
                     habitIcon = habitIcon,
-                    effortUnit = effortUnit,
-                    desiredEffortValue = desiredEffortValue
                 )
                 Column(
                     modifier = Modifier
