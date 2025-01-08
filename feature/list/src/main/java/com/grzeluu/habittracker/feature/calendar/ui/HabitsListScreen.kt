@@ -50,7 +50,7 @@ fun HabitsListScreen(
                     HabitsListCard(habit) {
                         onNavigateToDetails(habit.id)
                     }
-                    if (index != data.activeHabits.lastIndex) {
+                    if (index != data.archivedHabits.lastIndex) {
                         Spacer(modifier = Modifier.height(AppSizes.spaceBetweenCards))
                     }
                 }
