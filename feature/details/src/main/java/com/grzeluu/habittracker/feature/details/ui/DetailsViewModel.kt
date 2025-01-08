@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.ui.BaseViewModel
 import com.grzeluu.habittracker.component.habit.domain.model.Habit
 import com.grzeluu.habittracker.component.habit.domain.model.HabitHistoryEntry
-import com.grzeluu.habittracker.component.habit.domain.usecase.ArchiveHabitUseCase
+import com.grzeluu.habittracker.component.habit.domain.usecase.MarkHabitAsArchiveUseCase
 import com.grzeluu.habittracker.component.habit.domain.usecase.DeleteHabitUseCase
 import com.grzeluu.habittracker.component.habit.domain.usecase.GetHabitUseCase
 import com.grzeluu.habittracker.component.habit.domain.usecase.SaveHabitHistoryEntryUseCase
@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -40,7 +39,7 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(
     private val getHabitUseCase: GetHabitUseCase,
     private val deleteHabitUseCase: DeleteHabitUseCase,
-    private val archiveHabitUseCase: ArchiveHabitUseCase,
+    private val markHabitAsArchiveUseCase: MarkHabitAsArchiveUseCase,
     private val saveHabitHistoryEntryUseCase: SaveHabitHistoryEntryUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<DetailsDataState>() {
@@ -90,7 +89,8 @@ class DetailsViewModel @Inject constructor(
 
     fun onEvent(event: DetailsEvent) {
         when (event) {
-            DetailsEvent.OnArchiveHabit -> archiveHabit()
+            DetailsEvent.OnArchiveHabit -> markHabitAsArchive(true)
+            DetailsEvent.OnUnarchiveHabit -> markHabitAsArchive(false)
             DetailsEvent.OnDeleteHabit -> deleteHabit()
             is DetailsEvent.OnSaveDailyEffort -> saveDailyEffort(event)
             is DetailsEvent.OnSelectPeriod -> selectPeriod(event)
@@ -144,10 +144,16 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private fun archiveHabit() {
+    private fun markHabitAsArchive(isArchive: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            habit.value?.let { archiveHabitUseCase(it) }
-            navigationChannel.send(DetailsNavigationEvent.NAVIGATE_BACK)
+            habit.value?.let {
+                markHabitAsArchiveUseCase(
+                    MarkHabitAsArchiveUseCase.Request(
+                        habitId = it.id,
+                        isArchived = isArchive
+                    )
+                )
+            }
         }
     }
 

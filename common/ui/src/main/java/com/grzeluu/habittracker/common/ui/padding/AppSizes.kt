@@ -15,4 +15,6 @@ object AppSizes {
 
     val spaceBetweenFormElements = 12.dp
     val spaceBetweenFormSections = 20.dp
+
+    val fabSpacer = 52.dp
 }

@@ -30,20 +30,22 @@ fun DetailsTopBar(
         title = null,
         onNavigateBack = onNavigateBack,
         actions = {
-            val habit = (uiState as? UiState.Success)?.data?.habit
+            val habit = (uiState as? UiState.Success)?.data?.habit ?: return@BasicTopAppBar
             val buttonColors = IconButtonDefaults.iconButtonColors(
-                contentColor = habit?.color?.mapToColor()?.copy(alpha = 0.9f) ?: MaterialTheme.colorScheme.onSurface
+                contentColor = habit.color.mapToColor().copy(alpha = 0.9f)
             )
-            IconButton(
-                modifier = Modifier
-                    .align(Alignment.CenterVertically),
-                colors = buttonColors,
-                onClick = onEdit,
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_edit),
-                    contentDescription = stringResource(R.string.edit_habit),
-                )
+            if (!habit.isArchive) {
+                IconButton(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically),
+                    colors = buttonColors,
+                    onClick = onEdit,
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_edit),
+                        contentDescription = stringResource(R.string.edit_habit),
+                    )
+                }
             }
             IconButton(
                 modifier = Modifier
@@ -56,18 +58,20 @@ fun DetailsTopBar(
                     contentDescription = stringResource(R.string.delete_habit),
                 )
             }
-            IconButton(
-                modifier = Modifier
-                    .align(Alignment.CenterVertically),
-                colors = buttonColors,
-                onClick = onArchive,
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_archive),
-                    contentDescription = stringResource(R.string.archive_habit),
-                )
+            if (!habit.isArchive) {
+                IconButton(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically),
+                    colors = buttonColors,
+                    onClick = onArchive,
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_archive),
+                        contentDescription = stringResource(R.string.archive_habit),
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
             }
-            Spacer(modifier = Modifier.width(8.dp))
         }
     )
 }

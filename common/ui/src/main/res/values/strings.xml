@@ -79,7 +79,7 @@
     <string name="edit_habit">Edit habit</string>
     <string name="archive">Archive</string>
     <string name="archive_habit">Archive habit</string>
-    <string name="archive_habit_message">Are you sure you want to archive this habit? The habit will only be available in the Archived Habits section in settings.</string>
+    <string name="archive_habit_message">Are you sure you want to archive this habit?\nThis habit will only be available in the \'Archived Habits\' section on the \'All Habits\' page.</string>
     <string name="current_streak">Current streak</string>
     <string name="days">%s days</string>
     <string name="day">1 day</string>
@@ -93,11 +93,18 @@
     <string name="notification_time">Notification time</string>
     <string name="set_for_the_date">Set your progress for %1$s</string>
     <string name="your_latest_effort">Your latest effort</string>
-    <string name="my_habits">My Habits</string>
+    <string name="daily_habits">Daily Habits</string>
+    <string name="all_habits">All Habits</string>
     <string name="about_app">About App</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="your_progress">Your progress</string>
     <string name="week">Week</string>
     <string name="month">Month</string>
     <string name="year">Year</string>
+    <string name="active_habits">Active habits</string>
+    <string name="archived_habits">Archived habits</string>
+    <string name="unarchive_habit">Are you sure you want to make this habit active?</string>
+    <string name="unarchive_habit_message">Mark as active</string>
+    <string name="habit_archived">This habit has been archived. To continue tracking your progress, mark it as active.</string>
+    <string name="unarchive">Mark as active</string>
 </resources>

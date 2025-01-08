@@ -9,24 +9,18 @@ import javax.inject.Inject
 
 class LoadingState @Inject constructor() {
 
-    private val count = AtomicInteger()
     private val taskCount = MutableStateFlow(0)
-
     val isInProgress: Flow<Boolean> = taskCount.map { it > 0 }
 
     fun incrementTasksInProgress() {
-        taskCount.update { count.incrementAndGet() }
+        taskCount.update { it + 1 }
     }
 
     fun decrementTasksInProgress() {
-        taskCount.update {
-            val newCount = count.decrementAndGet()
-            newCount.coerceAtLeast(0)
-        }
+        taskCount.update { (it - 1).coerceAtLeast(0) }
     }
 
-    suspend fun stopLoading() {
-        count.set(0)
-        taskCount.emit(0)
+    fun stopLoading() {
+        taskCount.update { 0 }
     }
 }

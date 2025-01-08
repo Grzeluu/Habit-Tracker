@@ -1,5 +1,6 @@
 package com.grzeluu.habittracker.base.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.domain.error.Error
@@ -25,15 +26,15 @@ abstract class BaseViewModel<DATA> : ViewModel() {
 
     protected val loadingState: LoadingState = LoadingState()
 
-    protected val errorChannel = Channel<Error>()
-    private val error: Flow<Error?> = errorChannel.receiveAsFlow()
+    protected val errorChannel = Channel<Error?>()
+    private val error: Flow<Error?> = errorChannel.receiveAsFlow().onStart { emit(null) }
 
     protected abstract val uiDataState: StateFlow<DATA?>
     val uiState: StateFlow<UiState<DATA>> by lazy {
         combine(
             uiDataState,
             loadingState.isInProgress,
-            error.onStart { emit(null) }
+            error
         ) { uiDataState, isLoading, error ->
             when {
                 error != null -> UiState.Failure(error)

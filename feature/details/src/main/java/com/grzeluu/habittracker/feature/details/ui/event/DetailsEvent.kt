@@ -7,5 +7,6 @@ sealed class DetailsEvent {
     data class OnSaveDailyEffort(val date: LocalDate, val effort: Float) : DetailsEvent()
     data object OnDeleteHabit : DetailsEvent()
     data object OnArchiveHabit : DetailsEvent()
+    data object OnUnarchiveHabit : DetailsEvent()
     data class OnSelectPeriod(val period: ProgressPeriod) : DetailsEvent()
 }

@@ -18,6 +18,10 @@ import javax.inject.Singleton
 class HabitRepositoryImpl @Inject constructor(
     private val habitDao: HabitDao
 ) : HabitRepository {
+    override fun getHabits(): Flow<List<Habit>> {
+        return habitDao.getHabits().map { it.map { habit -> habit.mapToDomain() } }
+    }
+
     override fun getHabit(habitId: Long): Flow<Habit?> {
         return habitDao.getHabitWithHistoryEntriesByHabitId(habitId).map { it?.mapToDomain() }
     }
@@ -50,7 +54,7 @@ class HabitRepositoryImpl @Inject constructor(
         return habitDao.deleteHabit(habit.mapToEntity())
     }
 
-    override suspend fun markHabitAsArchived(habitId: Long) {
-        return habitDao.markHabitAsArchived(habitId)
+    override suspend fun markHabitAsArchived(habitId: Long, isArchive: Boolean) {
+        return habitDao.markHabitAsArchived(habitId, isArchive)
     }
 }

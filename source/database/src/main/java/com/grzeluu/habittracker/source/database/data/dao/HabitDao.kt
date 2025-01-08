@@ -30,6 +30,10 @@ interface HabitDao {
     suspend fun deleteHabit(habit: HabitEntity)
 
     @Transaction
+    @Query("SELECT * FROM habits")
+    fun getHabits(): Flow<List<HabitWithHistoryDbModel>>
+
+    @Transaction
     @Query("SELECT * FROM habits WHERE id = :habitId")
     fun getHabitWithHistoryEntriesByHabitId(habitId: Long): Flow<HabitWithHistoryDbModel?>
 
@@ -58,9 +62,9 @@ interface HabitDao {
     @Query(
         """
         UPDATE habits
-        SET is_archive = 1
+        SET is_archive = :isArchive
         WHERE id = :habitId
         """
     )
-    fun markHabitAsArchived(habitId: Long)
+    fun markHabitAsArchived(habitId: Long, isArchive: Boolean)
 }

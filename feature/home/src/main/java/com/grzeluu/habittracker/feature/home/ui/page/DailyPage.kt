@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -116,7 +117,7 @@ private fun DailyHabitsContent(
             )
         )
         LazyColumn {
-            items(data.dailyHabits, key = { it.id }) {
+            itemsIndexed(data.dailyHabits, key = { _, habit -> habit.id }) { index, it ->
                 HabitCard(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -126,7 +127,12 @@ private fun DailyHabitsContent(
                     onButtonClicked = { onHabitEffortClicked(it) },
                     onCardClicked = { onNavigateToDetails(it.id) }
                 )
-                Spacer(modifier = Modifier.height(AppSizes.spaceBetweenCards))
+                if (index != data.dailyHabits.lastIndex) {
+                    Spacer(modifier = Modifier.height(AppSizes.spaceBetweenCards))
+                }
+            }
+            item {
+                Spacer(modifier = Modifier.height(AppSizes.fabSpacer))
             }
         }
     }

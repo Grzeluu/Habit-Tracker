@@ -38,6 +38,8 @@ fun SimpleHabitCard(
     habitDescription: String?,
     habitColor: CardColor,
     habitIcon: CardIcon,
+    isArchive: Boolean = false,
+    onCardClicked: (() -> Unit)? = null,
 ) {
     val effortString =
         buildString {
@@ -47,9 +49,11 @@ fun SimpleHabitCard(
         }
 
     Card(
+        onClick = { onCardClicked?.invoke() },
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = habitColor.mapToColor().copy(alpha = 0.25f),
+            containerColor = if (isArchive) MaterialTheme.colorScheme.surfaceVariant
+            else habitColor.mapToColor().copy(alpha = 0.25f),
             contentColor = MaterialTheme.colorScheme.onSurface
         )
     ) {
@@ -101,12 +105,12 @@ fun SimpleHabitCardPreview() {
     HabitTrackerTheme {
         SimpleHabitCard(
             modifier = Modifier.wrapContentHeight(),
-            habitName = "Drink water",
-            habitIcon = CardIcon.DRINK,
-            habitColor = CardColor.BLUE,
-            habitDescription = "At least 2.5l daily",
-            effortUnit = EffortUnit.LITERS,
             desiredEffortValue = 2.5f,
+            effortUnit = EffortUnit.LITERS,
+            habitName = "Drink water",
+            habitDescription = "At least 2.5l daily",
+            habitColor = CardColor.BLUE,
+            habitIcon = CardIcon.DRINK
         )
     }
 }
