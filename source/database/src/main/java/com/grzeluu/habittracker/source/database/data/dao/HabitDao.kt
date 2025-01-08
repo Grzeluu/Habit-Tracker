@@ -62,9 +62,9 @@ interface HabitDao {
     @Query(
         """
         UPDATE habits
-        SET is_archive = 1
+        SET is_archive = :isArchive
         WHERE id = :habitId
         """
     )
-    fun markHabitAsArchived(habitId: Long)
+    fun markHabitAsArchived(habitId: Long, isArchive: Boolean)
 }

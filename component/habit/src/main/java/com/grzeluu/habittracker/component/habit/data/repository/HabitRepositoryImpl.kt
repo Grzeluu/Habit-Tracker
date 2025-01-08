@@ -54,7 +54,7 @@ class HabitRepositoryImpl @Inject constructor(
         return habitDao.deleteHabit(habit.mapToEntity())
     }
 
-    override suspend fun markHabitAsArchived(habitId: Long) {
-        return habitDao.markHabitAsArchived(habitId)
+    override suspend fun markHabitAsArchived(habitId: Long, isArchive: Boolean) {
+        return habitDao.markHabitAsArchived(habitId, isArchive)
     }
 }

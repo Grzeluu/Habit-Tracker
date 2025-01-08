@@ -22,5 +22,5 @@ interface HabitRepository {
 
     suspend fun deleteHabit(habit: Habit)
 
-    suspend fun markHabitAsArchived(habitId: Long)
+    suspend fun markHabitAsArchived(habitId: Long, isArchived: Boolean)
 }
