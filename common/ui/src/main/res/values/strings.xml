@@ -107,4 +107,9 @@
     <string name="unarchive_habit_message">Mark as active</string>
     <string name="habit_archived">This habit has been archived. To continue tracking your progress, mark it as active.</string>
     <string name="unarchive">Mark as active</string>
+    <string name="allow">Allow</string>
+    <string name="deny">Deny</string>
+    <string name="permission_notification_title">Permission Required</string>
+    <string name="permission_notification_message">This app requires permission to send notifications. Please enable notification permissions in the settings to stay updated.</string>
+    <string name="open_settings">Open Settings</string>
 </resources>
