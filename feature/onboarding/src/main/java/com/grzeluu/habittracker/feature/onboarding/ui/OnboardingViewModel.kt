@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.ui.BaseViewModel
 import com.grzeluu.habittracker.component.settings.domain.usecase.GetSettingsUseCase
 import com.grzeluu.habittracker.component.settings.domain.usecase.SaveSettingsUseCase
+import com.grzeluu.habittracker.feature.onboarding.ui.event.OnboardingEvent
 import com.grzeluu.habittracker.feature.onboarding.ui.event.OnboardingNavigationEvent
 import com.grzeluu.habittracker.feature.onboarding.ui.state.OnboardingStateData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,6 +54,14 @@ class OnboardingViewModel @Inject constructor(
             initialValue = null
         )
 
+    fun onEvent(event: OnboardingEvent) {
+        when(event) {
+            is OnboardingEvent.OnChangeDarkMode -> changeDarkModeSettings(event)
+            is OnboardingEvent.OnChangeNotifications -> changeNotificationSettings(event)
+            is OnboardingEvent.OnContinue -> saveSettingsAndNavigate(event)
+        }
+    }
+
     private fun getSettings() {
         viewModelScope.launch(Dispatchers.IO) {
             getSettingsUseCase(Unit).collectLatestResult { data ->
@@ -62,22 +71,22 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    fun changeNotificationSettings(isEnabled: Boolean) {
-        _isNotificationsEnabled.update { isEnabled }
+    private fun changeNotificationSettings(event: OnboardingEvent.OnChangeNotifications) {
+        _isNotificationsEnabled.update { event.isNotificationsEnabled }
     }
 
-    fun changeDarkModeSettings(isDarkModeEnabled: Boolean) {
+    private fun changeDarkModeSettings(event: OnboardingEvent.OnChangeDarkMode) {
         viewModelScope.launch(Dispatchers.IO) {
-            saveSettings(isDarkModeEnabled, isNotificationsEnabled.value)
+            saveSettings(event.isDarkModeEnabled, isNotificationsEnabled.value)
         }
     }
 
-    fun saveSettingsAndNavigate(destinationNavigationEvent: OnboardingNavigationEvent) {
+    private fun saveSettingsAndNavigate(event: OnboardingEvent.OnContinue) {
         viewModelScope.launch(Dispatchers.IO) {
             loadingState.incrementTasksInProgress()
             saveSettings(isDarkModeEnabled.value, isNotificationsEnabled.value)
             withContext(Dispatchers.Main) {
-                navigationChannel.send(destinationNavigationEvent)
+                navigationChannel.send(event.destinationNavigationEvent)
             }
             loadingState.decrementTasksInProgress()
         }

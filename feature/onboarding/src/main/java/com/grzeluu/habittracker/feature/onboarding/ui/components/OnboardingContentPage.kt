@@ -53,9 +53,7 @@ fun OnboardingContentPage(
                 colors = buttonColors,
                 onClick = goToNextPage
             ) {
-                Text(
-                    text = buttonText,
-                )
+                Text(text = buttonText,)
             }
         }
     }
