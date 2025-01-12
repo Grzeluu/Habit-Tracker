@@ -58,8 +58,9 @@ fun HabitDetailsStatsCards(
             DetailsCardWithIcon(
                 modifier = Modifier.weight(1f),
                 iconPainter = painterResource(R.drawable.ic_notification),
-                label = stringResource(R.string.notification_time),
-                body = if (habitNotification is HabitNotification.Enabled) (habitNotification as HabitNotification.Enabled).time.format() else "-"
+                label = stringResource(R.string.notification),
+                iconColor = if (habitNotification is HabitNotification.Enabled) color.mapToColor() else null,
+                body = if (habitNotification is HabitNotification.Enabled) (habitNotification as HabitNotification.Enabled).time.toString() else "-"
             )
         }
     }

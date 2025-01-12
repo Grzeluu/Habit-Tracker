@@ -153,6 +153,9 @@ class DetailsViewModel @Inject constructor(
                         isArchived = isArchive
                     )
                 )
+                if (isArchive) {
+                    navigationChannel.send(DetailsNavigationEvent.NAVIGATE_BACK)
+                }
             }
         }
     }

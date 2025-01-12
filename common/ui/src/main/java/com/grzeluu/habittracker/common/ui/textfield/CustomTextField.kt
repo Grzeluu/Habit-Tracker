@@ -1,5 +1,6 @@
 package com.grzeluu.habittracker.common.ui.textfield
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -35,7 +37,9 @@ fun CustomTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Default,
     alignment: TextAlign = TextAlign.Start,
-    trailingIcon: @Composable (() -> Unit)? = null
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    trailingIcon: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null
 ) {
 
     val textFieldTrailingIcon: @Composable (() -> Unit)? = when {
@@ -62,6 +66,7 @@ fun CustomTextField(
             isError = isError,
             supportingText = supportingText,
             readOnly = readOnly,
+            interactionSource = interactionSource,
             onValueChange = onValueChange,
             shape = RoundedCornerShape(8.dp),
             textStyle = LocalTextStyle.current.copy(textAlign = alignment),
@@ -72,7 +77,8 @@ fun CustomTextField(
                 unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
                 focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
             ),
-            trailingIcon = textFieldTrailingIcon
+            trailingIcon = textFieldTrailingIcon,
+            leadingIcon = leadingIcon
         )
     }
 }

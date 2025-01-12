@@ -44,11 +44,13 @@ fun DetailsCardWithIcon(
             ) {
                 Text(
                     text = label,
+                    maxLines = 1,
                     style = MaterialTheme.typography.labelMedium,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = body,
+                    maxLines = 1,
                     style = MaterialTheme.typography.bodyMedium,
                     overflow = TextOverflow.Ellipsis
                 )

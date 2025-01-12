@@ -77,7 +77,7 @@ fun DailyPage(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(AppSizes.screenPadding),
-                painter = painterResource(id = com.grzeluu.habittracker.feature.home.R.drawable.goals),
+                painter = painterResource(id = com.grzeluu.habittracker.feature.home.R.drawable.rest),
                 description = stringResource(R.string.no_habits_for_this_day)
             )
         } else {
