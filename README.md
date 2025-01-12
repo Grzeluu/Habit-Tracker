@@ -15,6 +15,7 @@ The application is currently under development, but its key features are fully f
 - All habit list
 - Application settings
 - Light and dark mode
+- Material3 components
 ### Upcoming:
 - Push notifications
 - Chart fixes
@@ -37,3 +38,5 @@ The application is currently under development, but its key features are fully f
 - Room Database
 - ViewModel
 - Kotlin Flow
+- Kotlin Coroutines
+  
