@@ -19,19 +19,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.grzeluu.habittracker.base.ui.BaseScreenContainer
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.label.BasicLabel
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
-import com.grzeluu.habittracker.common.ui.padding.AppSizes.spaceBetweenFormSections
+import com.grzeluu.habittracker.common.ui.padding.AppSizes.spaceBetweenFormElements
 import com.grzeluu.habittracker.common.ui.padding.AppSizes.spaceBetweenIconAndText
 import com.grzeluu.habittracker.common.ui.textfield.CustomTextField
 import com.grzeluu.habittracker.common.ui.topbar.BasicTopAppBar
@@ -40,6 +43,7 @@ import com.grzeluu.habittracker.feature.addhabit.ui.components.DaySelectionView
 import com.grzeluu.habittracker.feature.addhabit.ui.components.IconSelectionRow
 import com.grzeluu.habittracker.feature.addhabit.ui.components.SetDailyGoalView
 import com.grzeluu.habittracker.feature.addhabit.ui.components.SetNotificationsView
+import com.grzeluu.habittracker.feature.addhabit.ui.components.TimePickerDialog
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitEvent
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitNavigationEvent
 import com.grzeluu.habittracker.util.flow.ObserveAsEvent
@@ -51,6 +55,8 @@ fun AddHabitScreen(
 
     val viewModel: AddHabitViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    var isNotificationTimeDialogVisible by remember { mutableStateOf(false) }
 
     ObserveAsEvent(viewModel.navigationEventsChannelFlow) { event ->
         when (event) {
@@ -68,6 +74,21 @@ fun AddHabitScreen(
             BasicTopAppBar(
                 title = if (viewModel.habitId != null) stringResource(R.string.edit_habit) else stringResource(R.string.add_habit),
                 onNavigateBack = onNavigateBack,
+                actions = {
+                    Button(
+                        modifier = Modifier.padding(end = 4.dp),
+                        onClick = { viewModel.onEvent(AddHabitEvent.AddHabit) }
+                    ) {
+                        Icon(
+                            painterResource(if (viewModel.habitId != null) R.drawable.ic_edit else R.drawable.ic_add),
+                            contentDescription = null
+                        )
+                        Text(
+                            modifier = Modifier.padding(start = spaceBetweenIconAndText),
+                            text = stringResource(if (viewModel.habitId != null) R.string.edit else R.string.add)
+                        )
+                    }
+                }
             )
         },
     ) { innerPadding ->
@@ -77,6 +98,13 @@ fun AddHabitScreen(
                 .fillMaxSize(),
             uiState
         ) { uiData ->
+            TimePickerDialog(
+                isVisible = isNotificationTimeDialogVisible,
+                selectedTime = uiData.notificationSettings.time,
+                onDismissRequest = { isNotificationTimeDialogVisible = false },
+                onTimeSelected = { viewModel.onEvent(AddHabitEvent.OnNotificationTimeChanged(it)) }
+            )
+
             Column(
                 modifier = Modifier
                     .padding(horizontal = AppSizes.screenPadding)
@@ -119,7 +147,7 @@ fun AddHabitScreen(
                     iconsColor = uiData.color,
                     onSelectionChanged = { viewModel.onEvent(AddHabitEvent.OnIconChanged(it)) }
                 )
-                Spacer(modifier = Modifier.height(spaceBetweenFormSections))
+                Spacer(modifier = Modifier.height(spaceBetweenFormElements))
                 DaySelectionView(
                     selectedDays = uiData.selectedDaysField.value,
                     onDayCheckedChange = { day, isChecked ->
@@ -130,14 +158,14 @@ fun AddHabitScreen(
                     supportingText = uiData.selectedDaysField.errorMassage?.asString()
                         ?: stringResource(R.string.select_at_least_one_day)
                 )
-                Spacer(modifier = Modifier.height(spaceBetweenFormSections))
+                Spacer(modifier = Modifier.height(spaceBetweenFormElements))
                 SetDailyGoalView(
                     goalTextState = uiData.dailyEffort.orEmpty(),
                     onTextChanged = { viewModel.onEvent(AddHabitEvent.OnDailyGoalTextChanged(it)) },
                     selectedEffortUnit = uiData.effortUnit,
                     onChangeEffortUnit = { viewModel.onEvent(AddHabitEvent.OnDailyGoalUnitChanged(it)) }
                 )
-                Spacer(modifier = Modifier.height(AppSizes.spaceBetweenFormElements))
+                Spacer(modifier = Modifier.height(spaceBetweenFormElements))
                 val descriptionMaxLength = 50
                 CustomTextField(
                     maxLines = 2,
@@ -159,29 +187,12 @@ fun AddHabitScreen(
                         }
                     }
                 )
-                Spacer(modifier = Modifier.height(spaceBetweenFormSections))
                 SetNotificationsView(
-                    isNotificationsEnabled = uiData.isNotificationsEnabled,
-                    onNotificationsEnabledChange = { viewModel.onEvent(AddHabitEvent.OnNotificationsEnabledChanged(it)) }
+                    notificationSettings = uiData.notificationSettings,
+                    onNotificationsEnabledChange = { viewModel.onEvent(AddHabitEvent.OnNotificationsEnabledChanged(it)) },
+                    onShowTimePicker = { isNotificationTimeDialogVisible = true }
                 )
-                Spacer(modifier = Modifier.height(spaceBetweenFormSections))
-                Spacer(modifier = Modifier.weight(1f))
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = AppSizes.screenPadding)
-                        .align(Alignment.CenterHorizontally),
-                    onClick = { viewModel.onEvent(AddHabitEvent.AddHabit) }
-                ) {
-                    Icon(
-                        painterResource(if (viewModel.habitId != null) R.drawable.ic_edit else R.drawable.ic_add),
-                        contentDescription = null
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = spaceBetweenIconAndText),
-                        text = stringResource(if (viewModel.habitId != null) R.string.edit_habit else R.string.add_habit)
-                    )
-                }
+                Spacer(modifier = Modifier.height(32.dp))
             }
         }
     }

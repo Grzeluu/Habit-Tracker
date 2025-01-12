@@ -9,6 +9,7 @@
     <string name="notifications">Notifications</string>
     <string name="choose_notifications">Enable notifications to keep track of your progress and stay motivated.</string>
     <string name="add_habit">Add Habit</string>
+    <string name="add">Add</string>
     <string name="add_your_first_habit_title">Add your first habit or go directly to the app.</string>
     <string name="skip">Skip</string>
     <string name="add_your_first_habit_massage">Now is a great time to add your first habit to the app and start something new!</string>
@@ -76,7 +77,8 @@
     <string name="delete">Delete</string>
     <string name="delete_habit">Delete habit</string>
     <string name="delete_habit_message">Are you sure you want to delete this habit? All tracked progress will be lost.</string>
-    <string name="edit_habit">Edit habit</string>
+    <string name="edit_habit">Edit Habit</string>
+    <string name="edit">Edit</string>
     <string name="archive">Archive</string>
     <string name="archive_habit">Archive habit</string>
     <string name="archive_habit_message">Are you sure you want to archive this habit?\nThis habit will only be available in the \'Archived Habits\' section on the \'All Habits\' page.</string>
@@ -90,7 +92,7 @@
     <string name="habit_validation_error_empty_name">Name cannot be empty.</string>
     <string name="habit_validation_error_empty_days">Please select at least one day."</string>
     <string name="total_effort">Total effort</string>
-    <string name="notification_time">Notification time</string>
+    <string name="notification">Notification</string>
     <string name="set_for_the_date">Set your progress for %1$s</string>
     <string name="your_latest_effort">Your latest effort</string>
     <string name="daily_habits">Daily Habits</string>
@@ -112,4 +114,6 @@
     <string name="permission_notification_title">Permission Required</string>
     <string name="permission_notification_message">This app requires permission to send notifications. Please enable notification permissions in the settings to stay updated.</string>
     <string name="open_settings">Open Settings</string>
+    <string name="set_time">Set time</string>
+    <string name="notification_time">Notification time</string>
 </resources>

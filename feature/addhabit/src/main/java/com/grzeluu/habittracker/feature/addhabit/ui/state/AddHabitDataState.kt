@@ -5,6 +5,7 @@ import com.grzeluu.habittracker.util.enums.CardColor
 import com.grzeluu.habittracker.util.enums.CardIcon
 import com.grzeluu.habittracker.util.enums.Day
 import com.grzeluu.habittracker.util.enums.EffortUnit
+import kotlinx.datetime.LocalTime
 
 data class AddHabitDataState(
     val nameField: FieldState<String>,
@@ -14,5 +15,10 @@ data class AddHabitDataState(
     val selectedDaysField: FieldState<List<Day>>,
     val dailyEffort: String?,
     val effortUnit: EffortUnit,
-    val isNotificationsEnabled: Boolean
+    val notificationSettings: NotificationSettings
+)
+
+data class NotificationSettings(
+    val isEnabled: Boolean,
+    val time: LocalTime
 )

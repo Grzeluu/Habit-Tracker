@@ -18,6 +18,7 @@ import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitNavigationEven
 import com.grzeluu.habittracker.feature.addhabit.ui.mapper.asUiText
 import com.grzeluu.habittracker.feature.addhabit.ui.navigation.AddHabitArgument
 import com.grzeluu.habittracker.feature.addhabit.ui.state.AddHabitDataState
+import com.grzeluu.habittracker.feature.addhabit.ui.state.NotificationSettings
 import com.grzeluu.habittracker.util.datetime.getCurrentDate
 import com.grzeluu.habittracker.util.enums.CardColor
 import com.grzeluu.habittracker.util.enums.CardIcon
@@ -37,8 +38,10 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -91,6 +94,19 @@ class AddHabitViewModel @Inject constructor(
     private var _isNotificationsEnabled = MutableStateFlow(false)
     private val isNotificationsEnabled: StateFlow<Boolean> = _isNotificationsEnabled
 
+    private var _notificationTime = MutableStateFlow(LocalTime(17, 0))
+    private val notificationTime: StateFlow<LocalTime> = _notificationTime
+
+    private val notificationSettings = combine(
+        isNotificationsEnabled,
+        notificationTime
+    ) { isNotificationsEnabled, notificationTime ->
+        NotificationSettings(
+            isEnabled = isNotificationsEnabled,
+            time = notificationTime
+        )
+    }
+
     override val uiDataState: StateFlow<AddHabitDataState?>
         get() = combine(
             nameFieldState,
@@ -100,8 +116,8 @@ class AddHabitViewModel @Inject constructor(
             selectedDaysFieldState,
             dailyEffort,
             effortUnit,
-            isNotificationsEnabled
-        ) { nameFieldState, description, color, icon, selectedDaysFieldState, dailyEffort, effortUnit, isNotificationsEnabled ->
+            notificationSettings
+        ) { nameFieldState, description, color, icon, selectedDaysFieldState, dailyEffort, effortUnit, notificationSettings ->
             AddHabitDataState(
                 nameField = nameFieldState,
                 description = description,
@@ -110,7 +126,7 @@ class AddHabitViewModel @Inject constructor(
                 selectedDaysField = selectedDaysFieldState,
                 dailyEffort = dailyEffort,
                 effortUnit = effortUnit,
-                isNotificationsEnabled = isNotificationsEnabled
+                notificationSettings = notificationSettings
             )
         }.onStart {
             getEditedHabitData()
@@ -144,11 +160,7 @@ class AddHabitViewModel @Inject constructor(
         when (event) {
             AddHabitEvent.OnAllDaysToggled -> {
                 val allDays = Day.entries
-                _selectedDays.value = if (selectedDays.value.containsAll(allDays)) {
-                    emptyList()
-                } else {
-                    allDays
-                }
+                _selectedDays.value = if (selectedDays.value.containsAll(allDays)) emptyList() else allDays
             }
 
             is AddHabitEvent.OnColorChanged -> {
@@ -186,6 +198,10 @@ class AddHabitViewModel @Inject constructor(
 
             is AddHabitEvent.OnNotificationsEnabledChanged -> {
                 _isNotificationsEnabled.value = event.value
+            }
+
+            is AddHabitEvent.OnNotificationTimeChanged -> {
+                _notificationTime.value =  event.time
             }
 
             AddHabitEvent.AddHabit -> {
