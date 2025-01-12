@@ -116,4 +116,5 @@
     <string name="open_settings">Open Settings</string>
     <string name="set_time">Set time</string>
     <string name="notification_time">Notification time</string>
+    <string name="to_enable_notifications_please_enable_push_notifications_in_settings">To enable notifications, please enable push notifications in settings.</string>
 </resources>

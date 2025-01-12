@@ -16,11 +16,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -47,6 +50,7 @@ import com.grzeluu.habittracker.feature.addhabit.ui.components.TimePickerDialog
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitEvent
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitNavigationEvent
 import com.grzeluu.habittracker.util.flow.ObserveAsEvent
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddHabitScreen(
@@ -57,6 +61,9 @@ fun AddHabitScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     var isNotificationTimeDialogVisible by remember { mutableStateOf(false) }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     ObserveAsEvent(viewModel.navigationEventsChannelFlow) { event ->
         when (event) {
@@ -70,6 +77,7 @@ fun AddHabitScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             BasicTopAppBar(
                 title = if (viewModel.habitId != null) stringResource(R.string.edit_habit) else stringResource(R.string.add_habit),
@@ -187,9 +195,18 @@ fun AddHabitScreen(
                         }
                     }
                 )
+                val notificationSnackbarText = stringResource(R.string.to_enable_notifications_please_enable_push_notifications_in_settings)
                 SetNotificationsView(
                     notificationSettings = uiData.notificationSettings,
-                    onNotificationsEnabledChange = { viewModel.onEvent(AddHabitEvent.OnNotificationsEnabledChanged(it)) },
+                    onNotificationsEnabledChange = {
+                        if (uiData.isPushNotificationsEnabled) {
+                            viewModel.onEvent(AddHabitEvent.OnNotificationsEnabledChanged(it))
+                        } else {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(notificationSnackbarText)
+                            }
+                        }
+                    },
                     onShowTimePicker = { isNotificationTimeDialogVisible = true }
                 )
                 Spacer(modifier = Modifier.height(72.dp))

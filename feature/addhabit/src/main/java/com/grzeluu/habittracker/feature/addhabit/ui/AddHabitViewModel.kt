@@ -13,6 +13,7 @@ import com.grzeluu.habittracker.component.habit.domain.model.HabitDesiredEffort
 import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
 import com.grzeluu.habittracker.component.habit.domain.usecase.AddOrUpdateHabitUseCase
 import com.grzeluu.habittracker.component.habit.domain.usecase.GetHabitUseCase
+import com.grzeluu.habittracker.component.settings.domain.usecase.GetSettingsUseCase
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitEvent
 import com.grzeluu.habittracker.feature.addhabit.ui.event.AddHabitNavigationEvent
 import com.grzeluu.habittracker.feature.addhabit.ui.mapper.asUiText
@@ -38,7 +39,6 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalTime
@@ -47,6 +47,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddHabitViewModel @Inject constructor(
     private val getHabitUseCase: GetHabitUseCase,
+    private val getSettingsUseCase: GetSettingsUseCase,
     private val addOrUpdateHabitUseCase: AddOrUpdateHabitUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<AddHabitDataState>() {
@@ -91,18 +92,21 @@ class AddHabitViewModel @Inject constructor(
     private val _effortUnit = MutableStateFlow(EffortUnit.REPEAT)
     private val effortUnit: StateFlow<EffortUnit> = _effortUnit
 
-    private var _isNotificationsEnabled = MutableStateFlow(false)
-    private val isNotificationsEnabled: StateFlow<Boolean> = _isNotificationsEnabled
+    private var _isPushNotificationsEnabled = MutableStateFlow(false)
+    private val isPushNotificationsEnabled: StateFlow<Boolean> = _isPushNotificationsEnabled
+
+    private var _isNotificationEnabled = MutableStateFlow(false)
+    private val isNotificationEnabled: StateFlow<Boolean> = _isNotificationEnabled
 
     private var _notificationTime = MutableStateFlow(LocalTime(17, 0))
     private val notificationTime: StateFlow<LocalTime> = _notificationTime
 
     private val notificationSettings = combine(
-        isNotificationsEnabled,
+        isNotificationEnabled,
         notificationTime
-    ) { isNotificationsEnabled, notificationTime ->
+    ) { isNotificationEnabled, notificationTime ->
         NotificationSettings(
-            isEnabled = isNotificationsEnabled,
+            isEnabled = isNotificationEnabled,
             time = notificationTime
         )
     }
@@ -116,8 +120,17 @@ class AddHabitViewModel @Inject constructor(
             selectedDaysFieldState,
             dailyEffort,
             effortUnit,
-            notificationSettings
-        ) { nameFieldState, description, color, icon, selectedDaysFieldState, dailyEffort, effortUnit, notificationSettings ->
+            notificationSettings,
+            isPushNotificationsEnabled
+        ) { nameFieldState,
+            description,
+            color,
+            icon,
+            selectedDaysFieldState,
+            dailyEffort,
+            effortUnit,
+            notificationSettings,
+            isPushNotificationsEnabled ->
             AddHabitDataState(
                 nameField = nameFieldState,
                 description = description,
@@ -126,10 +139,12 @@ class AddHabitViewModel @Inject constructor(
                 selectedDaysField = selectedDaysFieldState,
                 dailyEffort = dailyEffort,
                 effortUnit = effortUnit,
-                notificationSettings = notificationSettings
+                notificationSettings = notificationSettings,
+                isPushNotificationsEnabled = isPushNotificationsEnabled
             )
         }.onStart {
             getEditedHabitData()
+            getSettings()
         }.stateIn(
             scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = null
         )
@@ -145,6 +160,14 @@ class AddHabitViewModel @Inject constructor(
         }
     }
 
+    private fun getSettings() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getSettingsUseCase.invoke(Unit).collectLatestResult {
+                _isPushNotificationsEnabled.emit(it.isNotificationsEnabled)
+            }
+        }
+    }
+
     private suspend fun handleHabitData(habit: Habit) {
         _name.emit(habit.name)
         _description.emit(habit.description)
@@ -153,7 +176,8 @@ class AddHabitViewModel @Inject constructor(
         _selectedDays.emit(habit.desirableDays)
         _dailyEffort.emit(habit.effort.desiredValue.formatFloat())
         _effortUnit.emit(habit.effort.effortUnit)
-        _isNotificationsEnabled.emit(habit.habitNotification is HabitNotification.Enabled)
+        _isNotificationEnabled.emit(habit.habitNotification is HabitNotification.Enabled)
+        (habit.habitNotification as? HabitNotification.Enabled)?.let { _notificationTime.emit((it.time)) }
     }
 
     fun onEvent(event: AddHabitEvent) {
@@ -197,11 +221,11 @@ class AddHabitViewModel @Inject constructor(
             }
 
             is AddHabitEvent.OnNotificationsEnabledChanged -> {
-                _isNotificationsEnabled.value = event.value
+                _isNotificationEnabled.value = event.value
             }
 
             is AddHabitEvent.OnNotificationTimeChanged -> {
-                _notificationTime.value =  event.time
+                _notificationTime.value = event.time
             }
 
             AddHabitEvent.AddHabit -> {
@@ -225,7 +249,7 @@ class AddHabitViewModel @Inject constructor(
                         desiredValue = dailyEffort.value?.toFloat() ?: 1f, effortUnit = effortUnit.value
                     ),
                     additionDate = getCurrentDate(),
-                    habitNotification = HabitNotification.Disabled
+                    habitNotification = if (isNotificationEnabled.value) HabitNotification.Enabled(notificationTime.value) else HabitNotification.Disabled
                 )
             )
             when (result) {

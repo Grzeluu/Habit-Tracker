@@ -33,6 +33,7 @@ android {
 
 dependencies {
     implementation(project(":component:habit"))
+    implementation(project(":component:settings"))
     implementation(project(":base"))
     implementation(project(":common:ui"))
     implementation(project(":common:util"))

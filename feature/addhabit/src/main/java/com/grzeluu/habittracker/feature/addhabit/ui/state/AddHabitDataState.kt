@@ -15,7 +15,8 @@ data class AddHabitDataState(
     val selectedDaysField: FieldState<List<Day>>,
     val dailyEffort: String?,
     val effortUnit: EffortUnit,
-    val notificationSettings: NotificationSettings
+    val notificationSettings: NotificationSettings,
+    val isPushNotificationsEnabled: Boolean
 )
 
 data class NotificationSettings(
