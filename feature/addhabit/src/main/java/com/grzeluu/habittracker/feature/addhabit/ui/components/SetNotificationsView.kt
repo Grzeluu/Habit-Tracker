@@ -1,6 +1,8 @@
 package com.grzeluu.habittracker.feature.addhabit.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
@@ -17,6 +19,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -31,6 +35,8 @@ fun SetNotificationsView(
     onNotificationsEnabledChange: (Boolean) -> Unit,
     onShowTimePicker: () -> Unit,
 ) {
+    val focusRequester = remember { FocusRequester() }
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -40,10 +46,19 @@ fun SetNotificationsView(
             Spacer(modifier = Modifier.weight(1f))
             Switch(
                 checked = notificationSettings.isEnabled,
-                onCheckedChange = onNotificationsEnabledChange
+                onCheckedChange = {
+                    onNotificationsEnabledChange(it)
+                }
             )
         }
-        AnimatedVisibility(visible = notificationSettings.isEnabled) {
+        AnimatedVisibility(
+            visible = notificationSettings.isEnabled,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            LaunchedEffect(Unit) {
+                focusRequester.requestFocus()
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -53,7 +68,9 @@ fun SetNotificationsView(
             ) {
                 CustomTextField(
                     label = stringResource(R.string.notification_time),
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .focusRequester(focusRequester),
                     interactionSource = remember { MutableInteractionSource() }
                         .also { interactionSource ->
                             LaunchedEffect(interactionSource) {

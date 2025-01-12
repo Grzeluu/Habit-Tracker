@@ -192,7 +192,7 @@ fun AddHabitScreen(
                     onNotificationsEnabledChange = { viewModel.onEvent(AddHabitEvent.OnNotificationsEnabledChanged(it)) },
                     onShowTimePicker = { isNotificationTimeDialogVisible = true }
                 )
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(72.dp))
             }
         }
     }
