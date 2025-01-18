@@ -17,7 +17,7 @@ The application is currently under development, but its key features are fully f
 - Light and dark mode
 - Material3 components
 ### Upcoming:
-- Push notifications
+- Notifications
 - Chart fixes
 - Unit tests
 
