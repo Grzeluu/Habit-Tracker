@@ -4,13 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.domain.error.BaseError
 import com.grzeluu.habittracker.base.domain.result.Result
-import com.grzeluu.habittracker.base.ui.BaseViewModel
+import com.grzeluu.habittracker.base.ui.UiStateViewModel
 import com.grzeluu.habittracker.common.ui.state.FieldState
 import com.grzeluu.habittracker.common.ui.text.UiText
 import com.grzeluu.habittracker.component.habit.domain.error.HabitValidationError
 import com.grzeluu.habittracker.component.habit.domain.model.Habit
 import com.grzeluu.habittracker.component.habit.domain.model.HabitDesiredEffort
-import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
+import com.grzeluu.habittracker.component.habit.domain.model.HabitNotificationSetting
 import com.grzeluu.habittracker.component.habit.domain.usecase.AddOrUpdateHabitUseCase
 import com.grzeluu.habittracker.component.habit.domain.usecase.GetHabitUseCase
 import com.grzeluu.habittracker.component.settings.domain.usecase.GetSettingsUseCase
@@ -50,7 +50,7 @@ class AddHabitViewModel @Inject constructor(
     private val getSettingsUseCase: GetSettingsUseCase,
     private val addOrUpdateHabitUseCase: AddOrUpdateHabitUseCase,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel<AddHabitDataState>() {
+) : UiStateViewModel<AddHabitDataState>() {
 
     val habitId = savedStateHandle.get<Long?>(AddHabitArgument.HABIT_ID)
 
@@ -176,8 +176,8 @@ class AddHabitViewModel @Inject constructor(
         _selectedDays.emit(habit.desirableDays)
         _dailyEffort.emit(habit.effort.desiredValue.formatFloat())
         _effortUnit.emit(habit.effort.effortUnit)
-        _isNotificationEnabled.emit(habit.habitNotification is HabitNotification.Enabled)
-        (habit.habitNotification as? HabitNotification.Enabled)?.let { _notificationTime.emit((it.time)) }
+        _isNotificationEnabled.emit(habit.notification is HabitNotificationSetting.Enabled)
+        (habit.notification as? HabitNotificationSetting.Enabled)?.let { _notificationTime.emit((it.time)) }
     }
 
     fun onEvent(event: AddHabitEvent) {
@@ -249,7 +249,7 @@ class AddHabitViewModel @Inject constructor(
                         desiredValue = dailyEffort.value?.toFloat() ?: 1f, effortUnit = effortUnit.value
                     ),
                     additionDate = getCurrentDate(),
-                    habitNotification = if (isNotificationEnabled.value) HabitNotification.Enabled(notificationTime.value) else HabitNotification.Disabled
+                    notification = if (isNotificationEnabled.value) HabitNotificationSetting.Enabled(notificationTime.value) else HabitNotificationSetting.Disabled
                 )
             )
             when (result) {

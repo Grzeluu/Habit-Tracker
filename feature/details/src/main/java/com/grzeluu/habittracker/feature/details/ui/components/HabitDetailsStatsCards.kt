@@ -14,8 +14,7 @@ import com.grzeluu.habittracker.common.ui.mapper.mapToColor
 import com.grzeluu.habittracker.component.habit.domain.model.Habit
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.mapper.mapToUiText
-import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
-import com.grzeluu.habittracker.util.datetime.format
+import com.grzeluu.habittracker.component.habit.domain.model.HabitNotificationSetting
 import com.grzeluu.habittracker.util.datetime.getCurrentDate
 import com.grzeluu.habittracker.util.numbers.formatFloat
 
@@ -59,8 +58,8 @@ fun HabitDetailsStatsCards(
                 modifier = Modifier.weight(1f),
                 iconPainter = painterResource(R.drawable.ic_notification),
                 label = stringResource(R.string.notification),
-                iconColor = if (habitNotification is HabitNotification.Enabled) color.mapToColor() else null,
-                body = if (habitNotification is HabitNotification.Enabled) (habitNotification as HabitNotification.Enabled).time.toString() else "-"
+                iconColor = if (notification is HabitNotificationSetting.Enabled) color.mapToColor() else null,
+                body = if (notification is HabitNotificationSetting.Enabled) (notification as HabitNotificationSetting.Enabled).time.toString() else "-"
             )
         }
     }

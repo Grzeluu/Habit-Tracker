@@ -2,7 +2,7 @@ package com.grzeluu.habittracker.activity.ui
 
 import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.activity.ui.state.MainActivityStateData
-import com.grzeluu.habittracker.base.ui.BaseViewModel
+import com.grzeluu.habittracker.base.ui.UiStateViewModel
 import com.grzeluu.habittracker.component.settings.domain.model.Settings
 import com.grzeluu.habittracker.component.settings.domain.usecase.CheckIsSettingsDefinedUseCase
 import com.grzeluu.habittracker.component.settings.domain.usecase.GetSettingsUseCase
@@ -22,7 +22,7 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(
     private val getSettingsUseCase: GetSettingsUseCase,
     private val checkIsSettingsDefinedUseCase: CheckIsSettingsDefinedUseCase,
-) : BaseViewModel<MainActivityStateData>() {
+) : UiStateViewModel<MainActivityStateData>() {
 
     private var _settings = MutableStateFlow<Settings?>(null)
     private val settings: StateFlow<Settings?> = _settings

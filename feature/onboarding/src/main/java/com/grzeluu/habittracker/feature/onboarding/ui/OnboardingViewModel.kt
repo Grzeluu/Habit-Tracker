@@ -1,7 +1,7 @@
 package com.grzeluu.habittracker.feature.onboarding.ui
 
 import androidx.lifecycle.viewModelScope
-import com.grzeluu.habittracker.base.ui.BaseViewModel
+import com.grzeluu.habittracker.base.ui.UiStateViewModel
 import com.grzeluu.habittracker.component.settings.domain.usecase.GetSettingsUseCase
 import com.grzeluu.habittracker.component.settings.domain.usecase.SaveSettingsUseCase
 import com.grzeluu.habittracker.feature.onboarding.ui.event.OnboardingEvent
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(
     private val saveSettingsUseCase: SaveSettingsUseCase,
     private val getSettingsUseCase: GetSettingsUseCase
-) : BaseViewModel<OnboardingStateData>() {
+) : UiStateViewModel<OnboardingStateData>() {
 
     private val navigationChannel = Channel<OnboardingNavigationEvent>()
     val navigationEventsChannelFlow = navigationChannel.receiveAsFlow()

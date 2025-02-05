@@ -31,7 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.grzeluu.habittracker.base.ui.BaseScreenContainer
+import com.grzeluu.habittracker.base.ui.UiStateScreenContainer
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.label.BasicLabel
 import com.grzeluu.habittracker.common.ui.mapper.mapToColor
@@ -82,7 +82,7 @@ fun DetailsScreen(
             onEdit = { onNavigateToAddHabit(viewModel.habitId) },
             onArchive = { isArchiveDialogVisible = true })
     }) { innerPadding ->
-        BaseScreenContainer(
+        UiStateScreenContainer(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(), uiState

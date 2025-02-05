@@ -1,7 +1,7 @@
 package com.grzeluu.habittracker.feature.home.ui.page
 
 import androidx.lifecycle.viewModelScope
-import com.grzeluu.habittracker.base.ui.BaseViewModel
+import com.grzeluu.habittracker.base.ui.UiStateViewModel
 import com.grzeluu.habittracker.component.habit.domain.model.DailyHabitInfo
 import com.grzeluu.habittracker.component.habit.domain.model.HabitHistoryEntry
 import com.grzeluu.habittracker.component.habit.domain.usecase.GetDailyHabitInfosUseCase
@@ -33,7 +33,7 @@ class DailyViewModel @AssistedInject constructor(
     @Assisted val date: LocalDate,
     private val getDailyHabitInfosUseCase: GetDailyHabitInfosUseCase,
     private val saveHabitHistoryEntryUseCase: SaveHabitHistoryEntryUseCase
-) : BaseViewModel<DailyDataState>() {
+) : UiStateViewModel<DailyDataState>() {
 
     @AssistedFactory
     interface DailyViewModelFactory {

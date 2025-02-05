@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.grzeluu.habittracker.base.ui.BaseScreenContainer
+import com.grzeluu.habittracker.base.ui.UiStateScreenContainer
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.label.BasicLabel
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
@@ -25,7 +25,7 @@ fun HabitsListScreen(
 ) {
     val viewModel: HabitsListViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
-    BaseScreenContainer(
+    UiStateScreenContainer(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = AppSizes.screenPadding),

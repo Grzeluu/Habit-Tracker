@@ -9,16 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.grzeluu.habittracker.activity.ui.navigation.app.AppNavHost
 import com.grzeluu.habittracker.activity.ui.navigation.app.NavRoute
 import com.grzeluu.habittracker.activity.ui.state.MainActivityStateData
-import com.grzeluu.habittracker.base.ui.BaseScreenContainer
+import com.grzeluu.habittracker.base.ui.UiStateScreenContainer
 import com.grzeluu.habittracker.base.ui.state.UiState
 import com.grzeluu.habittracker.common.ui.theme.HabitTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,7 +39,7 @@ class MainActivity : ComponentActivity() {
                     WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = !isDarkMode
                 }
 
-                BaseScreenContainer(
+                UiStateScreenContainer(
                     modifier = Modifier.fillMaxSize(),
                     uiState = uiState
                 ) { data ->

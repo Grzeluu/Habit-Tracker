@@ -17,7 +17,7 @@ data class Habit(
     val color: CardColor,
     val description: String?,
     val desirableDays: List<Day>,
-    val habitNotification: HabitNotification,
+    val notification: HabitNotificationSetting,
     val effort: HabitDesiredEffort,
     val additionDate: LocalDate,
     val history: List<HabitHistoryEntry> = emptyList(),

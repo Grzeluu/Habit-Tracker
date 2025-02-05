@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.grzeluu.habittracker.base.ui.BaseScreenContainer
+import com.grzeluu.habittracker.base.ui.UiStateScreenContainer
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
 import com.grzeluu.habittracker.feature.home.ui.components.DaysOfWeekRow
@@ -34,7 +34,7 @@ fun HabitsScreen(
     val viewModel: HomeViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
 
-    BaseScreenContainer(
+    UiStateScreenContainer(
         modifier = Modifier.fillMaxSize(),
         uiState = uiState,
     ) { data ->

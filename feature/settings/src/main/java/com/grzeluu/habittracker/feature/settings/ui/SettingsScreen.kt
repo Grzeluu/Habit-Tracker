@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -23,7 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.grzeluu.habittracker.base.ui.BaseScreenContainer
+import com.grzeluu.habittracker.base.ui.UiStateScreenContainer
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
 import com.grzeluu.habittracker.common.ui.permission.NotificationPermissionRationale
@@ -46,7 +45,7 @@ fun SettingsScreen() {
         onPermissionDenied = { isNotificationPermissionDialogVisible = true }
     )
 
-    BaseScreenContainer(
+    UiStateScreenContainer(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = AppSizes.screenPadding),

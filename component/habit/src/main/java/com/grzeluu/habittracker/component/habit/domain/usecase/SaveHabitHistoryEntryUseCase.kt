@@ -4,8 +4,9 @@ import com.grzeluu.habittracker.base.domain.error.BaseError
 import com.grzeluu.habittracker.base.domain.result.Result
 import com.grzeluu.habittracker.base.domain.usecase.UseCase
 import com.grzeluu.habittracker.component.habit.domain.model.HabitHistoryEntry
-import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
+import com.grzeluu.habittracker.component.habit.domain.model.HabitNotificationSetting
 import com.grzeluu.habittracker.component.habit.domain.repository.HabitRepository
+import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -21,7 +22,13 @@ class SaveHabitHistoryEntryUseCase @Inject constructor(
 
     override suspend fun execute(params: Request): Result<Unit, BaseError> {
         return try {
+            val archivedHabit = habitRepository.getHabit(params.habitId).firstOrNull()
+                ?: return Result.Error(BaseError.READ_ERROR)
+
             habitRepository.addHabitHistoryEntry(params.habitId, params.historyEntry)
+            if (archivedHabit.notification is HabitNotificationSetting.Enabled) {
+                //TODO update notification
+            }
             Result.Success(Unit)
         } catch (e: Exception) {
             Timber.e(e)
