@@ -1,7 +1,7 @@
 package com.grzeluu.habittracker.feature.calendar.ui
 
 import androidx.lifecycle.viewModelScope
-import com.grzeluu.habittracker.base.ui.BaseViewModel
+import com.grzeluu.habittracker.base.ui.UiStateViewModel
 import com.grzeluu.habittracker.component.habit.domain.model.Habit
 import com.grzeluu.habittracker.component.habit.domain.usecase.GetHabitsUseCase
 import com.grzeluu.habittracker.feature.calendar.ui.model.HabitsListDataState
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HabitsListViewModel @Inject constructor(
     private val getHabits: GetHabitsUseCase
-) : BaseViewModel<HabitsListDataState>() {
+) : UiStateViewModel<HabitsListDataState>() {
 
     private val _activeHabits = MutableStateFlow<List<Habit>>(emptyList())
     private val activeHabits: StateFlow<List<Habit>> = _activeHabits.asStateFlow()

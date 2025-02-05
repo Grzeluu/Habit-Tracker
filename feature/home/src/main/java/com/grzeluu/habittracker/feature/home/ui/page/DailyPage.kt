@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.grzeluu.habittracker.base.ui.BaseScreenContainer
+import com.grzeluu.habittracker.base.ui.UiStateScreenContainer
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.label.BasicLabel
 import com.grzeluu.habittracker.common.ui.mapper.mapToUiText
@@ -68,7 +67,7 @@ fun DailyPage(
         )
     }
 
-    BaseScreenContainer(
+    UiStateScreenContainer(
         modifier = modifier.fillMaxSize(),
         uiState = uiState,
     ) { data ->

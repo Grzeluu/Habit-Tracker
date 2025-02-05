@@ -1,6 +1,5 @@
 package com.grzeluu.habittracker.base.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.domain.error.Error
@@ -22,7 +21,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 
-abstract class BaseViewModel<DATA> : ViewModel() {
+abstract class UiStateViewModel<DATA> : ViewModel() {
 
     protected val loadingState: LoadingState = LoadingState()
 

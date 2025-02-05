@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.grzeluu.habittracker.base.domain.error.BaseError
 import com.grzeluu.habittracker.base.domain.result.Result
-import com.grzeluu.habittracker.base.ui.BaseViewModel
+import com.grzeluu.habittracker.base.ui.UiStateViewModel
 import com.grzeluu.habittracker.common.ui.state.FieldState
 import com.grzeluu.habittracker.common.ui.text.UiText
 import com.grzeluu.habittracker.component.habit.domain.error.HabitValidationError
@@ -50,7 +50,7 @@ class AddHabitViewModel @Inject constructor(
     private val getSettingsUseCase: GetSettingsUseCase,
     private val addOrUpdateHabitUseCase: AddOrUpdateHabitUseCase,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel<AddHabitDataState>() {
+) : UiStateViewModel<AddHabitDataState>() {
 
     val habitId = savedStateHandle.get<Long?>(AddHabitArgument.HABIT_ID)
 

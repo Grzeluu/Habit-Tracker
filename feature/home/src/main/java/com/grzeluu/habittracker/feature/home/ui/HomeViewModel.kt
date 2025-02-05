@@ -1,7 +1,7 @@
 package com.grzeluu.habittracker.feature.home.ui
 
 import androidx.lifecycle.viewModelScope
-import com.grzeluu.habittracker.base.ui.BaseViewModel
+import com.grzeluu.habittracker.base.ui.UiStateViewModel
 import com.grzeluu.habittracker.component.habit.domain.usecase.CheckIfHabitsAreAddedUseCase
 import com.grzeluu.habittracker.feature.home.ui.event.HomeEvent
 import com.grzeluu.habittracker.feature.home.ui.state.HomeDataState
@@ -25,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val checkIfHabitsAreAddedUseCase: CheckIfHabitsAreAddedUseCase
-) : BaseViewModel<HomeDataState>() {
+) : UiStateViewModel<HomeDataState>() {
 
     private val _areHabitsAdded = MutableStateFlow<Boolean?>(null)
     private val areHabitsAdded: StateFlow<Boolean?> = _areHabitsAdded.asStateFlow()

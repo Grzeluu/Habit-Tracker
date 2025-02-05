@@ -8,7 +8,7 @@ import com.grzeluu.habittracker.common.ui.error.GenericErrorView
 import com.grzeluu.habittracker.common.ui.loading.LoadingView
 
 @Composable
-fun <DATA> BaseScreenContainer(
+fun <DATA> UiStateScreenContainer(
     modifier: Modifier = Modifier,
     uiState: UiState<DATA>,
     content: @Composable (DATA) -> Unit

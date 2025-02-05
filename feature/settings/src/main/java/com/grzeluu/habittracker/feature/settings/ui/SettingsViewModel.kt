@@ -1,7 +1,7 @@
 package com.grzeluu.habittracker.feature.settings.ui
 
 import androidx.lifecycle.viewModelScope
-import com.grzeluu.habittracker.base.ui.BaseViewModel
+import com.grzeluu.habittracker.base.ui.UiStateViewModel
 import com.grzeluu.habittracker.component.settings.domain.usecase.GetSettingsUseCase
 import com.grzeluu.habittracker.component.settings.domain.usecase.SaveSettingsUseCase
 import com.grzeluu.habittracker.feature.settings.event.SettingsEvent
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val saveSettings: SaveSettingsUseCase,
     private val getSettings: GetSettingsUseCase
-) : BaseViewModel<SettingsStateData>() {
+) : UiStateViewModel<SettingsStateData>() {
 
     private var _isDarkModeEnabled = MutableStateFlow<Boolean?>(null)
     private val isDarkModeEnabled: StateFlow<Boolean?> = _isDarkModeEnabled
