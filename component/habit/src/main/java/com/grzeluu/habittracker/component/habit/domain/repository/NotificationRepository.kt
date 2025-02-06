@@ -4,4 +4,6 @@ import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
 
 interface NotificationRepository {
     suspend fun addOrUpdateHabitNotification(habitNotification: HabitNotification)
+
+    suspend fun deleteNotificationsByHabitId(id: Long)
 }

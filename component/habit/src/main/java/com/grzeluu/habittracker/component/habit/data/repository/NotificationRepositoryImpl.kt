@@ -12,6 +12,10 @@ class NotificationRepositoryImpl @Inject constructor(
     private val notificationDao: NotificationDao
 ) : NotificationRepository {
     override suspend fun addOrUpdateHabitNotification(habitNotification: HabitNotification) {
-        return notificationDao.addOrUpdateHabitNotification(habitNotification.mapToEntity())
+        notificationDao.addOrUpdateHabitNotification(habitNotification.mapToEntity())
+    }
+
+    override suspend fun deleteNotificationsByHabitId(id: Long) {
+        notificationDao.deleteHabitNotificationByHabitId(id)
     }
 }

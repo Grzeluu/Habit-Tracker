@@ -4,15 +4,20 @@ import com.grzeluu.habittracker.base.domain.error.BaseError
 import com.grzeluu.habittracker.base.domain.result.Result
 import com.grzeluu.habittracker.base.domain.usecase.UseCase
 import com.grzeluu.habittracker.component.habit.domain.model.HabitHistoryEntry
+import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
 import com.grzeluu.habittracker.component.habit.domain.model.HabitNotificationSetting
 import com.grzeluu.habittracker.component.habit.domain.repository.HabitRepository
+import com.grzeluu.habittracker.component.habit.domain.repository.NotificationRepository
+import com.grzeluu.habittracker.component.habit.domain.scheduler.NotificationScheduler
 import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
 import javax.inject.Inject
 
 
 class SaveHabitHistoryEntryUseCase @Inject constructor(
-    private val habitRepository: HabitRepository
+    private val habitRepository: HabitRepository,
+    private val notificationRepository: NotificationRepository,
+    private val notificationScheduler: NotificationScheduler
 ) : UseCase<SaveHabitHistoryEntryUseCase.Request, Unit, BaseError>() {
 
     data class Request(
@@ -22,12 +27,15 @@ class SaveHabitHistoryEntryUseCase @Inject constructor(
 
     override suspend fun execute(params: Request): Result<Unit, BaseError> {
         return try {
-            val archivedHabit = habitRepository.getHabit(params.habitId).firstOrNull()
+            val habit = habitRepository.getHabit(params.habitId).firstOrNull()
                 ?: return Result.Error(BaseError.READ_ERROR)
-
             habitRepository.addHabitHistoryEntry(params.habitId, params.historyEntry)
-            if (archivedHabit.notification is HabitNotificationSetting.Enabled) {
-                //TODO update notification
+
+            if (habit.notification is HabitNotificationSetting.Enabled
+                && params.historyEntry.currentEffort >= habit.effort.desiredValue
+            ) {
+                val notification = notificationScheduler.calculateNextNotificationForHabit(habit.id)
+                notificationRepository.addOrUpdateHabitNotification(notification)
             }
             Result.Success(Unit)
         } catch (e: Exception) {
