@@ -16,10 +16,11 @@ The application is currently under development, but its key features are fully f
 - Application settings
 - Light and dark mode
 - Material3 components
-### Upcoming:
+### In progress:
 - Notifications
-- Chart fixes
 - Unit tests
+### Upcoming:
+- Chart fixes
 
 ## Details
 ### Architecture
