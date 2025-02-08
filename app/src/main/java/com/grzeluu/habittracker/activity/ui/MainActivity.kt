@@ -19,7 +19,6 @@ import com.grzeluu.habittracker.activity.ui.state.MainActivityStateData
 import com.grzeluu.habittracker.base.ui.UiStateScreenContainer
 import com.grzeluu.habittracker.base.ui.state.UiState
 import com.grzeluu.habittracker.common.ui.theme.HabitTrackerTheme
-import com.grzeluu.habittracker.feature.notifications.manager.NotificationWorker
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,9 +30,8 @@ class MainActivity : ComponentActivity() {
             val viewModel = hiltViewModel<MainActivityViewModel>()
             val uiState by viewModel.uiState.collectAsState()
 
-            val isDarkMode = (uiState as? UiState.Success<MainActivityStateData>)?.data?.settings?.isDarkModeEnabled ?: isSystemInDarkTheme()
-
-            NotificationWorker.schedulePeriodicWorker(applicationContext)
+            val isDarkMode = (uiState as? UiState.Success<MainActivityStateData>)?.data?.settings?.isDarkModeEnabled
+                ?: isSystemInDarkTheme()
 
             HabitTrackerTheme(
                 darkTheme = isDarkMode

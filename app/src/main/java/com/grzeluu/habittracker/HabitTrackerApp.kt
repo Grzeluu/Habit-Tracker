@@ -1,31 +1,23 @@
 package com.grzeluu.habittracker
 
 import android.app.Application
-import android.util.Log
-import androidx.work.Configuration
-import com.grzeluu.habittracker.activity.di.NotificationWorkerFactory
-import com.grzeluu.habittracker.feature.notifications.manager.NotificationWorker
+import com.grzeluu.habittracker.component.habit.infrastructure.NotificationScheduler
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltAndroidApp
-class HabitTrackerApp @Inject constructor() : Application(), Configuration.Provider {
+class HabitTrackerApp @Inject constructor() : Application() {
 
     @Inject
-    lateinit var workerFactory: NotificationWorkerFactory
+    lateinit var notificationManager: NotificationScheduler
 
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+        notificationManager.initNotificationChannel()
     }
-
-    override val workManagerConfiguration: Configuration
-        get() = Configuration.Builder()
-            .setMinimumLoggingLevel(Log.DEBUG)
-            .setWorkerFactory(workerFactory)
-            .build()
 }
 

@@ -47,8 +47,6 @@ dependencies {
 
     implementation(libs.android.hilt)
     implementation(libs.android.hilt.navigation)
-    implementation(libs.androidx.work.runtime.ktx)
-    implementation(libs.androidx.hilt.common)
     ksp(libs.android.hilt.compiler)
     implementation(libs.kotlinx.metadata)
     implementation(libs.kotlinx.datetime)

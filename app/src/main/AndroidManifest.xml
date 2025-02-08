@@ -19,13 +19,8 @@
         tools:targetApi="34">
 
         <receiver
-            android:name=".feature.notifications.manager.NotificationReceiver"
+            android:name=".component.habit.data.receiver.NotificationReceiver"
             android:exported="false" />
-
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
-            tools:node="remove" />
 
         <activity
             android:name=".activity.ui.MainActivity"

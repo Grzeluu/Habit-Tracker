@@ -5,8 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface NotificationRepository {
     fun getHabitsNotification(): Flow<List<HabitNotification>>
-
     suspend fun addOrUpdateHabitNotification(habitNotification: HabitNotification)
-
-    suspend fun deleteNotificationsByHabitId(id: Long)
+    suspend fun deleteHabitNotificationByHabitId(notificationId: Long): HabitNotification?
 }

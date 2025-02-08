@@ -1,6 +1,5 @@
-package com.grzeluu.habittracker.feature.notifications.manager
+package com.grzeluu.habittracker.component.habit.data.receiver
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -9,11 +8,10 @@ import androidx.core.app.NotificationCompat
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.mapper.mapToDrawableRes
 import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
-import com.grzeluu.habittracker.feature.notifications.manager.AppNotificationManager.Companion.NOTIFICATION_CHANNEL_ID
+import com.grzeluu.habittracker.component.habit.infrastructure.NotificationSchedulerImpl.Companion.NOTIFICATION_CHANNEL_ID
 import timber.log.Timber
 
-class NotificationReceiver : BroadcastReceiver() {
-
+class NotificationReceiver() : BroadcastReceiver() {
     companion object {
         const val HABIT_ID = "habit_id"
         const val HABIT_TITLE = "habit_title"
@@ -27,7 +25,6 @@ class NotificationReceiver : BroadcastReceiver() {
             putExtra(ICON_RES_IS, habitNotification.habit.icon.mapToDrawableRes())
         }
     }
-
 
     override fun onReceive(context: Context, intent: Intent) {
         val habitId = requireNotNull(intent.getLongExtra(HABIT_ID, -1))

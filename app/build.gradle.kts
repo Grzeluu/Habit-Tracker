@@ -76,7 +76,6 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.android.hilt)
     implementation(libs.android.hilt.navigation)
-    implementation(libs.androidx.hilt.work)
     ksp(libs.android.hilt.compiler)
     implementation(libs.kotlinx.metadata)
     implementation(libs.timber)

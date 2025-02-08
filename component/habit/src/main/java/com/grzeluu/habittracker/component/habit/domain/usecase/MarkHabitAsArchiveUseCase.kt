@@ -4,11 +4,11 @@ package com.grzeluu.habittracker.component.habit.domain.usecase
 import com.grzeluu.habittracker.base.domain.error.BaseError
 import com.grzeluu.habittracker.base.domain.result.Result
 import com.grzeluu.habittracker.base.domain.usecase.UseCase
-import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
 import com.grzeluu.habittracker.component.habit.domain.model.HabitNotificationSetting
 import com.grzeluu.habittracker.component.habit.domain.repository.HabitRepository
 import com.grzeluu.habittracker.component.habit.domain.repository.NotificationRepository
-import com.grzeluu.habittracker.component.habit.domain.scheduler.NotificationScheduler
+import com.grzeluu.habittracker.component.habit.domain.scheduler.NotificationManager
+import com.grzeluu.habittracker.component.habit.infrastructure.NotificationScheduler
 import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
 import javax.inject.Inject
@@ -17,6 +17,7 @@ import javax.inject.Inject
 class MarkHabitAsArchiveUseCase @Inject constructor(
     private val habitRepository: HabitRepository,
     private val notificationRepository: NotificationRepository,
+    private val notificationManager: NotificationManager,
     private val notificationScheduler: NotificationScheduler
 ) : UseCase<MarkHabitAsArchiveUseCase.Request, Unit, BaseError>() {
 
@@ -34,10 +35,12 @@ class MarkHabitAsArchiveUseCase @Inject constructor(
 
             if (archivedHabit.notification is HabitNotificationSetting.Enabled) {
                 if (params.isArchived) {
-                    notificationRepository.deleteNotificationsByHabitId(archivedHabit.id)
+                    val notification = notificationRepository.deleteHabitNotificationByHabitId(params.habitId)
+                    notification?.let { notificationScheduler.cancelNotification(it) }
                 } else {
-                    val notification = notificationScheduler.calculateNextNotificationForHabit(archivedHabit)
+                    val notification = notificationManager.calculateNextNotificationForHabit(archivedHabit)
                     notificationRepository.addOrUpdateHabitNotification(notification)
+                    notificationScheduler.scheduleNotification(notification)
                 }
             }
             Result.Success(Unit)

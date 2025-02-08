@@ -14,8 +14,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NotificationSchedulerImpl @Inject constructor(
-) : NotificationScheduler {
+class NotificationManagerImpl @Inject constructor(
+) : NotificationManager {
+
 
     override suspend fun calculateNextNotificationForHabit(habit: Habit): HabitNotification {
         val currentTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())

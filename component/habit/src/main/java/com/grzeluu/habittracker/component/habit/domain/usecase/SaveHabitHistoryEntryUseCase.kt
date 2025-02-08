@@ -4,11 +4,11 @@ import com.grzeluu.habittracker.base.domain.error.BaseError
 import com.grzeluu.habittracker.base.domain.result.Result
 import com.grzeluu.habittracker.base.domain.usecase.UseCase
 import com.grzeluu.habittracker.component.habit.domain.model.HabitHistoryEntry
-import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
 import com.grzeluu.habittracker.component.habit.domain.model.HabitNotificationSetting
 import com.grzeluu.habittracker.component.habit.domain.repository.HabitRepository
 import com.grzeluu.habittracker.component.habit.domain.repository.NotificationRepository
-import com.grzeluu.habittracker.component.habit.domain.scheduler.NotificationScheduler
+import com.grzeluu.habittracker.component.habit.domain.scheduler.NotificationManager
+import com.grzeluu.habittracker.component.habit.infrastructure.NotificationScheduler
 import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
 import javax.inject.Inject
@@ -17,7 +17,8 @@ import javax.inject.Inject
 class SaveHabitHistoryEntryUseCase @Inject constructor(
     private val habitRepository: HabitRepository,
     private val notificationRepository: NotificationRepository,
-    private val notificationScheduler: NotificationScheduler
+    private val notificationManager: NotificationManager,
+    private val notificationScheduler: NotificationScheduler,
 ) : UseCase<SaveHabitHistoryEntryUseCase.Request, Unit, BaseError>() {
 
     data class Request(
@@ -34,8 +35,9 @@ class SaveHabitHistoryEntryUseCase @Inject constructor(
             if (habit.notification is HabitNotificationSetting.Enabled
                 && params.historyEntry.currentEffort >= habit.effort.desiredValue
             ) {
-                val notification = notificationScheduler.calculateNextNotificationForHabit(habit)
+                val notification = notificationManager.calculateNextNotificationForHabit(habit)
                 notificationRepository.addOrUpdateHabitNotification(notification)
+                notificationScheduler.scheduleNotification(notification)
             }
             Result.Success(Unit)
         } catch (e: Exception) {

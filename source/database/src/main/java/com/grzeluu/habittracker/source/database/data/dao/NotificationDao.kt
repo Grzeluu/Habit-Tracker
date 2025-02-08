@@ -19,6 +19,10 @@ interface NotificationDao {
     @Query("SELECT * FROM habits_notifications INNER JOIN habits ON habits.id = habits_notifications.habit_id")
     fun getAllNotifications(): Flow<List<HabitNotificationWithHabitEntity>>
 
+    @Transaction
+    @Query("SELECT * FROM habits_notifications INNER JOIN habits ON habits.id = habits_notifications.habit_id WHERE habit_id = :habitId")
+    fun getNotificationByHabitId(habitId: Long): Flow<HabitNotificationWithHabitEntity?>
+
     @Query("DELETE FROM habits_notifications WHERE habit_id = :habitId")
     suspend fun deleteHabitNotificationByHabitId(habitId: Long)
 
