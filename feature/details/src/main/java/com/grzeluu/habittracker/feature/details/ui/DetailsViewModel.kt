@@ -2,7 +2,7 @@ package com.grzeluu.habittracker.feature.details.ui
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.grzeluu.habittracker.base.ui.BaseViewModel
+import com.grzeluu.habittracker.base.ui.UiStateViewModel
 import com.grzeluu.habittracker.component.habit.domain.model.Habit
 import com.grzeluu.habittracker.component.habit.domain.model.HabitHistoryEntry
 import com.grzeluu.habittracker.component.habit.domain.usecase.MarkHabitAsArchiveUseCase
@@ -42,7 +42,7 @@ class DetailsViewModel @Inject constructor(
     private val markHabitAsArchiveUseCase: MarkHabitAsArchiveUseCase,
     private val saveHabitHistoryEntryUseCase: SaveHabitHistoryEntryUseCase,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel<DetailsDataState>() {
+) : UiStateViewModel<DetailsDataState>() {
 
     val habitId = requireNotNull(savedStateHandle.get<Long>(DetailsArguments.HABIT_ID))
 

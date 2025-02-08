@@ -1,8 +1,8 @@
 package com.grzeluu.habittracker.component.habit.domain.model
 
-import kotlinx.datetime.LocalTime
+import kotlinx.datetime.LocalDateTime
 
-sealed class HabitNotification {
-    data object Disabled : HabitNotification()
-    data class Enabled(val time: LocalTime) : HabitNotification()
-}
+data class HabitNotification(
+    val dateTime: LocalDateTime,
+    val habit: Habit
+)

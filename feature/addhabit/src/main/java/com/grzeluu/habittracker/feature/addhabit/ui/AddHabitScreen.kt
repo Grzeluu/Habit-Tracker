@@ -33,7 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.grzeluu.habittracker.base.ui.BaseScreenContainer
+import com.grzeluu.habittracker.base.ui.UiStateScreenContainer
 import com.grzeluu.habittracker.common.ui.R
 import com.grzeluu.habittracker.common.ui.label.BasicLabel
 import com.grzeluu.habittracker.common.ui.padding.AppSizes
@@ -100,7 +100,7 @@ fun AddHabitScreen(
             )
         },
     ) { innerPadding ->
-        BaseScreenContainer(
+        UiStateScreenContainer(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(),

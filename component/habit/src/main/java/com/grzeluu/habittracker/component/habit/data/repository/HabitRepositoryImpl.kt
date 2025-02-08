@@ -38,11 +38,12 @@ class HabitRepositoryImpl @Inject constructor(
         return habitDao.getHabitsCount()
     }
 
-    override suspend fun addOrUpdateHabit(habit: Habit) {
-        if (habit.id == 0L) {
+    override suspend fun addOrUpdateHabit(habit: Habit): Long {
+        return if (habit.id == 0L) {
             habitDao.insertHabit(habit.mapToEntity())
         } else {
             habitDao.updateHabit(habit.mapToEntity())
+            habit.id
         }
     }
 
@@ -54,7 +55,7 @@ class HabitRepositoryImpl @Inject constructor(
         return habitDao.deleteHabit(habit.mapToEntity())
     }
 
-    override suspend fun markHabitAsArchived(habitId: Long, isArchive: Boolean) {
-        return habitDao.markHabitAsArchived(habitId, isArchive)
+    override suspend fun markHabitAsArchived(habitId: Long, isArchived: Boolean) {
+        return habitDao.markHabitAsArchived(habitId, isArchived)
     }
 }

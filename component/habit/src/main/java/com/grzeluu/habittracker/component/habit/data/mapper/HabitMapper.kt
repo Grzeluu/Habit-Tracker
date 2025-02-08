@@ -4,7 +4,7 @@ import com.grzeluu.habittracker.component.habit.domain.model.DailyHabitInfo
 import com.grzeluu.habittracker.component.habit.domain.model.Habit
 import com.grzeluu.habittracker.component.habit.domain.model.HabitDesiredEffort
 import com.grzeluu.habittracker.component.habit.domain.model.HabitHistoryEntry
-import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
+import com.grzeluu.habittracker.component.habit.domain.model.HabitNotificationSetting
 import com.grzeluu.habittracker.source.database.data.model.HabitEntity
 import com.grzeluu.habittracker.source.database.data.model.HabitHistoryEntryEntity
 import com.grzeluu.habittracker.source.database.data.model.HabitWithHistoryDbModel
@@ -29,8 +29,8 @@ fun Habit.mapToEntity() =
         colorValue = color.name,
         description = description,
         desirableDays = desirableDays.map { it.name },
-        isNotificationEnabled = habitNotification is HabitNotification.Enabled,
-        notificationTime = if (habitNotification is HabitNotification.Enabled) habitNotification.time else null,
+        isNotificationEnabled = notification is HabitNotificationSetting.Enabled,
+        notificationTime = if (notification is HabitNotificationSetting.Enabled) notification.time else null,
         effortUnit = effort.effortUnit.name,
         desiredEffortValue = effort.desiredValue,
         additionDate = additionDate,
@@ -76,7 +76,7 @@ fun HabitWithHistoryDbModel.mapToDomain() = Habit(
         desiredValue = habit.desiredEffortValue
     ),
     history = historyEntries.map { it.mapToDomain() },
-    habitNotification = if (habit.isNotificationEnabled) HabitNotification.Enabled(habit.notificationTime!!) else HabitNotification.Disabled,
+    notification = if (habit.isNotificationEnabled) HabitNotificationSetting.Enabled(habit.notificationTime!!) else HabitNotificationSetting.Disabled,
     additionDate = habit.additionDate,
     isArchive = habit.isArchive,
     desirableDays = habit.desirableDays.map { Day.valueOf(it) }
