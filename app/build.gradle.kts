@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.grzeluu.habittracker"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.grzeluu.habittracker"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.android.hilt)
     implementation(libs.android.hilt.navigation)
+    implementation(libs.androidx.hilt.work)
     ksp(libs.android.hilt.compiler)
     implementation(libs.kotlinx.metadata)
     implementation(libs.timber)

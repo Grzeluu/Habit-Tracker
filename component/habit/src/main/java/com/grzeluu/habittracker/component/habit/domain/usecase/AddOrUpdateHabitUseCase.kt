@@ -5,7 +5,6 @@ import com.grzeluu.habittracker.base.domain.result.Result
 import com.grzeluu.habittracker.base.domain.usecase.UseCase
 import com.grzeluu.habittracker.component.habit.domain.error.HabitValidationError
 import com.grzeluu.habittracker.component.habit.domain.model.Habit
-import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
 import com.grzeluu.habittracker.component.habit.domain.model.HabitNotificationSetting
 import com.grzeluu.habittracker.component.habit.domain.repository.HabitRepository
 import com.grzeluu.habittracker.component.habit.domain.repository.NotificationRepository
@@ -24,10 +23,11 @@ class AddOrUpdateHabitUseCase @Inject constructor(
             if (params.name.isEmpty()) return Result.Error(HabitValidationError.EMPTY_NAME)
             if (params.desirableDays.isEmpty()) return Result.Error(HabitValidationError.EMPTY_DAYS)
 
-            val habitId = habitRepository.addOrUpdateHabit(params)
+
+            val habit = params.copy(id = habitRepository.addOrUpdateHabit(params))
 
             if (params.notification is HabitNotificationSetting.Enabled) {
-                val notification = notificationScheduler.calculateNextNotificationForHabit(habitId)
+                val notification = notificationScheduler.calculateNextNotificationForHabit(habit)
                 notificationRepository.addOrUpdateHabitNotification(notification)
             }
 

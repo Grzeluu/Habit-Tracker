@@ -36,7 +36,7 @@ class MarkHabitAsArchiveUseCase @Inject constructor(
                 if (params.isArchived) {
                     notificationRepository.deleteNotificationsByHabitId(archivedHabit.id)
                 } else {
-                    val notification = notificationScheduler.calculateNextNotificationForHabit(archivedHabit.id)
+                    val notification = notificationScheduler.calculateNextNotificationForHabit(archivedHabit)
                     notificationRepository.addOrUpdateHabitNotification(notification)
                 }
             }

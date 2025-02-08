@@ -117,4 +117,7 @@
     <string name="set_time">Set time</string>
     <string name="notification_time">Notification time</string>
     <string name="to_enable_notifications_please_enable_push_notifications_in_settings">To enable notifications, please enable push notifications in settings.</string>
+    <string name="its_time_to_check_your_habit">It\'s time to check your habit!</string>
+    <string name="habit_notifications">Habit Notifications</string>
+    <string name="habit_notifications_channel_desc">Channel for habit reminders</string>
 </resources>

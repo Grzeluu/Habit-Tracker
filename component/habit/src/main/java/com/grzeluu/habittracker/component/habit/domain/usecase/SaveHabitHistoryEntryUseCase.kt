@@ -34,7 +34,7 @@ class SaveHabitHistoryEntryUseCase @Inject constructor(
             if (habit.notification is HabitNotificationSetting.Enabled
                 && params.historyEntry.currentEffort >= habit.effort.desiredValue
             ) {
-                val notification = notificationScheduler.calculateNextNotificationForHabit(habit.id)
+                val notification = notificationScheduler.calculateNextNotificationForHabit(habit)
                 notificationRepository.addOrUpdateHabitNotification(notification)
             }
             Result.Success(Unit)

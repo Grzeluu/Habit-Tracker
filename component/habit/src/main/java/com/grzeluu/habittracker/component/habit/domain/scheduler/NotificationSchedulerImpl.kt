@@ -1,11 +1,9 @@
 package com.grzeluu.habittracker.component.habit.domain.scheduler
 
+import com.grzeluu.habittracker.component.habit.domain.model.Habit
 import com.grzeluu.habittracker.component.habit.domain.model.HabitNotification
 import com.grzeluu.habittracker.component.habit.domain.model.HabitNotificationSetting
-import com.grzeluu.habittracker.component.habit.domain.repository.HabitRepository
-import com.grzeluu.habittracker.component.habit.domain.repository.NotificationRepository
 import com.grzeluu.habittracker.util.enums.Day
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDateTime
@@ -17,29 +15,21 @@ import javax.inject.Singleton
 
 @Singleton
 class NotificationSchedulerImpl @Inject constructor(
-    private val habitRepository: HabitRepository
 ) : NotificationScheduler {
 
-    override suspend fun calculateNextNotificationForHabit(habitId: Long): HabitNotification {
-        val habit = habitRepository.getHabit(habitId).firstOrNull()!!
-
-        val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-        val currentDay = Day.get(today.dayOfWeek.value)
-
-        val nextDay = habit.desirableDays
-            .map { it.value }
-            .firstOrNull { it >= currentDay.value }
-            ?: habit.desirableDays.first().value
-
-        val daysUntilNext = (nextDay - currentDay.value).let { if (it <= 0) it + 7 else it }
-        val nextDate = today.plus(daysUntilNext, DateTimeUnit.DAY)
+    override suspend fun calculateNextNotificationForHabit(habit: Habit): HabitNotification {
+        val currentTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
         if (habit.notification !is HabitNotificationSetting.Enabled) throw RuntimeException("Habit notification is already disabled")
+        var notificationDateTime = LocalDateTime(currentTime.date, habit.notification.time)
+
+        while (notificationDateTime <= currentTime || !habit.desirableDays.contains(Day.get(notificationDateTime.dayOfWeek.value))) {
+            notificationDateTime = LocalDateTime(notificationDateTime.date.plus(1, DateTimeUnit.DAY), habit.notification.time)
+        }
 
         return HabitNotification(
-            habitId = habitId,
-            dateTime = LocalDateTime(nextDate, habit.notification.time)
-
+            habit = habit,
+            dateTime = notificationDateTime
         )
     }
 }

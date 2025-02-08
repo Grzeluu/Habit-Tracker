@@ -1,6 +1,7 @@
 package com.grzeluu.habittracker.source.database.data.model
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -25,4 +26,9 @@ data class HabitNotificationEntity(
 
     @ColumnInfo("date_time")
     val dateTime: LocalDateTime,
+)
+
+data class HabitNotificationWithHabitEntity(
+    @Embedded val habit: HabitWithHistoryDbModel,
+    @Embedded val notification: HabitNotificationEntity
 )
