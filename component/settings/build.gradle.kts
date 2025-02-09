@@ -40,4 +40,12 @@ dependencies {
     implementation(libs.android.hilt.navigation)
     ksp(libs.android.hilt.compiler)
     implementation(libs.timber)
+
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.junit.jupiter.params)
+
+    androidTestImplementation(libs.androidx.test.ext.junit)
+
+    testImplementation(libs.mockk)
 }

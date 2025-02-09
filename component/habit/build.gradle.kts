@@ -4,6 +4,7 @@ plugins {
     id(libs.plugins.kotlin.compose.get().pluginId)
     id(libs.plugins.android.hilt.get().pluginId)
     id(libs.plugins.google.ksp.get().pluginId)
+    id("de.mannodermaus.android-junit5") version "1.11.3.0"
 }
 
 android {
@@ -49,4 +50,14 @@ dependencies {
     implementation(libs.kotlinx.metadata)
     implementation(libs.timber)
     implementation(libs.kotlinx.datetime)
+
+    testImplementation(libs.mockk)
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.junit.jupiter.params)
+    testImplementation(libs.jetbrains.coroutines.test)
+
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
 }
