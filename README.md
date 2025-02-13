@@ -1,6 +1,7 @@
 ![Main_Screen](./images/Habit_tracker.png)
 # Habit-Tracker
 A lightweight habit tracker app that helps users track their habits and notifies them about upcoming goals.
+Graphics designed by [Freepik](https://www.freepik.com/)
 ## Status
 The application is currently under development, but its key features are fully functional.
 ## Features:
